@@ -51,4 +51,4 @@ commit credentials or local runtime data.
 - `public/` - browser study experience with local progress storage.
 - `test/server.test.mjs` - smoke tests for the public HTTP contract.
 - `CONTEXT.md` - initial domain vocabulary and boundaries.
-- `requirements/PRD-001-tourism-mvp-v0.1.0.md` - formal MVP product requirements.
+- `requirements/PRD-001-tourism-mvp-v0.1.1.md` - formal MVP product requirements.
