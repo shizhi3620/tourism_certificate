@@ -22,6 +22,12 @@ button { font: inherit; cursor: pointer; }
 .option:hover, .option.selected { border-color: #0f766e; background: #e9f7f4; }
 .option.correct { border-color: #238b45; background: #e8f7ec; }
 .option.incorrect { border-color: #c44b4b; background: #fff0f0; }
+.option.selected { border-color: #0f766e; background: #e9f7f4; }
+.primary, .small { border: 0; border-radius: 8px; padding: 10px 14px; background: #0f766e; color: white; }
+.small { padding: 6px 10px; font-size: .85rem; }
+.list-item { border-top: 1px solid #dce9e6; padding: 10px 0; }
+.mock-q { margin: 18px 0; }
+details { margin: 10px 0; padding: 10px; background: #f4f8f7; border-radius: 8px; }
 .result { margin-top: 14px; padding: 12px; border-radius: 8px; background: #eef5f4; }
 .progress { height: 8px; background: #e6efed; border-radius: 8px; overflow: hidden; }
 .progress i { display: block; height: 100%; background: #0f766e; }

@@ -1,36 +1,63 @@
 {
   "version": "2026.0",
+  "contentVersion": "2026.1.0",
+  "syllabusVersion": "2026.0",
+  "publishedAt": "2026-01-01",
   "title": "2026 四川英文导游资格证备考",
-  "notice": "题目内容将按官方大纲逐批审核录入。当前示例题仅用于验证产品流程，不代表正式考试真题。",
+  "notice": "题库仅收录公开、合成或已获许可的内容；标记为待审核的内容不会进入默认练习和模考。",
   "exam": {
     "region": "四川省",
     "language": "英语",
     "writtenSyllabus": "附件2：《2026年全国导游资格考试笔试大纲》.pdf",
     "practicalSyllabus": "附件3：《四川省2026年全国导游资格考试现场考试大纲》.pdf"
   },
+  "subjects": [
+    { "id": "policy", "name": "政策与法律法规" },
+    { "id": "business", "name": "导游业务" },
+    { "id": "national", "name": "全国导游基础知识" },
+    { "id": "local", "name": "地方导游基础知识" }
+  ],
   "chapters": [
-    {
-      "id": "written-syllabus",
-      "name": "全国笔试大纲",
-      "description": "官方大纲目录和知识范围，正式章节将在审核后持续补充。",
-      "status": "in_progress",
-      "questionCount": 1
-    }
+    { "id": "policy-01", "subjectId": "policy", "name": "旅游政策与法规", "description": "旅游业发展与游客权益保护的基础规则。" },
+    { "id": "business-01", "subjectId": "business", "name": "导游服务规范", "description": "导游服务流程、应急处理和职业规范。" },
+    { "id": "national-01", "subjectId": "national", "name": "中国历史文化", "description": "中国历史、文化遗产和旅游资源。" },
+    { "id": "local-01", "subjectId": "local", "name": "四川旅游资源", "description": "四川自然与人文旅游资源。" }
   ],
   "questions": [
     {
-      "id": "demo-001",
-      "chapterId": "written-syllabus",
-      "type": "single_choice",
-      "sourceType": "self_authored",
-      "sourceStatus": "demo",
-      "year": null,
-      "region": "全国",
-      "subject": "待按大纲录入",
-      "prompt": "这是一个流程示例题。正式题库录入后，此题将替换为已审核内容。",
-      "options": ["选项 A", "选项 B", "选项 C", "选项 D"],
-      "answer": 0,
-      "explanation": "示例题不计入正式成绩，仅用于验证答题、错题和进度流程。"
+      "id": "demo-001", "chapterId": "policy-01", "subject": "政策与法律法规",
+      "type": "single_choice", "sourceType": "self_authored", "sourceStatus": "published",
+      "sourceNote": "合成流程示例题，不代表正式考试真题。", "year": null, "region": "全国",
+      "prompt": "Which practice best protects a visitor's right to accurate information?",
+      "options": ["Provide clear, truthful itinerary information", "Hide optional charges", "Change the itinerary without notice", "Refuse reasonable questions"],
+      "answer": 0, "explanation": "Clear and truthful information supports informed choices and protects visitor rights."
+    },
+    {
+      "id": "past-2024-sichuan-001", "chapterId": "local-01", "subject": "地方导游基础知识",
+      "type": "single_choice", "sourceType": "past_exam", "sourceStatus": "published",
+      "sourceNote": "Synthetic licensed-style practice item; not a reproduction of an exam paper.", "year": 2024, "region": "四川省",
+      "prompt": "Which description is most appropriate for Sichuan's tourism resources?",
+      "options": ["They combine varied natural landscapes and living cultural traditions", "They consist only of coastal resorts", "They have no protected areas", "They are limited to one city"],
+      "answer": 0, "explanation": "Sichuan offers diverse mountains, heritage, cuisine and living traditions."
+    },
+    {
+      "id": "mock-001", "chapterId": "business-01", "subject": "导游业务",
+      "type": "single_choice", "sourceType": "mock", "sourceStatus": "published",
+      "sourceNote": "合成模拟题。", "year": null, "region": "全国",
+      "prompt": "When a schedule changes unexpectedly, what should a guide do first?",
+      "options": ["Explain the verified situation and discuss safe alternatives", "Blame the visitors", "Delete the itinerary", "Promise an impossible outcome"],
+      "answer": 0, "explanation": "A calm, accurate explanation and safe alternatives are the professional response."
+    },
+    {
+      "id": "pending-001", "chapterId": "national-01", "subject": "全国导游基础知识",
+      "type": "single_choice", "sourceType": "recalled", "sourceStatus": "pending_review",
+      "sourceNote": "回忆题，尚未完成来源核验；仅供维护者审核。", "year": 2025, "region": "全国",
+      "prompt": "Pending review item", "options": ["A", "B", "C", "D"], "answer": 0,
+      "explanation": "This item is not published."
     }
-  ]
+  ],
+  "mockConfig": {
+    "id": "written-mock-2026-1", "version": "2026.1.0", "durationMinutes": 30,
+    "questionCount": 3, "questionIds": ["demo-001", "past-2024-sichuan-001", "mock-001"]
+  }
 }

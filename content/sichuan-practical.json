@@ -1,0 +1,20 @@
+{
+  "packVersion": "2026.1.0",
+  "region": "四川省",
+  "syllabusVersion": "2026.0",
+  "notice": "现场训练首个切片：仅展示已审核材料；录音仅供浏览器临时复盘，不会上传或长期保存。",
+  "scoringDimensions": ["内容准确性", "语言表达", "服务礼仪", "应变能力"],
+  "attractions": [
+    {
+      "id": "jinsha-museum",
+      "name": "金沙遗址博物馆",
+      "status": "published",
+      "chineseDescription": "练习介绍考古遗址的历史价值与参观礼仪。",
+      "englishScript": "Welcome to the Jinsha Site Museum. The site offers a window into the ancient Shu civilization.",
+      "chineseMeaning": "欢迎来到金沙遗址博物馆。这里展示古蜀文明，为我们了解其历史提供了窗口。",
+      "questions": [
+        { "id": "jinsha-q1", "promptZh": "如何提醒游客遵守参观秩序？", "promptEn": "How would you remind visitors to follow museum rules?", "answerGuideZh": "礼貌说明规则并给出具体做法。", "status": "published" }
+      ]
+    }
+  ]
+}

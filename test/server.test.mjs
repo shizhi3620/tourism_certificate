@@ -78,3 +78,36 @@ test("serves the study app and versioned exam content", async () => {
     await once(server, "close");
   }
 });
+
+test("publishes only reviewed questions and exposes content versions", async () => {
+  const server = createTourismServer().listen(0);
+  await once(server, "listening");
+  const { port } = server.address();
+  try {
+    const content = await (await fetch(`http://127.0.0.1:${port}/api/exam`)).json();
+    assert.equal(content.contentVersion, "2026.1.0");
+    assert.ok(content.questions.every((question) => question.sourceStatus === "published"));
+    assert.equal(content.questions.some((question) => question.id === "pending-001"), false);
+    assert.deepEqual((await (await fetch(`http://127.0.0.1:${port}/api/exam/versions`)).json()).versions[0], {
+      contentVersion: "2026.1.0", syllabusVersion: "2026.0", status: "published",
+    });
+  } finally {
+    server.close();
+    await once(server, "close");
+  }
+});
+
+test("serves the reviewed Sichuan practical pack", async () => {
+  const server = createTourismServer().listen(0);
+  await once(server, "listening");
+  const { port } = server.address();
+  try {
+    const pack = await (await fetch(`http://127.0.0.1:${port}/api/practical/sichuan`)).json();
+    assert.equal(pack.region, "四川省");
+    assert.ok(pack.attractions.every((attraction) => attraction.status === "published"));
+    assert.ok(pack.attractions[0].questions[0].promptEn);
+  } finally {
+    server.close();
+    await once(server, "close");
+  }
+});

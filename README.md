@@ -1,5 +1,27 @@
 # Tourism
 
+四川英文导游资格证学习 MVP，采用无依赖 Node.js 22 HTTP 服务和浏览器本地存储。
+
+## 开发
+
+```sh
+npm install
+npm run check
+npm test
+npm start
+```
+
+公开内容来自 `content/exam.json`（全国笔试版本）和
+`content/sichuan-practical.json`（四川现场数据包）。`sourceStatus` 不是
+`published` 的题目不会从 `/api/exam` 返回。学习记录、错题和模考成绩只保存在
+浏览器；现场训练不上传录音，也不提供 AI 评分。
+
+## 部署
+
+NAS/Cloudflare Tunnel 的最小权限、认证、限流、备份和恢复步骤见
+[`docs/deployment-nas-cloudflare.md`](docs/deployment-nas-cloudflare.md)。
+部署前不要把 Tunnel 当作应用认证；先配置 Cloudflare Access 和 NAS 防火墙。
+
 四川英文导游资格证备考 MVP，后续通过省份数据包扩展到全国。
 
 ## MVP 范围
