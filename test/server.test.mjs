@@ -69,7 +69,7 @@ test("serves the study app and versioned exam content", async () => {
   try {
     const page = await fetch(`http://127.0.0.1:${port}/`);
     assert.equal(page.status, 200);
-    assert.match(await page.text(), /四川英文导游资格证备考/);
+    assert.match(await page.text(), /四川导游资格证备考/);
     const content = await fetch(`http://127.0.0.1:${port}/api/exam`);
     assert.equal(content.status, 200);
     assert.equal((await content.json()).version, "2026.0");
@@ -85,11 +85,11 @@ test("publishes only reviewed questions and exposes content versions", async () 
   const { port } = server.address();
   try {
     const content = await (await fetch(`http://127.0.0.1:${port}/api/exam`)).json();
-    assert.equal(content.contentVersion, "2026.1.0");
+    assert.equal(content.contentVersion, "2026.1.1");
     assert.ok(content.questions.every((question) => question.sourceStatus === "published"));
     assert.equal(content.questions.some((question) => question.id === "pending-001"), false);
     assert.deepEqual((await (await fetch(`http://127.0.0.1:${port}/api/exam/versions`)).json()).versions[0], {
-      contentVersion: "2026.1.0", syllabusVersion: "2026.0", status: "published",
+      contentVersion: "2026.1.1", syllabusVersion: "2026.0", status: "published",
     });
   } finally {
     server.close();

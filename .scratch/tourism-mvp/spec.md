@@ -5,9 +5,9 @@ Type: task
 
 ## Problem Statement
 
-准备参加 2026 年四川英文导游资格证考试的个人考生，需要一个以官方考试
-大纲为范围基线的学习工具，把章节练习、合法来源的历年真题、错题复习、
-整卷模考和基础统计组织成一个可持续使用的笔试闭环。现有项目已具备
+准备参加 2026 年四川导游资格证考试、选择英语现场面试的个人考生，需要一个
+以官方考试大纲为范围基线的学习工具，把全国大纲四科的章节练习、合法来源的
+历年真题、错题复习、整卷模考和基础统计组织成一个可持续使用的笔试闭环。现有项目已具备
 最小浏览器学习壳，但正式题库、版本化考试配置和后续省份扩展需要明确、
 可审核的规格。
 
@@ -21,7 +21,7 @@ Cloudflare Tunnel 和免费方案对外访问。全国化采用共享业务能�
 
 ## User Stories
 
-1. As a 四川英文导游资格证考生, I want to view the official syllabus outline, so that I can understand the exam scope.
+1. As a 四川导游资格证考生选择英语现场面试, I want to view the official syllabus outline, so that I can understand the exam scope.
 2. As a candidate, I want to see subjects and chapters, so that I can choose a focused study area.
 3. As a candidate, I want to see my chapter progress, so that I can resume study after leaving the app.
 4. As a candidate, I want to practice questions by chapter, so that I can learn one knowledge area at a time.

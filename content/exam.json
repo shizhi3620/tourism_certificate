@@ -1,13 +1,21 @@
 {
   "version": "2026.0",
-  "contentVersion": "2026.1.0",
+  "contentVersion": "2026.1.1",
   "syllabusVersion": "2026.0",
   "publishedAt": "2026-01-01",
-  "title": "2026 四川英文导游资格证备考",
+  "title": "2026 四川导游资格证备考",
   "notice": "题库仅收录公开、合成或已获许可的内容；标记为待审核的内容不会进入默认练习和模考。",
   "exam": {
     "region": "四川省",
-    "language": "英语",
+    "writtenExam": {
+      "language": "中文",
+      "subjectCount": 4,
+      "scope": "全国导游资格考试大纲"
+    },
+    "practicalExam": {
+      "region": "四川省",
+      "interviewLanguage": "英语"
+    },
     "writtenSyllabus": "附件2：《2026年全国导游资格考试笔试大纲》.pdf",
     "practicalSyllabus": "附件3：《四川省2026年全国导游资格考试现场考试大纲》.pdf"
   },

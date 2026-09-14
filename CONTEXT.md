@@ -2,14 +2,15 @@
 
 ## Purpose
 
-Tourism is a study service for the English tour-guide qualification exam. The
+Tourism is a study service for the national tour-guide qualification exam,
+with English-language practical-exam training for the selected province. The
 MVP starts with Sichuan candidates and is designed to expand to every province
 without duplicating the application code.
 
 ## Initial Vocabulary
 
-- **Candidate**: A person preparing for the English tour-guide qualification
-  exam.
+- **Candidate**: A person preparing for the national tour-guide qualification
+  exam and, where applicable, an English-language practical exam.
 - **National written exam**: The shared written-exam scope defined by the
   current national syllabus.
 - **Provincial practical exam**: A province-specific on-site exam, including
@@ -26,8 +27,9 @@ without duplicating the application code.
 - Candidate-facing web/PWA, mobile-first and desktop-compatible.
 - National written-exam outline, study progress, chapter practice, past exam
   questions, wrong-question review, mock exams, and basic statistics.
-- Sichuan is the first province pack. Practical-exam training follows the
-  written-exam slice and uses Chinese explanations with English practice.
+- The written exam always follows the four subjects and scope in the national
+  syllabus. Sichuan is the first province pack; its practical-exam interview
+  training uses Chinese explanations with English practice.
 - Past questions are a first-class source, separate from mock questions. Only
   public, licensed, or independently authored material is included.
 - A voluntary support/donation entry may be displayed. It does not unlock

@@ -1,6 +1,7 @@
 # Tourism
 
-四川英文导游资格证学习 MVP，采用无依赖 Node.js 22 HTTP 服务和浏览器本地存储。
+全国导游资格证学习 MVP，首期提供四川现场考试英语面试训练；采用无依赖
+Node.js 22 HTTP 服务和浏览器本地存储。
 
 ## 开发
 
@@ -22,7 +23,8 @@ NAS/Cloudflare Tunnel 的最小权限、认证、限流、备份和恢复步骤�
 [`docs/deployment-nas-cloudflare.md`](docs/deployment-nas-cloudflare.md)。
 部署前不要把 Tunnel 当作应用认证；先配置 Cloudflare Access 和 NAS 防火墙。
 
-四川英文导游资格证备考 MVP，后续通过省份数据包扩展到全国。
+全国导游资格证备考 MVP，首期覆盖全国大纲四个笔试科目，并通过省份数据包
+扩展各地区现场考试；四川现场考试的面试训练使用英语。
 
 ## MVP 范围
 
