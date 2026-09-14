@@ -1,5 +1,5 @@
 import { readFile, writeFile } from "node:fs/promises";
-import { basename, resolve } from "node:path";
+import { basename, dirname, resolve } from "node:path";
 
 const sourceTextPath = process.argv[2];
 const outputPath = process.argv[3] ?? "content/drafts/questions-pending-review.json";
@@ -8,18 +8,31 @@ if (!sourceTextPath) {
   process.exit(1);
 }
 
-const apiKey = process.env.OPENAI_API_KEY;
-const baseUrl = (process.env.OPENAI_BASE_URL ?? "https://api.openai.com/v1").replace(/\/$/, "");
-const model = process.env.OPENAI_MODEL ?? "gpt-4o-mini";
-if (!apiKey) throw new Error("OPENAI_API_KEY is required; no question draft was generated");
+const apiKey = process.env.DEEPSEEK_API_KEY ?? process.env.OPENAI_API_KEY;
+const baseUrl = (
+  process.env.DEEPSEEK_BASE_URL
+  ?? process.env.OPENAI_BASE_URL
+  ?? "https://api.deepseek.com/v1"
+).replace(/\/$/, "");
+const model = process.env.DEEPSEEK_MODEL ?? process.env.OPENAI_MODEL ?? "deepseek-chat";
+if (!apiKey) throw new Error("DEEPSEEK_API_KEY is required; no question draft was generated");
 
 const source = await readFile(resolve(sourceTextPath), "utf8");
+const manifestPath = resolve(dirname(sourceTextPath), `${basename(sourceTextPath, ".txt")}.json`);
+let manifest = {};
+try {
+  manifest = JSON.parse(await readFile(manifestPath, "utf8"));
+} catch (error) {
+  if (error.code !== "ENOENT") throw error;
+}
+const subject = manifest.subject ?? "待审核";
+const region = manifest.region ?? "全国";
 const prompt = `根据下面的教材/大纲原文生成适合全国导游资格证笔试的中文单选题。
 只生成原文能够支持的内容，不要编造法规、年份、数字或结论。不要生成英语题。
 输出严格 JSON 数组，每项字段为：
-{"id":"draft-...","chapterId":"待审核","subject":"待审核","type":"single_choice",
+{"id":"draft-...","chapterId":"待审核","subject":"${subject}","type":"single_choice",
 "sourceType":"self_authored","sourceStatus":"pending_review","sourceNote":"教材文件名和页码待人工补充",
-"year":null,"region":"全国","prompt":"...","options":["...","...","...","..."],
+"year":null,"region":"${region}","prompt":"...","options":["...","...","...","..."],
 "answer":0,"explanation":"..."}。
 题目必须标记 pending_review，不能声称是官方真题。
 
@@ -30,7 +43,10 @@ ${source.slice(0, 120000)}`;
 
 const response = await fetch(`${baseUrl}/chat/completions`, {
   method: "POST",
-  headers: { authorization: `Bearer ${apiKey}`, "content-type": "application/json" },
+  headers: {
+    authorization: `Bearer ${apiKey}`,
+    "content-type": "application/json",
+  },
   body: JSON.stringify({
     model,
     temperature: 0.1,

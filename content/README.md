@@ -18,9 +18,12 @@ npm run import:source -- /path/to/material.pdf "政策与法律法规" 全国
 npm run generate:draft -- content/sources/<source-id>.txt
 ```
 
-`import:source` 会提取文本并生成来源清单；`generate:draft` 使用配置的
-OpenAI-compatible API 生成 `pending_review` 草稿。需要先设置
-`OPENAI_API_KEY`，可选设置 `OPENAI_BASE_URL` 和 `OPENAI_MODEL`。源文件和草稿
+`import:source` 会提取文本并生成来源清单；`generate:draft` 默认使用 DeepSeek
+的 OpenAI-compatible API 生成 `pending_review` 草稿。需要先设置
+`DEEPSEEK_API_KEY`，可选设置 `DEEPSEEK_BASE_URL`（默认
+`https://api.deepseek.com/v1`）和 `DEEPSEEK_MODEL`（默认 `deepseek-chat`）。
+仍可使用 `OPENAI_API_KEY`、`OPENAI_BASE_URL` 和 `OPENAI_MODEL` 兼容其他
+OpenAI-compatible 服务。源文件和草稿
 默认被 `.gitignore` 忽略，避免把教材、密钥或未审核内容提交到仓库。
 
 如果配置的是第三方模型服务，提取出的教材文本会发送到该服务；使用前必须
