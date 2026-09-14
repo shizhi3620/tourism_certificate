@@ -1,6 +1,6 @@
 const load = (key, fallback) => { try { return JSON.parse(localStorage.getItem(key) ?? JSON.stringify(fallback)); } catch { return fallback; } };
 const save = (key, value) => localStorage.setItem(key, JSON.stringify(value));
-const state = { content: null, practical: null, records: load("tourism-study-records", {}), mocks: load("tourism-mock-results", []), selectedView: "practice", mock: null };
+const state = { content: null, practical: null, records: load("tourism-study-records", {}), mocks: load("tourism-mock-results", []), selectedView: "practice", mock: null, mockTimer: null };
 const recordFor = (id) => state.records[id] ?? { attempts: 0, correct: 0, wrong: false };
 const label = (q) => q.sourceType === "past_exam" ? `历年真题 · ${q.year} · ${q.region}` : q.sourceType === "mock" ? "模拟题" : "示例题";
 function renderStats() {
@@ -35,17 +35,26 @@ function renderOutline() {
 }
 function renderMock() {
   const el = document.querySelector("#mock-view");
+  if (state.mockTimer) { clearInterval(state.mockTimer); state.mockTimer = null; }
   if (state.mock) {
     const answered = Object.keys(state.mock.answers).length;
     el.innerHTML = `<div class="card"><h2>整卷模考 <span class="timer">${Math.max(0, Math.ceil((state.mock.ends - Date.now()) / 1000))}s</span></h2><p>已完成 ${answered}/${state.mock.questions.length} 题</p>${state.mock.questions.map((q, i) => `<div class="mock-q"><p><strong>${i + 1}. ${q.prompt}</strong></p>${q.options.map((o, j) => `<button class="option ${state.mock.answers[q.id] === j ? "selected" : ""}" data-q="${q.id}" data-index="${j}">${String.fromCharCode(65 + j)}. ${o}</button>`).join("")}</div>`).join("")}<button id="submit-mock" class="primary">交卷</button></div>`;
     el.querySelectorAll(".mock-q .option").forEach((b) => b.addEventListener("click", () => { state.mock.answers[b.dataset.q] = +b.dataset.index; renderMock(); }));
-    el.querySelector("#submit-mock").addEventListener("click", submitMock); return;
+    el.querySelector("#submit-mock").addEventListener("click", submitMock);
+    state.mockTimer = setInterval(() => {
+      if (Date.now() >= state.mock.ends) return submitMock();
+      const timer = el.querySelector(".timer");
+      if (timer) timer.textContent = `${Math.max(0, Math.ceil((state.mock.ends - Date.now()) / 1000))}s`;
+    }, 1000);
+    return;
   }
   el.innerHTML = `<div class="card"><h2>整卷模考</h2><p>版本 ${state.content.mockConfig.version} · ${state.content.mockConfig.questionCount} 题 · ${state.content.mockConfig.durationMinutes} 分钟</p><button id="start-mock" class="primary">开始模考</button><h3>历史成绩</h3>${state.mocks.length ? state.mocks.map((m) => `<p>${new Date(m.finishedAt).toLocaleString()} · ${m.score}/${m.total}（${m.percent}%）</p>`).join("") : '<p class="muted">暂无模考记录。</p>'}</div>`;
   el.querySelector("#start-mock").addEventListener("click", () => { state.mock = { questions: state.content.questions.filter((q) => state.content.mockConfig.questionIds.includes(q.id)), answers: {}, ends: Date.now() + state.content.mockConfig.durationMinutes * 60000 }; renderMock(); });
 }
 function submitMock() {
+  if (!state.mock) return;
   const score = state.mock.questions.reduce((n, q) => n + (state.mock.answers[q.id] === q.answer ? 1 : 0), 0), result = { finishedAt: new Date().toISOString(), score, total: state.mock.questions.length, percent: Math.round(score / state.mock.questions.length * 100) };
+  if (state.mockTimer) { clearInterval(state.mockTimer); state.mockTimer = null; }
   state.mocks.unshift(result); save("tourism-mock-results", state.mocks); state.mock = null; renderMock();
 }
 function renderPractical() {

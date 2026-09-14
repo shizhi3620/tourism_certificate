@@ -10,7 +10,8 @@ const practicalPath = join(root, "content/sichuan-practical.json");
 const contentTypes = { ".css": "text/css; charset=utf-8", ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".json": "application/json; charset=utf-8" };
 const requests = new Map();
 const windowMs = 60_000;
-const limit = Number.parseInt(process.env.RATE_LIMIT ?? "120", 10);
+const configuredLimit = Number.parseInt(process.env.RATE_LIMIT ?? "120", 10);
+const limit = Number.isInteger(configuredLimit) && configuredLimit > 0 ? configuredLimit : 120;
 
 function headers(extra = {}) {
   return { "cache-control": "no-store", "x-content-type-options": "nosniff", "x-frame-options": "DENY", "referrer-policy": "no-referrer", ...extra };
@@ -55,11 +56,26 @@ export function createTourismServer() {
       return sendJson(response, 200, { ...content, ...(process.env.DONATION_URL?.trim() ? { donationUrl: process.env.DONATION_URL.trim() } : {}) });
     }
     if (pathname === "/api/exam/versions") {
-      return sendJson(response, 200, { versions: [{ contentVersion: "2026.1.0", syllabusVersion: "2026.0", status: "published" }] });
+      const content = published(JSON.parse(await readFile(contentPath, "utf8")));
+      return sendJson(response, 200, {
+        versions: [{
+          contentVersion: content.contentVersion,
+          syllabusVersion: content.syllabusVersion,
+          status: "published",
+        }],
+      });
     }
     if (pathname === "/api/practical/sichuan") {
       const pack = JSON.parse(await readFile(practicalPath, "utf8"));
-      return sendJson(response, 200, { ...pack, attractions: pack.attractions.filter((item) => item.status === "published") });
+      return sendJson(response, 200, {
+        ...pack,
+        attractions: pack.attractions
+          .filter((item) => item.status === "published")
+          .map((item) => ({
+            ...item,
+            questions: item.questions.filter((question) => question.status === "published"),
+          })),
+      });
     }
     return sendStaticFile(response, pathname);
   });
