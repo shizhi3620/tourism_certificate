@@ -15,11 +15,13 @@ export function createTourismServer() {
     }
 
     if (request.url === "/") {
+      const donationUrl = process.env.DONATION_URL?.trim();
       response.writeHead(200, { "content-type": "application/json" });
       response.end(
         JSON.stringify({
           service: "tourism",
           routes: ["/health"],
+          ...(donationUrl ? { donationUrl } : {}),
         }),
       );
       return;

@@ -2,19 +2,44 @@
 
 ## Purpose
 
-Tourism is a standalone service for building travel experiences. The initial
-version provides a small, dependency-free HTTP entry point so the product
-surface can be expanded without committing to a framework before the domain
-requirements are known.
+Tourism is a study service for the English tour-guide qualification exam. The
+MVP starts with Sichuan candidates and is designed to expand to every province
+without duplicating the application code.
 
 ## Initial Vocabulary
 
-- **Destination**: A place a traveler may visit.
-- **Trip**: A planned journey with one or more destinations.
-- **Traveler**: A person using the service to plan or manage a trip.
+- **Candidate**: A person preparing for the English tour-guide qualification
+  exam.
+- **National written exam**: The shared written-exam scope defined by the
+  current national syllabus.
+- **Provincial practical exam**: A province-specific on-site exam, including
+  Sichuan's 2026 syllabus for the MVP.
+- **Question source**: The provenance category for study content: official
+  public material, self-authored or licensed content, or recalled questions.
+- **Past exam question**: A question from a previous exam, clearly labeled with
+  year, province, subject, source, and review status.
+- **Province pack**: Configuration and content for one province's practical
+  exam, including attractions, scripts, questions, and scoring guidance.
 
-## Boundaries
+## MVP Scope
 
-The initial scaffold does not persist traveler data, call external providers,
-or expose authentication. Those concerns should be introduced only after the
-corresponding product requirements are defined.
+- Candidate-facing web/PWA, mobile-first and desktop-compatible.
+- National written-exam outline, study progress, chapter practice, past exam
+  questions, wrong-question review, mock exams, and basic statistics.
+- Sichuan is the first province pack. Practical-exam training follows the
+  written-exam slice and uses Chinese explanations with English practice.
+- Past questions are a first-class source, separate from mock questions. Only
+  public, licensed, or independently authored material is included.
+- A voluntary support/donation entry may be displayed. It does not unlock
+  content, create membership rights, or promise examination results.
+
+## Deployment and privacy boundary
+
+- The MVP runs on a home NAS and is exposed through a Cloudflare Tunnel.
+- The operating target is the free tier; no paid cloud service is required for
+  the initial release.
+- The tunnel is not an application security boundary. Authentication,
+  rate-limiting, backups, update procedures, and NAS isolation remain required
+  before public access.
+- Candidate progress may start locally. Cloud synchronization is optional
+  future work; recordings should not be retained by default.

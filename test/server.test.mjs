@@ -35,3 +35,28 @@ test("returns not found for unknown routes", async () => {
     await once(server, "close");
   }
 });
+
+test("exposes the optional voluntary-support link when configured", async () => {
+  const previousDonationUrl = process.env.DONATION_URL;
+  process.env.DONATION_URL = "https://example.com/support";
+  const server = createTourismServer().listen(0);
+  await once(server, "listening");
+  const { port } = server.address();
+
+  try {
+    const response = await fetch(`http://127.0.0.1:${port}/`);
+    assert.equal(response.status, 200);
+    assert.equal(
+      (await response.json()).donationUrl,
+      "https://example.com/support",
+    );
+  } finally {
+    if (previousDonationUrl === undefined) {
+      delete process.env.DONATION_URL;
+    } else {
+      process.env.DONATION_URL = previousDonationUrl;
+    }
+    server.close();
+    await once(server, "close");
+  }
+});
