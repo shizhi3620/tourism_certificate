@@ -48,3 +48,4 @@ commit credentials or local runtime data.
 - `src/server.mjs` - HTTP server and request routing.
 - `test/server.test.mjs` - smoke tests for the public HTTP contract.
 - `CONTEXT.md` - initial domain vocabulary and boundaries.
+- `requirements/PRD-001-tourism-mvp-v0.1.0.md` - formal MVP product requirements.
