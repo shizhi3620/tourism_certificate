@@ -12,10 +12,13 @@ npm test
 npm start
 ```
 
-公开内容来自 `content/exam.json`（全国笔试版本）和
+公开内容来自 `content/exam.json`（全国四科笔试版本）和
 `content/sichuan-practical.json`（四川现场数据包）。`sourceStatus` 不是
 `published` 的题目不会从 `/api/exam` 返回。学习记录、错题和模考成绩只保存在
 浏览器；现场训练不上传录音，也不提供 AI 评分。
+
+题库维护、审核、上传和更新流程见 [`content/README.md`](content/README.md)；
+当前通过 Git 发布内容，不提供公网题库上传接口。
 
 ## 部署
 
@@ -72,6 +75,7 @@ commit credentials or local runtime data.
 
 - `src/server.mjs` - HTTP server and request routing.
 - `content/exam.json` - versioned syllabus, chapter and question data.
+- `content/README.md` - content generation, review, and update workflow.
 - `public/` - browser study experience with local progress storage.
 - `test/server.test.mjs` - smoke tests for the public HTTP contract.
 - `CONTEXT.md` - initial domain vocabulary and boundaries.

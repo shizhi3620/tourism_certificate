@@ -1,6 +1,6 @@
 {
   "version": "2026.0",
-  "contentVersion": "2026.1.1",
+  "contentVersion": "2026.1.2",
   "syllabusVersion": "2026.0",
   "publishedAt": "2026-01-01",
   "title": "2026 四川导游资格证备考",
@@ -36,25 +36,25 @@
       "id": "demo-001", "chapterId": "policy-01", "subject": "政策与法律法规",
       "type": "single_choice", "sourceType": "self_authored", "sourceStatus": "published",
       "sourceNote": "合成流程示例题，不代表正式考试真题。", "year": null, "region": "全国",
-      "prompt": "Which practice best protects a visitor's right to accurate information?",
-      "options": ["Provide clear, truthful itinerary information", "Hide optional charges", "Change the itinerary without notice", "Refuse reasonable questions"],
+      "prompt": "下列哪种做法最能保障游客获取准确信息的权利？",
+      "options": ["提供清晰、真实的行程信息", "隐瞒自费项目", "未经说明擅自更改行程", "拒绝回答游客的合理问题"],
       "answer": 0, "explanation": "Clear and truthful information supports informed choices and protects visitor rights."
     },
     {
       "id": "past-2024-sichuan-001", "chapterId": "local-01", "subject": "地方导游基础知识",
       "type": "single_choice", "sourceType": "past_exam", "sourceStatus": "published",
       "sourceNote": "Synthetic licensed-style practice item; not a reproduction of an exam paper.", "year": 2024, "region": "四川省",
-      "prompt": "Which description is most appropriate for Sichuan's tourism resources?",
-      "options": ["They combine varied natural landscapes and living cultural traditions", "They consist only of coastal resorts", "They have no protected areas", "They are limited to one city"],
-      "answer": 0, "explanation": "Sichuan offers diverse mountains, heritage, cuisine and living traditions."
+      "prompt": "关于四川旅游资源，下列哪项描述最恰当？",
+      "options": ["四川兼具多样的自然景观和鲜活的地域文化", "四川旅游资源只有滨海度假区", "四川没有任何自然保护地", "四川旅游资源仅集中在一个城市"],
+      "answer": 0, "explanation": "四川拥有多样的山地景观、文化遗产、美食和鲜活的地域传统。"
     },
     {
       "id": "mock-001", "chapterId": "business-01", "subject": "导游业务",
       "type": "single_choice", "sourceType": "mock", "sourceStatus": "published",
       "sourceNote": "合成模拟题。", "year": null, "region": "全国",
-      "prompt": "When a schedule changes unexpectedly, what should a guide do first?",
-      "options": ["Explain the verified situation and discuss safe alternatives", "Blame the visitors", "Delete the itinerary", "Promise an impossible outcome"],
-      "answer": 0, "explanation": "A calm, accurate explanation and safe alternatives are the professional response."
+      "prompt": "行程出现突发变化时，导游首先应当怎么做？",
+      "options": ["说明已经核实的情况，并与游客协商安全的替代方案", "责怪游客没有配合", "直接删除原行程", "承诺无法保证的结果"],
+      "answer": 0, "explanation": "冷静、准确地说明情况并提出安全替代方案，是专业导游的处理方式。"
     },
     {
       "id": "pending-001", "chapterId": "national-01", "subject": "全国导游基础知识",

@@ -85,11 +85,11 @@ test("publishes only reviewed questions and exposes content versions", async () 
   const { port } = server.address();
   try {
     const content = await (await fetch(`http://127.0.0.1:${port}/api/exam`)).json();
-    assert.equal(content.contentVersion, "2026.1.1");
+    assert.equal(content.contentVersion, "2026.1.2");
     assert.ok(content.questions.every((question) => question.sourceStatus === "published"));
     assert.equal(content.questions.some((question) => question.id === "pending-001"), false);
     assert.deepEqual((await (await fetch(`http://127.0.0.1:${port}/api/exam/versions`)).json()).versions[0], {
-      contentVersion: "2026.1.1", syllabusVersion: "2026.0", status: "published",
+      contentVersion: "2026.1.2", syllabusVersion: "2026.0", status: "published",
     });
   } finally {
     server.close();
