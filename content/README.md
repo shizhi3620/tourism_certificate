@@ -11,8 +11,23 @@
 的题库。每道题必须填写题目 ID、章节、题型、题源、审核状态、来源说明、题干、
 选项、答案和解析；历年真题还应填写年份和地区。
 
-建议先在临时文件中生成或人工整理 JSON，再复制到正式内容文件。生成工具或
-AI 只能辅助起草，不能替代人工核对大纲、答案、解析、版权和语言。
+导入 PDF/教材并生成草稿：
+
+```sh
+npm run import:source -- /path/to/material.pdf "政策与法律法规" 全国
+npm run generate:draft -- content/sources/<source-id>.txt
+```
+
+`import:source` 会提取文本并生成来源清单；`generate:draft` 使用配置的
+OpenAI-compatible API 生成 `pending_review` 草稿。需要先设置
+`OPENAI_API_KEY`，可选设置 `OPENAI_BASE_URL` 和 `OPENAI_MODEL`。源文件和草稿
+默认被 `.gitignore` 忽略，避免把教材、密钥或未审核内容提交到仓库。
+
+如果配置的是第三方模型服务，提取出的教材文本会发送到该服务；使用前必须
+确认资料授权、隐私和服务条款。希望内容留在 NAS 时，应使用 NAS 内部部署的
+OpenAI-compatible 服务，并将 `OPENAI_BASE_URL` 指向内网地址。
+
+生成工具或 AI 只能辅助起草，不能替代人工核对大纲、答案、解析、版权和语言。
 
 ## 审核与发布
 
