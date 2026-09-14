@@ -38,7 +38,8 @@ npm start
 The server listens on `PORT` (default `3000`) and exposes:
 
 - `GET /health` - returns the service health status.
-- `GET /` - returns the project name and available routes.
+- `GET /` - serves the mobile-first study app.
+- `GET /api/exam` - returns the versioned exam content configuration.
 
 Copy `.env.example` to `.env` when local configuration is needed. Do not
 commit credentials or local runtime data.
@@ -46,6 +47,8 @@ commit credentials or local runtime data.
 ## Structure
 
 - `src/server.mjs` - HTTP server and request routing.
+- `content/exam.json` - versioned syllabus, chapter and question data.
+- `public/` - browser study experience with local progress storage.
 - `test/server.test.mjs` - smoke tests for the public HTTP contract.
 - `CONTEXT.md` - initial domain vocabulary and boundaries.
 - `requirements/PRD-001-tourism-mvp-v0.1.0.md` - formal MVP product requirements.

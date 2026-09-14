@@ -1,0 +1,30 @@
+:root { color-scheme: light; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #17324d; background: #f4f8f7; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+.shell { width: min(760px, 100%); margin: auto; padding: 28px 18px 36px; }
+.hero { padding: 24px 0 18px; }
+.eyebrow { color: #0f766e; font-size: .75rem; font-weight: 700; letter-spacing: .14em; }
+h1 { margin: 8px 0; font-size: clamp(1.7rem, 7vw, 2.8rem); }
+.muted, footer { color: #668092; }
+.notice { padding: 12px 14px; background: #fff7e6; border-left: 4px solid #e0a53b; border-radius: 8px; font-size: .9rem; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 16px 0 24px; }
+.stats div, .card { background: white; border: 1px solid #dce9e6; border-radius: 12px; padding: 14px; }
+.stats strong, .stats span { display: block; }
+.stats strong { font-size: 1.45rem; color: #0f766e; }
+.stats span { margin-top: 4px; font-size: .8rem; color: #668092; }
+.tabs { display: flex; gap: 8px; border-bottom: 1px solid #dce9e6; margin-bottom: 18px; }
+button { font: inherit; cursor: pointer; }
+.tab { border: 0; background: transparent; padding: 10px 8px; color: #668092; }
+.tab.active { color: #0f766e; font-weight: 700; border-bottom: 2px solid #0f766e; }
+.card h2, .card h3 { margin-top: 0; }
+.question { margin-top: 16px; }
+.option { width: 100%; text-align: left; border: 1px solid #dce9e6; background: #fbfdfd; border-radius: 8px; margin: 8px 0; padding: 12px; color: inherit; }
+.option:hover, .option.selected { border-color: #0f766e; background: #e9f7f4; }
+.option.correct { border-color: #238b45; background: #e8f7ec; }
+.option.incorrect { border-color: #c44b4b; background: #fff0f0; }
+.result { margin-top: 14px; padding: 12px; border-radius: 8px; background: #eef5f4; }
+.progress { height: 8px; background: #e6efed; border-radius: 8px; overflow: hidden; }
+.progress i { display: block; height: 100%; background: #0f766e; }
+footer { display: flex; justify-content: space-between; margin-top: 28px; font-size: .8rem; }
+footer a { color: #0f766e; }
+@media (min-width: 600px) { .shell { padding-top: 52px; } }

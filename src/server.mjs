@@ -1,34 +1,70 @@
 import { createServer } from "node:http";
+import { readFile } from "node:fs/promises";
+import { extname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const publicDirectory = fileURLToPath(new URL("../public/", import.meta.url));
+const contentPath = fileURLToPath(new URL("../content/exam.json", import.meta.url));
+const contentTypes = {
+  ".css": "text/css; charset=utf-8",
+  ".html": "text/html; charset=utf-8",
+  ".js": "text/javascript; charset=utf-8",
+  ".json": "application/json; charset=utf-8",
+};
+
+function sendJson(response, status, body) {
+  response.writeHead(status, { "content-type": "application/json; charset=utf-8" });
+  response.end(JSON.stringify(body));
+}
+
+async function sendStaticFile(response, pathname) {
+  const requestedPath = pathname === "/" ? "/index.html" : pathname;
+  const filePath = join(publicDirectory, requestedPath);
+  if (!filePath.startsWith(publicDirectory)) {
+    sendJson(response, 400, { error: "invalid_path" });
+    return;
+  }
+
+  try {
+    const body = await readFile(filePath);
+    response.writeHead(200, {
+      "content-type": contentTypes[extname(filePath)] ?? "application/octet-stream",
+    });
+    response.end(body);
+  } catch (error) {
+    if (error.code === "ENOENT") {
+      sendJson(response, 404, { error: "not_found" });
+      return;
+    }
+    throw error;
+  }
+}
 
 export function createTourismServer() {
-  return createServer((request, response) => {
+  return createServer(async (request, response) => {
     if (request.method !== "GET") {
-      response.writeHead(405, { "content-type": "application/json" });
-      response.end(JSON.stringify({ error: "method_not_allowed" }));
+      sendJson(response, 405, { error: "method_not_allowed" });
       return;
     }
 
-    if (request.url === "/health") {
-      response.writeHead(200, { "content-type": "application/json" });
-      response.end(JSON.stringify({ status: "ok", service: "tourism" }));
+    const pathname = new URL(request.url, "http://localhost").pathname;
+    if (pathname === "/health") {
+      sendJson(response, 200, { status: "ok", service: "tourism" });
       return;
     }
 
-    if (request.url === "/") {
-      const donationUrl = process.env.DONATION_URL?.trim();
-      response.writeHead(200, { "content-type": "application/json" });
-      response.end(
-        JSON.stringify({
-          service: "tourism",
-          routes: ["/health"],
-          ...(donationUrl ? { donationUrl } : {}),
-        }),
-      );
+    if (pathname === "/api/exam") {
+      const content = JSON.parse(await readFile(contentPath, "utf8"));
+      sendJson(response, 200, {
+        ...content,
+        ...(process.env.DONATION_URL?.trim()
+          ? { donationUrl: process.env.DONATION_URL.trim() }
+          : {}),
+      });
       return;
     }
 
-    response.writeHead(404, { "content-type": "application/json" });
-    response.end(JSON.stringify({ error: "not_found" }));
+    await sendStaticFile(response, pathname);
   });
 }
 

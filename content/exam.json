@@ -1,0 +1,36 @@
+{
+  "version": "2026.0",
+  "title": "2026 四川英文导游资格证备考",
+  "notice": "题目内容将按官方大纲逐批审核录入。当前示例题仅用于验证产品流程，不代表正式考试真题。",
+  "exam": {
+    "region": "四川省",
+    "language": "英语",
+    "writtenSyllabus": "附件2：《2026年全国导游资格考试笔试大纲》.pdf",
+    "practicalSyllabus": "附件3：《四川省2026年全国导游资格考试现场考试大纲》.pdf"
+  },
+  "chapters": [
+    {
+      "id": "written-syllabus",
+      "name": "全国笔试大纲",
+      "description": "官方大纲目录和知识范围，正式章节将在审核后持续补充。",
+      "status": "in_progress",
+      "questionCount": 1
+    }
+  ],
+  "questions": [
+    {
+      "id": "demo-001",
+      "chapterId": "written-syllabus",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "demo",
+      "year": null,
+      "region": "全国",
+      "subject": "待按大纲录入",
+      "prompt": "这是一个流程示例题。正式题库录入后，此题将替换为已审核内容。",
+      "options": ["选项 A", "选项 B", "选项 C", "选项 D"],
+      "answer": 0,
+      "explanation": "示例题不计入正式成绩，仅用于验证答题、错题和进度流程。"
+    }
+  ]
+}

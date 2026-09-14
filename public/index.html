@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0f766e">
+    <title>Tourism · 英文导游资格证备考</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <header class="hero">
+        <p class="eyebrow">TOURISM · 2026 MVP</p>
+        <h1>四川英文导游资格证备考</h1>
+        <p class="muted">按照官方大纲，稳步完成笔试练习。</p>
+      </header>
+      <section id="notice" class="notice" hidden></section>
+      <section class="stats" aria-label="学习统计">
+        <div><strong id="answered-count">0</strong><span>已答题</span></div>
+        <div><strong id="correct-rate">—</strong><span>正确率</span></div>
+        <div><strong id="wrong-count">0</strong><span>错题</span></div>
+      </section>
+      <nav class="tabs" aria-label="学习模块">
+        <button class="tab active" data-view="practice">章节练习</button>
+        <button class="tab" data-view="wrong">错题本</button>
+        <button class="tab" data-view="outline">考纲进度</button>
+      </nav>
+      <section id="practice-view" class="view"></section>
+      <section id="wrong-view" class="view" hidden></section>
+      <section id="outline-view" class="view" hidden></section>
+      <footer><span>本地优先 · 内容持续审核中</span><a id="donation-link" hidden>支持项目</a></footer>
+    </main>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

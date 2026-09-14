@@ -44,7 +44,7 @@ test("exposes the optional voluntary-support link when configured", async () => 
   const { port } = server.address();
 
   try {
-    const response = await fetch(`http://127.0.0.1:${port}/`);
+    const response = await fetch(`http://127.0.0.1:${port}/api/exam`);
     assert.equal(response.status, 200);
     assert.equal(
       (await response.json()).donationUrl,
@@ -56,6 +56,24 @@ test("exposes the optional voluntary-support link when configured", async () => 
     } else {
       process.env.DONATION_URL = previousDonationUrl;
     }
+    server.close();
+    await once(server, "close");
+  }
+});
+
+test("serves the study app and versioned exam content", async () => {
+  const server = createTourismServer().listen(0);
+  await once(server, "listening");
+  const { port } = server.address();
+
+  try {
+    const page = await fetch(`http://127.0.0.1:${port}/`);
+    assert.equal(page.status, 200);
+    assert.match(await page.text(), /四川英文导游资格证备考/);
+    const content = await fetch(`http://127.0.0.1:${port}/api/exam`);
+    assert.equal(content.status, 200);
+    assert.equal((await content.json()).version, "2026.0");
+  } finally {
     server.close();
     await once(server, "close");
   }
