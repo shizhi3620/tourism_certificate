@@ -10,18 +10,32 @@ function renderStats() {
   document.querySelector("#wrong-count").textContent = records.filter((r) => r.wrong).length;
 }
 function answer(question, selected, container, onDone = () => {}) {
-  const correct = selected === question.answer, record = recordFor(question.id);
+  const correct = Array.isArray(question.answer)
+    ? Array.isArray(selected) && selected.length === question.answer.length && selected.every((value) => question.answer.includes(value))
+    : selected === question.answer;
+  const record = recordFor(question.id);
   record.attempts += 1; record.correct += correct ? 1 : 0; record.wrong = !correct; state.records[question.id] = record; save("tourism-study-records", state.records);
-  container.querySelectorAll(".option").forEach((button) => { button.disabled = true; if (+button.dataset.index === question.answer) button.classList.add("correct"); if (+button.dataset.index === selected && !correct) button.classList.add("incorrect"); });
+  const correctIndexes = Array.isArray(question.answer) ? question.answer : [question.answer];
+  const selectedIndexes = Array.isArray(selected) ? selected : [selected];
+  container.querySelectorAll(".option").forEach((button) => { button.disabled = true; const index = +button.dataset.index; if (correctIndexes.includes(index)) button.classList.add("correct"); if (selectedIndexes.includes(index) && !correct) button.classList.add("incorrect"); });
   const result = container.querySelector(".result"); result.hidden = false;
-  result.innerHTML = `<strong>${correct ? "回答正确" : "回答错误"}</strong> · 正确答案：${String.fromCharCode(65 + question.answer)}<br>${question.explanation}`;
+  const answerIndexes = Array.isArray(question.answer) ? question.answer : [question.answer];
+  result.innerHTML = `<strong>${correct ? "回答正确" : "回答错误"}</strong> · 正确答案：${answerIndexes.map((index) => String.fromCharCode(65 + index)).join("、")}<br>${question.explanation}`;
   renderStats(); renderWrong(); renderOutline(); onDone(correct);
 }
 function renderPractice(ids = state.content.questions.map((q) => q.id)) {
   const q = state.content.questions.find((item) => item.id === ids[0]), el = document.querySelector("#practice-view");
   if (!q) return void (el.innerHTML = '<div class="card"><h2>暂无可练习内容</h2><p class="muted">审核后的题目会显示在这里。</p></div>');
-  el.innerHTML = `<div class="card"><p class="eyebrow">${label(q)} · ${q.subject}</p><h2>${q.prompt}</h2><p class="muted">${q.sourceNote}</p><div class="question">${q.options.map((o, i) => `<button class="option" data-index="${i}">${String.fromCharCode(65 + i)}. ${o}</button>`).join("")}</div><div class="result" hidden></div></div>`;
-  el.querySelectorAll(".option").forEach((b) => b.addEventListener("click", () => answer(q, +b.dataset.index, el)));
+  const multiple = q.type === "multiple_choice";
+  el.innerHTML = `<div class="card"><p class="eyebrow">${label(q)} · ${q.subject} · ${multiple ? "多选题" : q.type === "true_false" ? "判断题" : "单选题"}</p><h2>${q.prompt}</h2><p class="muted">${q.sourceNote}</p><div class="question">${q.options.map((o, i) => `<button class="option" data-index="${i}">${String.fromCharCode(65 + i)}. ${o}</button>`).join("")}</div>${multiple ? '<button class="primary" id="submit-question">提交答案</button>' : ""}<div class="result" hidden></div></div>`;
+  el.querySelectorAll(".option").forEach((button) => button.addEventListener("click", () => {
+    if (multiple) button.classList.toggle("selected");
+    else answer(q, +button.dataset.index, el);
+  }));
+  el.querySelector("#submit-question")?.addEventListener("click", () => {
+    const selected = [...el.querySelectorAll(".option.selected")].map((button) => +button.dataset.index);
+    answer(q, selected, el);
+  });
 }
 function renderWrong() {
   const wrong = state.content.questions.filter((q) => recordFor(q.id).wrong), el = document.querySelector("#wrong-view");
@@ -38,8 +52,17 @@ function renderMock() {
   if (state.mockTimer) { clearInterval(state.mockTimer); state.mockTimer = null; }
   if (state.mock) {
     const answered = Object.keys(state.mock.answers).length;
-    el.innerHTML = `<div class="card"><h2>整卷模考 <span class="timer">${Math.max(0, Math.ceil((state.mock.ends - Date.now()) / 1000))}s</span></h2><p>已完成 ${answered}/${state.mock.questions.length} 题</p>${state.mock.questions.map((q, i) => `<div class="mock-q"><p><strong>${i + 1}. ${q.prompt}</strong></p>${q.options.map((o, j) => `<button class="option ${state.mock.answers[q.id] === j ? "selected" : ""}" data-q="${q.id}" data-index="${j}">${String.fromCharCode(65 + j)}. ${o}</button>`).join("")}</div>`).join("")}<button id="submit-mock" class="primary">交卷</button></div>`;
-    el.querySelectorAll(".mock-q .option").forEach((b) => b.addEventListener("click", () => { state.mock.answers[b.dataset.q] = +b.dataset.index; renderMock(); }));
+    el.innerHTML = `<div class="card"><h2>整卷模考 <span class="timer">${Math.max(0, Math.ceil((state.mock.ends - Date.now()) / 1000))}s</span></h2><p>已完成 ${answered}/${state.mock.questions.length} 题</p>${state.mock.questions.map((q, i) => `<div class="mock-q"><p><strong>${i + 1}. ${q.prompt}</strong></p>${q.options.map((o, j) => { const selected = Array.isArray(q.answer) ? (state.mock.answers[q.id] ?? []).includes(j) : state.mock.answers[q.id] === j; return `<button class="option ${selected ? "selected" : ""}" data-q="${q.id}" data-index="${j}">${String.fromCharCode(65 + j)}. ${o}</button>`; }).join("")}</div>`).join("")}<button id="submit-mock" class="primary">交卷</button></div>`;
+    el.querySelectorAll(".mock-q .option").forEach((button) => button.addEventListener("click", () => {
+      const question = state.mock.questions.find((item) => item.id === button.dataset.q);
+      if (Array.isArray(question.answer)) {
+        const selected = new Set(state.mock.answers[question.id] ?? []);
+        if (selected.has(+button.dataset.index)) selected.delete(+button.dataset.index);
+        else selected.add(+button.dataset.index);
+        state.mock.answers[question.id] = [...selected];
+      } else state.mock.answers[question.id] = +button.dataset.index;
+      renderMock();
+    }));
     el.querySelector("#submit-mock").addEventListener("click", submitMock);
     state.mockTimer = setInterval(() => {
       if (Date.now() >= state.mock.ends) return submitMock();
@@ -53,7 +76,12 @@ function renderMock() {
 }
 function submitMock() {
   if (!state.mock) return;
-  const score = state.mock.questions.reduce((n, q) => n + (state.mock.answers[q.id] === q.answer ? 1 : 0), 0), result = { finishedAt: new Date().toISOString(), score, total: state.mock.questions.length, percent: Math.round(score / state.mock.questions.length * 100) };
+  const score = state.mock.questions.reduce((n, q) => {
+    const selected = state.mock.answers[q.id], correct = Array.isArray(q.answer)
+      ? Array.isArray(selected) && selected.length === q.answer.length && selected.every((value) => q.answer.includes(value))
+      : selected === q.answer;
+    return n + (correct ? 1 : 0);
+  }, 0), result = { finishedAt: new Date().toISOString(), score, total: state.mock.questions.length, percent: Math.round(score / state.mock.questions.length * 100) };
   if (state.mockTimer) { clearInterval(state.mockTimer); state.mockTimer = null; }
   state.mocks.unshift(result); save("tourism-mock-results", state.mocks); state.mock = null; renderMock();
 }

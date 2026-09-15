@@ -102,9 +102,12 @@ function reviewFlags(item) {
   return [
     ...["id", "chapterId", "sourceType", "sourceNote"].filter((field) => !item[field]).map((field) => `缺少${field}`),
     !item.prompt && !item.title ? "缺少题目内容" : null,
-    item.type === "single_choice" && (!Array.isArray(item.options) || item.options.length < 2) ? "选项不足" : null,
-    item.type === "single_choice" && !Number.isInteger(item.answer) ? "答案未确认" : null,
-    item.type === "single_choice" && (!Array.isArray(item.options) || item.answer < 0 || item.answer >= item.options.length) ? "答案超出选项范围" : null,
+    ["single_choice", "multiple_choice", "true_false"].includes(item.type) && (!Array.isArray(item.options) || item.options.length < 2) ? "选项不足" : null,
+    item.type === "multiple_choice" && (!Array.isArray(item.answer) || item.answer.length === 0 || item.answer.some((answer) => !Number.isInteger(answer))) ? "答案未确认" : null,
+    item.type !== "multiple_choice" && ["single_choice", "true_false"].includes(item.type) && !Number.isInteger(item.answer) ? "答案未确认" : null,
+    item.type === "multiple_choice" && (!Array.isArray(item.options) || item.answer.some((answer) => answer < 0 || answer >= item.options.length)) ? "答案超出选项范围" : null,
+    item.type !== "multiple_choice" && ["single_choice", "true_false"].includes(item.type) && (!Array.isArray(item.options) || item.answer < 0 || item.answer >= item.options.length) ? "答案超出选项范围" : null,
+    !["single_choice", "multiple_choice", "true_false", "practical_material"].includes(item.type) ? "题型不受支持" : null,
     text.includes("[无法识别]") ? "包含 OCR 无法识别标记" : null,
     !hasMeaningfulValue(item.syllabusRequirement) ? "缺少大纲要求定位" : null,
     !hasMeaningfulValue(item.textbookSubject) || !hasMeaningfulValue(item.textbookChapter) ? "缺少教材章节定位" : null,
@@ -124,15 +127,22 @@ async function publishApprovedDraft() {
   const items = draft.items ?? draft.questions ?? [];
   const approved = items.filter((item) => item.reviewStatus === "approved");
   if (!approved.length) throw Object.assign(new Error("no_approved_items"), { status: 400 });
-  const invalid = approved.find((item) => reviewFlags(item).length || item.type !== "single_choice");
+  const invalid = approved.find((item) => reviewFlags(item).length || !["single_choice", "multiple_choice", "true_false"].includes(item.type));
   if (invalid) throw Object.assign(new Error(`item_not_publishable:${invalid.id}`), { status: 400 });
   const exam = JSON.parse(await readFile(contentPath, "utf8"));
   const existingIds = new Set(exam.questions.map((question) => question.id));
-  const duplicate = approved.find((item) => existingIds.has(item.id));
-  if (duplicate) throw Object.assign(new Error(`duplicate_question_id:${duplicate.id}`), { status: 400 });
+  const usedIds = new Set(existingIds);
+  const generatedIdPrefix = `draft-${Date.now()}`;
+  const publishedItems = approved.map((item, index) => {
+    let id = item.id;
+    if (!id || usedIds.has(id)) id = `${generatedIdPrefix}-${index + 1}`;
+    while (usedIds.has(id)) id = `${generatedIdPrefix}-${index + 1}-${usedIds.size}`;
+    usedIds.add(id);
+    return { ...item, id };
+  });
   const publishedAt = new Date().toISOString();
   const contentVersion = nextContentVersion(exam.contentVersion);
-  const publishedQuestions = approved.map(({ reviewStatus, reviewFlags: ignored, ...item }) => ({
+  const publishedQuestions = publishedItems.map(({ reviewStatus, reviewFlags: ignored, ...item }) => ({
     ...item,
     sourceStatus: "published",
     publishedAt,

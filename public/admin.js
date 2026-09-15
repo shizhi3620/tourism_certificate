@@ -43,6 +43,7 @@ async function publish() {
 }
 
 function answerLabel(answer, options = []) {
+  if (Array.isArray(answer)) return answer.map((index) => `${String.fromCharCode(65 + index)}（第 ${index + 1} 项）`).join("、") || "待确认";
   if (!Number.isInteger(answer)) return "待确认";
   const letter = String.fromCharCode(65 + answer);
   return options[answer] ? `${letter}（第 ${answer + 1} 项）` : `${letter}（第 ${answer + 1} 项，超出选项）`;
@@ -179,13 +180,19 @@ async function loadReview() {
     const card = document.createElement("article");
     card.className = `review-card review-${item.reviewStatus}`;
     const flags = item.reviewFlags.length ? `<p class="notice">${escapeHtml(item.reviewFlags.join("；"))}</p>` : "";
-    const answerOptions = Array.isArray(item.options)
-      ? item.options.map((option, index) => `<option value="${index}" ${item.answer === index ? "selected" : ""}>${String.fromCharCode(65 + index)}（第 ${index + 1} 项）</option>`).join("")
-      : "";
-    card.innerHTML = `<label><input type="checkbox" data-id="${escapeHtml(item.id)}"> 选择此题</label>${flags}<h3>${escapeHtml(item.prompt ?? item.title ?? item.id)}</h3><p>${(item.options ?? []).map((option, index) => `${String.fromCharCode(65 + index)}. ${escapeHtml(option)}`).join("<br>")}</p><p class="review-meta"><span class="review-status">审核状态：${escapeHtml(item.reviewStatus)}</span><br>答案：${escapeHtml(answerLabel(item.answer, item.options))}<br>教材：${escapeHtml(item.textbookSubject ?? "待补充")} / ${escapeHtml(item.textbookChapter ?? "待补充")}<br>大纲：${escapeHtml(item.syllabusRequirement ?? "待补充")}<br>来源：${escapeHtml((item.sourcePages ?? []).join(", "))}　${escapeHtml(item.sourceExcerpt ?? "待补充")}</p>${answerOptions ? `<label>人工确认答案<select data-answer>${answerOptions}</select></label><button type="button" class="small" data-save-answer>保存答案</button>` : ""}`;
+    const answerEditor = item.type === "multiple_choice"
+      ? (item.options ?? []).map((option, index) => `<label><input type="checkbox" data-answer-option value="${index}" ${Array.isArray(item.answer) && item.answer.includes(index) ? "checked" : ""}> ${String.fromCharCode(65 + index)}（第 ${index + 1} 项）</label>`).join("")
+      : (item.options ?? []).map((option, index) => `<option value="${index}" ${item.answer === index ? "selected" : ""}>${String.fromCharCode(65 + index)}（第 ${index + 1} 项）</option>`).join("");
+    const editor = item.type === "multiple_choice"
+      ? (answerEditor ? `<fieldset><legend>人工确认答案（可多选）</legend>${answerEditor}</fieldset>` : "")
+      : (answerEditor ? `<label>人工确认答案<select data-answer>${answerEditor}</select></label>` : "");
+    card.innerHTML = `<label><input type="checkbox" data-id="${escapeHtml(item.id)}"> 选择此题</label>${flags}<h3>${escapeHtml(item.prompt ?? item.title ?? item.id)}</h3><p>题型：${escapeHtml(item.type ?? "未指定")}<br>${(item.options ?? []).map((option, index) => `${String.fromCharCode(65 + index)}. ${escapeHtml(option)}`).join("<br>")}</p><p class="review-meta"><span class="review-status">审核状态：${escapeHtml(item.reviewStatus)}</span><br>答案：${escapeHtml(answerLabel(item.answer, item.options))}<br>教材：${escapeHtml(item.textbookSubject ?? "待补充")} / ${escapeHtml(item.textbookChapter ?? "待补充")}<br>大纲：${escapeHtml(item.syllabusRequirement ?? "待补充")}<br>来源：${escapeHtml((item.sourcePages ?? []).join(", "))}　${escapeHtml(item.sourceExcerpt ?? "待补充")}</p>${editor}${editor ? '<button type="button" class="small" data-save-answer>保存答案</button>' : ""}`;
     card.querySelector("[data-save-answer]")?.addEventListener("click", async () => {
       try {
-        await saveReviewFields(item.id, { answer: Number(card.querySelector("[data-answer]").value) });
+        const answer = item.type === "multiple_choice"
+          ? [...card.querySelectorAll("[data-answer-option]:checked")].map((input) => Number(input.value))
+          : Number(card.querySelector("[data-answer]").value);
+        await saveReviewFields(item.id, { answer });
       } catch (error) {
         reviewList.insertAdjacentHTML("afterbegin", `<p class="notice">答案保存失败：${escapeHtml(error.message)}</p>`);
       }
