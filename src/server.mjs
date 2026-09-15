@@ -1,6 +1,7 @@
 import { createServer } from "node:http";
 import { spawn } from "node:child_process";
 import { access, mkdir, readFile, writeFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
 import { extname, join, normalize, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { PDFParse } from "pdf-parse";
@@ -12,6 +13,7 @@ const practicalPath = join(root, "content/sichuan-practical.json");
 const sourceDirectory = join(root, "content/sources");
 const draftDirectory = join(root, "content/drafts");
 const draftPath = join(draftDirectory, "questions-pending-review.json");
+const materialsPath = join(sourceDirectory, "materials.json");
 const contentTypes = { ".css": "text/css; charset=utf-8", ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".json": "application/json; charset=utf-8" };
 const requests = new Map();
 const windowMs = 60_000;
@@ -150,6 +152,7 @@ async function importUploadedFile(file, fields) {
   await mkdir(sourceDirectory, { recursive: true });
   const stored = join(sourceDirectory, sourceId);
   const sections = [];
+  const materials = await readMaterials();
   const roleLabels = {
     textbook: "教材",
     syllabus: "考纲",
@@ -159,6 +162,12 @@ async function importUploadedFile(file, fields) {
   };
   let ocrUsed = false;
   for (const item of files) {
+    const hash = createHash("sha256").update(item.data).digest("hex");
+    const existing = materials.find((material) => material.hash === hash);
+    if (existing) {
+      sections.push(`\n\n===== ${existing.role}：${existing.filename}（已保存，跳过重复 OCR） =====\n${await readFile(resolve(root, existing.textPath), "utf8")}`);
+      continue;
+    }
     const storedFile = `${stored}-${item.filename.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
     await writeFile(storedFile, item.data);
     let section = item.data.toString("utf8");
@@ -172,6 +181,19 @@ async function importUploadedFile(file, fields) {
       ? `${roleLabels[item.fieldName] ?? "材料"}：${item.filename}`
       : item.filename;
     sections.push(`\n\n===== ${heading} =====\n${section}`);
+    if (fields.addToLibrary !== "false") {
+      materials.push({
+        id: hash.slice(0, 16),
+        hash,
+        filename: item.filename,
+        role: roleLabels[item.fieldName] ?? "材料",
+        subject: fields.subject ?? null,
+        region: fields.region ?? "全国",
+        active: true,
+        textPath: `content/sources/${sourceId}.txt`,
+        importedAt: new Date().toISOString(),
+      });
+    }
   }
   const text = sections.join("");
   const extractedByTextLayer = text.replace(/[=\s-]/g, "").length;
@@ -185,12 +207,28 @@ async function importUploadedFile(file, fields) {
     status: "extracted", extractedByTextLayer, ocrUsed, ocrRequired: extractedByTextLayer < 100 && !ocrUsed,
     importedAt: new Date().toISOString(), questionStatus: "not_generated",
   }, null, 2)}\n`);
+  await writeFile(materialsPath, `${JSON.stringify(materials, null, 2)}\n`);
   return {
     sourceId, textPath: `content/sources/${sourceId}.txt`, extractedCharacters: text.length,
     ocrRequired: extractedByTextLayer < 100 && !ocrUsed,
     ocrUsed,
     message: extractedByTextLayer < 100 ? "PDF 没有足够文本层，请先 OCR 后再生成。" : "文本已提取。",
   };
+}
+async function readMaterials() {
+  try {
+    return JSON.parse(await readFile(materialsPath, "utf8"));
+  } catch (error) {
+    if (error.code === "ENOENT") return [];
+    throw error;
+  }
+}
+function sourcePath(candidate) {
+  const resolved = resolve(root, candidate);
+  if (!resolved.startsWith(`${sourceDirectory}/`) || !resolved.endsWith(".txt")) {
+    throw Object.assign(new Error("invalid_source_path"), { status: 400 });
+  }
+  return resolved;
 }
 function published(content) {
   return { ...content, questions: content.questions.filter((question) => question.sourceStatus === "published") };
@@ -238,22 +276,42 @@ export function createTourismServer() {
         return sendJson(response, error.status ?? 500, { error: error.message });
       }
     }
+    if (pathname === "/api/admin/materials" && request.method === "GET") {
+      if (!adminAllowed(request)) return sendJson(response, 401, { error: "admin_auth_required" });
+      return sendJson(response, 200, { materials: await readMaterials() });
+    }
+    if (pathname === "/api/admin/materials" && request.method === "POST") {
+      if (!adminAllowed(request)) return sendJson(response, 401, { error: "admin_auth_required" });
+      try {
+        const payload = JSON.parse((await readBody(request, 1024 * 1024)).toString("utf8"));
+        const materials = await readMaterials();
+        const material = materials.find((item) => item.id === payload.id);
+        if (!material) return sendJson(response, 404, { error: "material_not_found" });
+        material.active = payload.active === true;
+        await writeFile(materialsPath, `${JSON.stringify(materials, null, 2)}\n`);
+        return sendJson(response, 200, { material });
+      } catch (error) {
+        return sendJson(response, error.status ?? 400, { error: error.message });
+      }
+    }
     if (pathname === "/api/admin/generate" && request.method === "POST") {
       if (!adminAllowed(request)) return sendJson(response, 401, { error: "admin_auth_required" });
       try {
         const payload = JSON.parse((await readBody(request, 1024 * 1024)).toString("utf8"));
-        const sourceCandidate = payload.textPath ? resolve(root, payload.textPath) : "";
-        if (!payload.textPath || !sourceCandidate.startsWith(`${sourceDirectory}/`) || !sourceCandidate.endsWith(".txt")) {
-          return sendJson(response, 400, { error: "invalid_source_path" });
-        }
+        const paths = payload.textPaths ?? (payload.textPath ? [payload.textPath] : []);
+        if (!paths.length) return sendJson(response, 400, { error: "no_materials_selected" });
+        const sourceCandidates = paths.map(sourcePath);
         try {
-          await access(sourceCandidate);
+          await Promise.all(sourceCandidates.map((candidate) => access(candidate)));
         } catch {
           return sendJson(response, 400, { error: "source_not_found" });
         }
+        const sourceText = (await Promise.all(sourceCandidates.map((candidate) => readFile(candidate, "utf8")))).join("\n\n");
+        const generatedInput = join(draftDirectory, "generation-input.txt");
+        await writeFile(generatedInput, sourceText, "utf8");
         await mkdir(draftDirectory, { recursive: true });
         const outputPath = "content/drafts/questions-pending-review.json";
-        return sendJson(response, 201, await generateDraft(payload.textPath, outputPath));
+        return sendJson(response, 201, await generateDraft("content/drafts/generation-input.txt", outputPath));
       } catch (error) {
         return sendJson(response, error.status ?? 500, { error: error.message });
       }

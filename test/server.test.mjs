@@ -157,6 +157,11 @@ test("protects the content admin page and accepts authenticated source uploads",
     const extracted = await readFile(payload.textPath, "utf8");
     assert.match(extracted, /===== past-paper\.txt =====/);
     assert.match(extracted, /===== past-paper-2\.txt =====/);
+    const materials = await fetch(`http://127.0.0.1:${port}/api/admin/materials`, {
+      headers: { authorization: "Bearer test-admin-token" },
+    });
+    assert.equal(materials.status, 200);
+    assert.ok((await materials.json()).materials.some((material) => material.filename === "past-paper.txt"));
   } finally {
     if (previousToken === undefined) delete process.env.ADMIN_TOKEN;
     else process.env.ADMIN_TOKEN = previousToken;

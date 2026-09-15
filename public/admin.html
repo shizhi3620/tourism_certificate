@@ -39,6 +39,8 @@
       <label>水印文字（可选，多个用英文逗号分隔）<input name="watermark" placeholder="如：仅供学习使用,某某网"></label>
       <label>科目<input name="subject" placeholder="如：政策与法律法规"></label>
       <label>地区<input name="region" value="全国"></label>
+      <label><input name="addToLibrary" type="checkbox" checked> OCR 后保存到材料库，供以后生成模拟题复用</label>
+      <button type="button" id="load-materials">加载已保存材料</button>
       <button type="submit">上传并提取文字</button>
     </form>
     <button id="generate" hidden>第二步：调用 DeepSeek 生成待审核草稿</button>
@@ -47,6 +49,7 @@
 
   <section class="card">
     <h2>第三步：选择生成目标</h2>
+    <div id="materials-list"><p class="muted">正在加载已保存材料…</p></div>
     <label>生成类型
       <select name="mode" form="import-form">
         <option value="past_paper">历年真题：按科目拆分单题</option>
@@ -54,7 +57,7 @@
         <option value="practical_material">四川现场材料：按现场考纲生成讲解与问答</option>
       </select>
     </label>
-    <p class="muted">选择“笔试模拟题”时，至少上传对应教材和全国大纲；选择“历年真题”时，上传真题及其答案；选择“现场材料”时，上传四川现场考试大纲和相关官方材料。</p>
+    <p class="muted">教材和大纲不是每次必传。首次识别后会保存在材料库；以后直接勾选要使用的已启用材料即可。旧版本可停用但不会删除。</p>
   </section>
 
   <section class="card">

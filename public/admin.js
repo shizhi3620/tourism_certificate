@@ -4,8 +4,11 @@ const generateButton = document.querySelector("#generate");
 const reviewList = document.querySelector("#review-list");
 const loadReviewButton = document.querySelector("#load-review");
 const publishButton = document.querySelector("#publish");
+const materialsList = document.querySelector("#materials-list");
+const loadMaterialsButton = document.querySelector("#load-materials");
 let token;
 let textPath;
+let materials = [];
 
 const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (character) => ({
   "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;",
@@ -24,6 +27,40 @@ async function publish() {
   reviewList.insertAdjacentHTML("afterbegin", `<p class="notice">${message}</p>`);
 }
 
+function renderMaterials() {
+  materialsList.innerHTML = materials.length
+    ? materials.map((material) => `<label><input type="checkbox" data-material-id="${escapeHtml(material.id)}" data-text-path="${escapeHtml(material.textPath)}" ${material.active ? "checked" : ""}> ${escapeHtml(material.role)} · ${escapeHtml(material.filename)} · ${escapeHtml(material.subject ?? "未指定科目")} · ${material.active ? "已启用" : "已停用"}</label>`).join("")
+    : '<p class="muted">暂无已保存材料，首次上传教材或大纲后会出现在这里。</p>';
+  materialsList.querySelectorAll("input[data-material-id]").forEach((input) => {
+    input.addEventListener("change", async () => {
+      const response = await fetch("/api/admin/materials", {
+        method: "POST",
+        headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
+        body: JSON.stringify({ id: input.dataset.materialId, active: input.checked }),
+      });
+      if (!response.ok) input.checked = !input.checked;
+    });
+  });
+}
+
+async function loadMaterials() {
+  const response = await fetch("/api/admin/materials", { headers: { authorization: `Bearer ${token}` } });
+  const payload = await response.json();
+  if (!response.ok) throw new Error(payload.error ?? "材料库加载失败");
+  materials = payload.materials ?? [];
+  renderMaterials();
+  generateButton.hidden = false;
+}
+
+loadMaterialsButton.addEventListener("click", async () => {
+  try {
+    token = form.querySelector('[name="token"]').value.trim();
+    await loadMaterials();
+  } catch (error) {
+    materialsList.textContent = error.message;
+  }
+});
+
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const data = new FormData(form);
@@ -40,6 +77,7 @@ form.addEventListener("submit", async (event) => {
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error ?? "上传失败");
     textPath = payload.textPath;
+    await loadMaterials();
     generateButton.hidden = false;
     result.textContent = payload.ocrRequired
       ? `提取到的文字较少（${payload.extractedCharacters} 个字符），请先对扫描 PDF 做 OCR，再生成草稿。`
@@ -56,8 +94,14 @@ generateButton.addEventListener("click", async () => {
     const response = await fetch("/api/admin/generate", {
       method: "POST",
       headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
-      body: JSON.stringify({ textPath }),
+      body: JSON.stringify({
+        textPaths: [
+          textPath,
+          ...[...materialsList.querySelectorAll("input[data-text-path]:checked")].map((input) => input.dataset.textPath),
+        ].filter(Boolean).filter((path, index, paths) => paths.indexOf(path) === index),
+      }),
     });
+
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error ?? "生成失败");
     result.textContent = `已生成待审核草稿：${payload.outputPath}。请人工审核后再发布。`;
