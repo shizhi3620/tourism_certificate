@@ -9,7 +9,8 @@
 
 题目可以来自官方公开材料、合法授权内容或自行编写内容。不要复制来源不明
 的题库。每道题必须填写题目 ID、章节、题型、题源、审核状态、来源说明、题干、
-选项、答案和解析；历年真题还应填写年份和地区。
+选项、答案和解析，还必须填写对应的大纲要求、教材科目、教材章节、来源页码
+（或 OCR 页码）和支持答案的原文引用片段；历年真题还应填写年份和地区。
 
 导入 PDF/教材并生成草稿：
 
@@ -31,6 +32,9 @@ OpenAI-compatible 服务。源文件和草稿
 OpenAI-compatible 服务，并将 `OPENAI_BASE_URL` 指向内网地址。
 
 生成工具或 AI 只能辅助起草，不能替代人工核对大纲、答案、解析、版权和语言。
+生成题还必须带有 `syllabusRequirement`、`textbookSubject`、
+`textbookChapter`、`sourcePages` 和 `sourceExcerpt`；审核页面会展示这些定位，
+发布前缺少任一项会被拒绝。
 
 扫描 PDF 可用 DeepSeek 进行逐页 OCR 试运行：
 

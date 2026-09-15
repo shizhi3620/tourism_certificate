@@ -16,6 +16,11 @@ const requiredQuestionFields = [
   "options",
   "answer",
   "explanation",
+  "syllabusRequirement",
+  "textbookSubject",
+  "textbookChapter",
+  "sourcePages",
+  "sourceExcerpt",
 ];
 
 if (exam.exam.writtenExam.subjectCount !== 4) {
@@ -36,6 +41,10 @@ for (const question of exam.questions) {
   }
   if (!Array.isArray(question.options) || question.answer < 0 || question.answer >= question.options.length) {
     throw new Error(`${question.id} has an invalid answer`);
+  }
+  if (!question.syllabusRequirement || !question.textbookSubject || !question.textbookChapter
+    || !Array.isArray(question.sourcePages) || !question.sourcePages.length || !question.sourceExcerpt) {
+    throw new Error(`${question.id} is missing source traceability`);
   }
 }
 for (const attraction of practical.attractions) {

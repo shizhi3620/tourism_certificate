@@ -36,6 +36,7 @@
       "id": "demo-001", "chapterId": "policy-01", "subject": "政策与法律法规",
       "type": "single_choice", "sourceType": "self_authored", "sourceStatus": "published",
       "sourceNote": "合成流程示例题，不代表正式考试真题。", "year": null, "region": "全国",
+      "textbookSubject": "政策与法律法规", "textbookChapter": "旅游政策与法规", "syllabusRequirement": "旅游者知情权与旅行社信息披露", "sourcePages": ["demo"], "sourceExcerpt": "合成流程示例题，仅用于验证内容结构。",
       "prompt": "下列哪种做法最能保障游客获取准确信息的权利？",
       "options": ["提供清晰、真实的行程信息", "隐瞒自费项目", "未经说明擅自更改行程", "拒绝回答游客的合理问题"],
       "answer": 0, "explanation": "Clear and truthful information supports informed choices and protects visitor rights."
@@ -44,6 +45,7 @@
       "id": "past-2024-sichuan-001", "chapterId": "local-01", "subject": "地方导游基础知识",
       "type": "single_choice", "sourceType": "past_exam", "sourceStatus": "published",
       "sourceNote": "Synthetic licensed-style practice item; not a reproduction of an exam paper.", "year": 2024, "region": "四川省",
+      "textbookSubject": "地方导游基础知识", "textbookChapter": "四川旅游资源", "syllabusRequirement": "四川自然与人文旅游资源", "sourcePages": ["demo"], "sourceExcerpt": "Synthetic licensed-style practice item.",
       "prompt": "关于四川旅游资源，下列哪项描述最恰当？",
       "options": ["四川兼具多样的自然景观和鲜活的地域文化", "四川旅游资源只有滨海度假区", "四川没有任何自然保护地", "四川旅游资源仅集中在一个城市"],
       "answer": 0, "explanation": "四川拥有多样的山地景观、文化遗产、美食和鲜活的地域传统。"
@@ -52,6 +54,7 @@
       "id": "mock-001", "chapterId": "business-01", "subject": "导游业务",
       "type": "single_choice", "sourceType": "mock", "sourceStatus": "published",
       "sourceNote": "合成模拟题。", "year": null, "region": "全国",
+      "textbookSubject": "导游业务", "textbookChapter": "导游服务规范", "syllabusRequirement": "突发情况与行程变化处理", "sourcePages": ["demo"], "sourceExcerpt": "合成模拟题，仅用于验证内容结构。",
       "prompt": "行程出现突发变化时，导游首先应当怎么做？",
       "options": ["说明已经核实的情况，并与游客协商安全的替代方案", "责怪游客没有配合", "直接删除原行程", "承诺无法保证的结果"],
       "answer": 0, "explanation": "冷静、准确地说明情况并提出安全替代方案，是专业导游的处理方式。"
@@ -60,6 +63,7 @@
       "id": "pending-001", "chapterId": "national-01", "subject": "全国导游基础知识",
       "type": "single_choice", "sourceType": "recalled", "sourceStatus": "pending_review",
       "sourceNote": "回忆题，尚未完成来源核验；仅供维护者审核。", "year": 2025, "region": "全国",
+      "textbookSubject": "全国导游基础知识", "textbookChapter": "中国历史文化", "syllabusRequirement": "待人工核对的历史文化知识点", "sourcePages": ["pending"], "sourceExcerpt": "回忆题，尚未完成来源核验。",
       "prompt": "Pending review item", "options": ["A", "B", "C", "D"], "answer": 0,
       "explanation": "This item is not published."
     }

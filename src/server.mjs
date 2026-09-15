@@ -86,6 +86,9 @@ function reviewFlags(item) {
     item.type === "single_choice" && (!Array.isArray(item.options) || item.options.length < 2) ? "选项不足" : null,
     item.type === "single_choice" && !Number.isInteger(item.answer) ? "答案未确认" : null,
     text.includes("[无法识别]") ? "包含 OCR 无法识别标记" : null,
+    !item.syllabusRequirement ? "缺少大纲要求定位" : null,
+    !item.textbookSubject || !item.textbookChapter ? "缺少教材章节定位" : null,
+    !Array.isArray(item.sourcePages) || !item.sourcePages.length || !item.sourceExcerpt ? "缺少来源页码或引用" : null,
   ].filter(Boolean);
 }
 function nextContentVersion(version) {

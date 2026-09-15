@@ -60,7 +60,7 @@ generateButton.addEventListener("click", async () => {
         const card = document.createElement("article");
         card.className = "card question";
         const flags = item.reviewFlags.length ? `<p class="notice">${escapeHtml(item.reviewFlags.join("；"))}</p>` : "";
-        card.innerHTML = `<label><input type="checkbox" data-id="${escapeHtml(item.id)}" ${item.reviewStatus === "approved" ? "checked" : ""}> ${escapeHtml(item.reviewStatus)}</label>${flags}<h3>${escapeHtml(item.prompt ?? item.title ?? item.id)}</h3><p>${(item.options ?? []).map((option, index) => `${String.fromCharCode(65 + index)}. ${escapeHtml(option)}`).join("<br>")}</p><p class="muted">答案：${escapeHtml(item.answer ?? "待确认")}　来源：${escapeHtml(item.sourceNote ?? "待补充")}</p>`;
+        card.innerHTML = `<label><input type="checkbox" data-id="${escapeHtml(item.id)}" ${item.reviewStatus === "approved" ? "checked" : ""}> ${escapeHtml(item.reviewStatus)}</label>${flags}<h3>${escapeHtml(item.prompt ?? item.title ?? item.id)}</h3><p>${(item.options ?? []).map((option, index) => `${String.fromCharCode(65 + index)}. ${escapeHtml(option)}`).join("<br>")}</p><p class="muted">答案：${escapeHtml(item.answer ?? "待确认")}　教材：${escapeHtml(item.textbookSubject ?? "待补充")} / ${escapeHtml(item.textbookChapter ?? "待补充")}<br>大纲：${escapeHtml(item.syllabusRequirement ?? "待补充")}<br>来源：${escapeHtml((item.sourcePages ?? []).join(", "))}　${escapeHtml(item.sourceExcerpt ?? "待补充")}</p>`;
         reviewList.append(card);
       }
       const save = async (status) => {

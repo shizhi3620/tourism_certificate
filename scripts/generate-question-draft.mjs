@@ -35,7 +35,7 @@ const instructions = {
 const prompt = `${instructions}
 不要编造法规、年份、数字或结论。所有输出都必须标记 pending_review，不能声称是官方真题。
 输出一个 JSON 对象，格式为 {"items":[...]}，不要输出 Markdown。笔试题字段为：
-{"id":"draft-...","chapterId":"待审核","subject":"${subject}","type":"single_choice","sourceType":"${mode === "past_paper" ? "past_exam" : "self_authored"}","sourceStatus":"pending_review","sourceNote":"教材文件名和页码待人工补充","year":null,"region":"${region}","prompt":"...","options":["...","...","...","..."],"answer":0,"explanation":"..."}。
+{"id":"draft-...","chapterId":"待审核","subject":"${subject}","textbookSubject":"${subject}","textbookChapter":"必须填写教材章节","syllabusRequirement":"必须填写对应大纲要求","sourcePages":["OCR PAGE 1"],"sourceExcerpt":"必须填写支持答案的原文短引文","type":"single_choice","sourceType":"${mode === "past_paper" ? "past_exam" : "self_authored"}","sourceStatus":"pending_review","sourceNote":"教材文件名和页码待人工补充","year":null,"region":"${region}","prompt":"...","options":["...","...","...","..."],"answer":0,"explanation":"..."}。
 现场材料字段为：
 {"id":"draft-...","region":"${region}","type":"practical_material","sourceStatus":"pending_review","title":"...","outlinePoints":["..."],"scriptZh":"...","scriptEn":"...","qa":[{"questionEn":"...","answerEn":"...","answerZh":"..."}]}。
 
