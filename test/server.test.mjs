@@ -68,12 +68,15 @@ test("serves the study app and versioned exam content", async () => {
 test("publishes only reviewed questions and exposes content versions", async () => {
   const server = await startServer();
   try {
+    const configuredContent = JSON.parse(await readFile(new URL("../content/exam.json", import.meta.url), "utf8"));
     const content = await (await fetch(`http://127.0.0.1:${server.address().port}/api/exam`)).json();
-    assert.equal(content.contentVersion, "2026.1.2");
+    assert.equal(content.contentVersion, configuredContent.contentVersion);
     assert.ok(content.questions.every((question) => question.sourceStatus === "published"));
     assert.equal(content.questions.some((question) => question.id === "pending-001"), false);
     assert.deepEqual((await (await fetch(`http://127.0.0.1:${server.address().port}/api/exam/versions`)).json()).versions[0], {
-      contentVersion: "2026.1.2", syllabusVersion: "2026.0", status: "published",
+      contentVersion: configuredContent.contentVersion,
+      syllabusVersion: configuredContent.syllabusVersion,
+      status: "published",
     });
   } finally {
     server.close();

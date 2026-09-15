@@ -27,15 +27,18 @@ function authHeaders(extra = {}) {
 
 async function publish() {
   if (!confirm("只发布审核状态为“approved”的笔试题，继续吗？")) return;
-  const response = await fetch("/api/admin/publish", {
-    method: "POST",
-    headers: authHeaders(),
-  });
-  const payload = await response.json();
-  const message = response.ok
-    ? `已发布 ${payload.published} 题，内容版本 ${payload.contentVersion}`
-    : escapeHtml(payload.error ?? "发布失败");
-  reviewList.insertAdjacentHTML("afterbegin", `<p class="notice">${message}</p>`);
+  try {
+    const response = await fetch("/api/admin/publish", {
+      method: "POST",
+      headers: authHeaders(),
+    });
+    const payload = await response.json();
+    if (!response.ok) throw new Error(payload.error ?? "发布失败");
+    reviewList.insertAdjacentHTML("afterbegin", `<p class="notice">已发布 ${payload.published} 题，内容版本 ${payload.contentVersion}。审核列表已刷新。</p>`);
+    await loadReview();
+  } catch (error) {
+    reviewList.insertAdjacentHTML("afterbegin", `<p class="notice">发布失败：${escapeHtml(error.message)}</p>`);
+  }
 }
 
 function answerLabel(answer, options = []) {
@@ -149,40 +152,53 @@ generateButton.addEventListener("click", async () => {
 
 publishButton.addEventListener("click", publish);
 
-loadReviewButton.addEventListener("click", async () => {
+async function loadReview() {
   reviewList.textContent = "正在加载…";
-  const response = await fetch("/api/admin/review", { headers: authHeaders() });
-  const payload = await response.json();
-  if (!response.ok) {
-    reviewList.textContent = payload.error ?? "加载失败";
-    return;
-  }
-  reviewList.innerHTML = "";
-  const items = payload.items ?? [];
-  const toolbar = document.createElement("div");
-  toolbar.className = "review-toolbar";
-  toolbar.innerHTML = `<p>共 ${items.length} 题，异常 ${items.filter((item) => item.reviewFlags.length).length} 题</p><label><input type="checkbox" data-action="select-all-review"> 全选题目</label><button class="small" data-action="approve">批量通过选中题目</button><button class="small" data-action="reject">批量驳回选中题目</button>`;
-  reviewList.append(toolbar);
-  for (const item of items) {
+  try {
+    const response = await fetch("/api/admin/review", { headers: authHeaders() });
+    const payload = await response.json();
+    if (!response.ok) throw new Error(payload.error ?? "加载失败");
+    reviewList.innerHTML = "";
+    const items = payload.items ?? [];
+    const toolbar = document.createElement("div");
+    toolbar.className = "review-toolbar";
+    toolbar.innerHTML = `<p>共 ${items.length} 题，异常 ${items.filter((item) => item.reviewFlags.length).length} 题</p><label><input type="checkbox" data-action="select-all-review"> 全选题目</label><button class="small" data-action="approve">批量通过选中题目</button><button class="small" data-action="reject">批量驳回选中题目</button>`;
+    reviewList.append(toolbar);
+    for (const item of items) {
     const card = document.createElement("article");
     card.className = `review-card review-${item.reviewStatus}`;
     const flags = item.reviewFlags.length ? `<p class="notice">${escapeHtml(item.reviewFlags.join("；"))}</p>` : "";
     card.innerHTML = `<label><input type="checkbox" data-id="${escapeHtml(item.id)}"> 选择此题</label>${flags}<h3>${escapeHtml(item.prompt ?? item.title ?? item.id)}</h3><p>${(item.options ?? []).map((option, index) => `${String.fromCharCode(65 + index)}. ${escapeHtml(option)}`).join("<br>")}</p><p class="review-meta"><span class="review-status">审核状态：${escapeHtml(item.reviewStatus)}</span><br>答案：${escapeHtml(answerLabel(item.answer, item.options))}<br>教材：${escapeHtml(item.textbookSubject ?? "待补充")} / ${escapeHtml(item.textbookChapter ?? "待补充")}<br>大纲：${escapeHtml(item.syllabusRequirement ?? "待补充")}<br>来源：${escapeHtml((item.sourcePages ?? []).join(", "))}　${escapeHtml(item.sourceExcerpt ?? "待补充")}</p>`;
-    reviewList.append(card);
+      reviewList.append(card);
+    }
+    const save = async (status) => {
+      const ids = [...reviewList.querySelectorAll("input[data-id]:checked")].map((input) => input.dataset.id);
+      if (!ids.length) {
+        reviewList.insertAdjacentHTML("afterbegin", `<p class="notice">请先选择至少一道题。</p>`);
+        return;
+      }
+      try {
+        const saveResponse = await fetch("/api/admin/review", {
+          method: "POST",
+          headers: authHeaders({ "content-type": "application/json" }),
+          body: JSON.stringify({ items: ids.map((id) => ({ id, reviewStatus: status })) }),
+        });
+        const saved = await saveResponse.json();
+        if (!saveResponse.ok) throw new Error(saved.error ?? "审核状态更新失败");
+        reviewList.insertAdjacentHTML("afterbegin", `<p class="notice">已${status === "approved" ? "通过" : "驳回"} ${saved.updated ?? ids.length} 题，审核列表已刷新。</p>`);
+        await loadReview();
+      } catch (error) {
+        reviewList.insertAdjacentHTML("afterbegin", `<p class="notice">审核更新失败：${escapeHtml(error.message)}</p>`);
+      }
+    };
+    toolbar.querySelector('[data-action="select-all-review"]').onchange = (event) => {
+      reviewList.querySelectorAll("input[data-id]").forEach((input) => { input.checked = event.target.checked; });
+    };
+    toolbar.querySelector('[data-action="approve"]').onclick = () => save("approved");
+    toolbar.querySelector('[data-action="reject"]').onclick = () => save("rejected");
+  } catch (error) {
+    reviewList.innerHTML = `<p class="notice">加载失败：${escapeHtml(error.message)}</p>`;
   }
-  const save = async (status) => {
-    const ids = [...reviewList.querySelectorAll("input[data-id]:checked")].map((input) => input.dataset.id);
-    const saveResponse = await fetch("/api/admin/review", {
-      method: "POST",
-      headers: authHeaders({ "content-type": "application/json" }),
-      body: JSON.stringify({ items: ids.map((id) => ({ id, reviewStatus: status })) }),
-    });
-    const saved = await saveResponse.json();
-    reviewList.insertAdjacentHTML("afterbegin", `<p class="notice">已更新 ${saved.updated ?? 0} 题</p>`);
-  };
-  toolbar.querySelector('[data-action="select-all-review"]').onchange = (event) => {
-    reviewList.querySelectorAll("input[data-id]").forEach((input) => { input.checked = event.target.checked; });
-  };
-  toolbar.querySelector('[data-action="approve"]').onclick = () => save("approved");
-  toolbar.querySelector('[data-action="reject"]').onclick = () => save("rejected");
-});
+}
+
+loadReviewButton.addEventListener("click", loadReview);

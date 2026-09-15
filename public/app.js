@@ -74,4 +74,5 @@ async function init() {
   document.querySelectorAll(".tab").forEach((tab) => tab.addEventListener("click", () => selectView(tab.dataset.view)));
   renderStats(); renderPractice();
 }
+document.querySelector("#refresh-content").addEventListener("click", () => window.location.reload());
 init().catch((error) => { document.querySelector("#practice-view").innerHTML = `<div class="card"><h2>加载失败</h2><p>${error.message}</p></div>`; });
