@@ -47,8 +47,22 @@ for (const [index, page] of pages.entries()) {
     }),
   });
   if (!response.ok) throw new Error(`DeepSeek OCR failed on page ${index + 1}: ${response.status} ${await response.text()}`);
-  const payload = await response.json();
-  let text = payload.choices?.[0]?.message?.content ?? "";
+  const responseText = await response.text();
+  let payload;
+  try {
+    payload = JSON.parse(responseText);
+  } catch (error) {
+    throw new Error(`DeepSeek OCR returned invalid JSON on page ${index + 1}: ${error.message}; response: ${responseText.slice(0, 500)}`);
+  }
+  if (!payload || typeof payload !== "object") {
+    throw new Error(`DeepSeek OCR returned an empty response on page ${index + 1}; response: ${responseText.slice(0, 500)}`);
+  }
+  const content = payload.choices?.[0]?.message?.content;
+  if (typeof content !== "string" || !content.trim()) {
+    const detail = payload.error?.message ?? payload.message ?? "response contained no message content";
+    throw new Error(`DeepSeek OCR returned no text on page ${index + 1}: ${detail}`);
+  }
+  let text = content;
   for (const term of watermarkTerms) {
     text = text.split("\n").filter((line) => !line.includes(term)).join("\n");
   }
