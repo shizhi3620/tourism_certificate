@@ -68,7 +68,7 @@ npm run ocr:source -- content/sources/<source-id>-原文件.pdf
 
 本地内容管理页面已提供上传和 DeepSeek 草稿生成入口：启动服务后访问
 `/admin`，设置 `ADMIN_TOKEN` 后使用管理令牌登录。支持 PDF、TXT、MD，单文件
-最大 15 MB。教材和大纲首次 OCR 后会写入 `content/sources/materials.json`
+本次上传总大小最大 200 MB。教材和大纲首次 OCR 后会写入 `content/sources/materials.json`
 材料库；后续可在管理页面加载并勾选已启用材料生成，不需要重复上传或 OCR。
 相同文件按 SHA-256 跳过重复识别；旧材料可以停用，来源文件和 OCR 文本仍保留。
 未勾选“保存到材料库”的本次上传只用于当前生成。生成结果仍写入

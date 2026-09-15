@@ -14,6 +14,7 @@ const sourceDirectory = join(root, "content/sources");
 const draftDirectory = join(root, "content/drafts");
 const draftPath = join(draftDirectory, "questions-pending-review.json");
 const materialsPath = join(sourceDirectory, "materials.json");
+const uploadMaxBytes = 200 * 1024 * 1024;
 const contentTypes = { ".css": "text/css; charset=utf-8", ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".json": "application/json; charset=utf-8" };
 const requests = new Map();
 const windowMs = 60_000;
@@ -262,8 +263,8 @@ export function createTourismServer() {
     if (pathname === "/admin" && request.method === "GET") return sendStaticFile(response, "/admin.html");
     if (pathname === "/api/admin/import" && request.method === "POST") {
       if (!adminAllowed(request)) return sendJson(response, 401, { error: "admin_auth_required" });
-      const fields = parseMultipart(await readBody(request), request.headers["content-type"] ?? "");
       try {
+        const fields = parseMultipart(await readBody(request, uploadMaxBytes), request.headers["content-type"] ?? "");
         const uploadedFiles = [
           fields.file,
           fields.textbook,
