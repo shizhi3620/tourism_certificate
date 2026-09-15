@@ -61,6 +61,16 @@ loadMaterialsButton.addEventListener("click", async () => {
   }
 });
 
+form.querySelector('[name="token"]').addEventListener("change", async (event) => {
+  token = event.target.value.trim();
+  if (!token) return;
+  try {
+    await loadMaterials();
+  } catch (error) {
+    materialsList.textContent = error.message;
+  }
+});
+
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const data = new FormData(form);
