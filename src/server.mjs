@@ -129,6 +129,13 @@ function reviewFlags(item) {
     !hasMeaningfulPages || !hasMeaningfulValue(item.sourceExcerpt) ? "缺少来源页码或引用" : null,
   ].filter(Boolean);
 }
+function normalizeSourcePages(sourcePages) {
+  if (Array.isArray(sourcePages)) return sourcePages;
+  if (typeof sourcePages === "string" && sourcePages.trim()) {
+    return sourcePages.split(/\s*[,，、]\s*/).filter(Boolean);
+  }
+  return [];
+}
 function nextContentVersion(version) {
   const match = /^(\d{4})\.(\d+)\.(\d+)$/.exec(version);
   if (!match) throw new Error(`invalid contentVersion: ${version}`);
@@ -393,8 +400,9 @@ export function createTourismServer() {
         const draft = await readDraft();
         const items = (draft.items ?? draft.questions ?? []).map((item) => ({
           ...item,
+          sourcePages: normalizeSourcePages(item.sourcePages),
           reviewStatus: item.reviewStatus ?? "pending",
-          reviewFlags: reviewFlags(item),
+          reviewFlags: reviewFlags({ ...item, sourcePages: normalizeSourcePages(item.sourcePages) }),
         }));
         return sendJson(response, 200, { ...draft, items });
       } catch (error) {
