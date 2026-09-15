@@ -11,6 +11,7 @@ const contentPath = join(root, "content/exam.json");
 const practicalPath = join(root, "content/sichuan-practical.json");
 const sourceDirectory = join(root, "content/sources");
 const draftDirectory = join(root, "content/drafts");
+const draftPath = join(draftDirectory, "questions-pending-review.json");
 const contentTypes = { ".css": "text/css; charset=utf-8", ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".json": "application/json; charset=utf-8" };
 const requests = new Map();
 const windowMs = 60_000;
@@ -77,6 +78,18 @@ function generateDraft(textPath, outputPath) {
     child.on("error", reject);
     child.on("close", (code) => code === 0 ? resolvePromise({ outputPath }) : reject(new Error(stderr.trim() || `generator exited with ${code}`)));
   });
+}
+function reviewFlags(item) {
+  const text = JSON.stringify(item);
+  return [
+    !item.prompt && !item.title ? "缺少题目内容" : null,
+    item.type === "single_choice" && (!Array.isArray(item.options) || item.options.length < 2) ? "选项不足" : null,
+    item.type === "single_choice" && !Number.isInteger(item.answer) ? "答案未确认" : null,
+    text.includes("[无法识别]") ? "包含 OCR 无法识别标记" : null,
+  ].filter(Boolean);
+}
+async function readDraft() {
+  return JSON.parse(await readFile(draftPath, "utf8"));
 }
 async function importUploadedFile(file, fields) {
   const files = Array.isArray(file) ? file : [file];
@@ -175,6 +188,36 @@ export function createTourismServer() {
         return sendJson(response, 201, await generateDraft(payload.textPath, outputPath));
       } catch (error) {
         return sendJson(response, error.status ?? 500, { error: error.message });
+      }
+    }
+    if (pathname === "/api/admin/review" && request.method === "GET") {
+      if (!adminAllowed(request)) return sendJson(response, 401, { error: "admin_auth_required" });
+      try {
+        const draft = await readDraft();
+        const items = (draft.items ?? draft.questions ?? []).map((item) => ({
+          ...item,
+          reviewStatus: item.reviewStatus ?? "pending",
+          reviewFlags: reviewFlags(item),
+        }));
+        return sendJson(response, 200, { ...draft, items });
+      } catch (error) {
+        return sendJson(response, error.code === "ENOENT" ? 404 : 500, { error: error.code === "ENOENT" ? "draft_not_found" : error.message });
+      }
+    }
+    if (pathname === "/api/admin/review" && request.method === "POST") {
+      if (!adminAllowed(request)) return sendJson(response, 401, { error: "admin_auth_required" });
+      try {
+        const payload = JSON.parse((await readBody(request, 2 * 1024 * 1024)).toString("utf8"));
+        const draft = await readDraft();
+        const updates = new Map((payload.items ?? []).map((item) => [item.id, item]));
+        const items = (draft.items ?? draft.questions ?? []).map((item) => {
+          const update = updates.get(item.id);
+          return update ? { ...item, ...update, sourceStatus: "pending_review" } : item;
+        });
+        await writeFile(draftPath, `${JSON.stringify({ ...draft, items, updatedAt: new Date().toISOString() }, null, 2)}\n`);
+        return sendJson(response, 200, { updated: updates.size });
+      } catch (error) {
+        return sendJson(response, error.code === "ENOENT" ? 404 : 400, { error: error.code === "ENOENT" ? "draft_not_found" : error.message });
       }
     }
     if (request.method !== "GET") return sendJson(response, 405, { error: "method_not_allowed" });

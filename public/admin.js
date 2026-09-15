@@ -38,6 +38,44 @@ generateButton.addEventListener("click", async () => {
       headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
       body: JSON.stringify({ textPath }),
     });
+
+    const reviewList = document.querySelector("#review-list");
+    const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (character) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;",
+    }[character]));
+    document.querySelector("#load-review").addEventListener("click", async () => {
+      reviewList.textContent = "正在加载…";
+      const response = await fetch("/api/admin/review", { headers: { authorization: `Bearer ${token}` } });
+      const payload = await response.json();
+      if (!response.ok) {
+        reviewList.textContent = payload.error ?? "加载失败";
+        return;
+      }
+      reviewList.innerHTML = "";
+      const items = payload.items ?? [];
+      const toolbar = document.createElement("div");
+      toolbar.innerHTML = `<p>共 ${items.length} 题，异常 ${items.filter((item) => item.reviewFlags.length).length} 题</p><button class="small" data-action="approve">批量通过</button> <button class="small" data-action="reject">批量驳回</button>`;
+      reviewList.append(toolbar);
+      for (const item of items) {
+        const card = document.createElement("article");
+        card.className = "card question";
+        const flags = item.reviewFlags.length ? `<p class="notice">${escapeHtml(item.reviewFlags.join("；"))}</p>` : "";
+        card.innerHTML = `<label><input type="checkbox" data-id="${escapeHtml(item.id)}" ${item.reviewStatus === "approved" ? "checked" : ""}> ${escapeHtml(item.reviewStatus)}</label>${flags}<h3>${escapeHtml(item.prompt ?? item.title ?? item.id)}</h3><p>${(item.options ?? []).map((option, index) => `${String.fromCharCode(65 + index)}. ${escapeHtml(option)}`).join("<br>")}</p><p class="muted">答案：${escapeHtml(item.answer ?? "待确认")}　来源：${escapeHtml(item.sourceNote ?? "待补充")}</p>`;
+        reviewList.append(card);
+      }
+      const save = async (status) => {
+        const ids = [...reviewList.querySelectorAll("input[data-id]:checked")].map((input) => input.dataset.id);
+        const result = await fetch("/api/admin/review", {
+          method: "POST",
+          headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
+          body: JSON.stringify({ items: ids.map((id) => ({ id, reviewStatus: status })) }),
+        });
+        const saved = await result.json();
+        reviewList.insertAdjacentHTML("afterbegin", `<p class="notice">已更新 ${saved.updated ?? 0} 题</p>`);
+      };
+      toolbar.querySelector('[data-action="approve"]').onclick = () => save("approved");
+      toolbar.querySelector('[data-action="reject"]').onclick = () => save("rejected");
+    });
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error ?? "生成失败");
     result.textContent = `已生成待审核草稿：${payload.outputPath}。请人工审核后再发布。`;
