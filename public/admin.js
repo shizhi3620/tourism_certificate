@@ -35,7 +35,8 @@ async function publish() {
     });
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error ?? "发布失败");
-    reviewList.insertAdjacentHTML("afterbegin", `<p class="notice">已发布 ${payload.published} 题，内容版本 ${payload.contentVersion}。审核列表已刷新。</p>`);
+    const skipped = (payload.skipped ?? []).map((item) => `${item.id}：${item.reasons.join("、")}`).join("；");
+    reviewList.insertAdjacentHTML("afterbegin", `<p class="notice">已发布 ${payload.published} 题，内容版本 ${payload.contentVersion}。${skipped ? `以下题目因异常保留待处理：${escapeHtml(skipped)}` : ""}审核列表已刷新。</p>`);
     await loadReview();
   } catch (error) {
     reviewList.insertAdjacentHTML("afterbegin", `<p class="notice">发布失败：${escapeHtml(error.message)}</p>`);

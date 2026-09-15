@@ -29,13 +29,13 @@ const region = process.env.GENERATION_REGION || manifest.region || "全国";
 const mode = process.env.GENERATION_MODE || manifest.mode || "written_simulation";
 const instructions = {
   past_paper: "从历年真题及答案中逐题拆分，保留题干、全部选项、正确答案和解析；不得改写成模拟题。",
-  written_simulation: "结合教材和全国笔试大纲生成中文笔试模拟题；题型可以是 single_choice（单选题）、multiple_choice（多选题）或 true_false（判断题），按原文适合的题型生成，答案必须来自原文证据。",
+  written_simulation: "结合教材和全国笔试大纲生成中文笔试模拟题；必须混合生成 single_choice（单选题）、multiple_choice（多选题）和 true_false（判断题），不得把全部题目生成成单选题。建议题型比例约为单选50%、多选25%、判断25%，答案必须来自原文证据。",
   practical_material: "结合现场考试大纲生成现场讲解材料，可包含景点讲解提纲、中文要点、英文表达和问答训练；不要生成全国笔试题。",
 }[mode] ?? "只生成原文能够支持的中文学习材料。";
 const prompt = `${instructions}
 不要编造法规、年份、数字或结论。所有输出都必须标记 pending_review，不能声称是官方真题。
 输出一个 JSON 对象，格式为 {"items":[...]}，不要输出 Markdown。笔试题字段为：
-{"id":"draft-唯一编号","chapterId":"待审核","subject":"${subject}","textbookSubject":"${subject}","textbookChapter":"必须填写教材章节","syllabusRequirement":"必须填写对应大纲要求","sourcePages":["OCR PAGE 1"],"sourceExcerpt":"必须填写支持答案的原文短引文","type":"single_choice","sourceType":"${mode === "past_paper" ? "past_exam" : "self_authored"}","sourceStatus":"pending_review","sourceNote":"教材文件名和页码待人工补充","year":null,"region":"${region}","prompt":"...","options":["...","...","...","..."],"answer":1,"explanation":"..."}。
+笔试题必须完整包含以下字段：id、chapterId、subject、textbookSubject、textbookChapter、syllabusRequirement、sourcePages、sourceExcerpt、type、sourceType、sourceStatus、sourceNote、year、region、prompt、options、answer、explanation。type 必须从三种题型中选择：single_choice 示例 answer 为单个下标；multiple_choice 示例 answer 为下标数组；true_false 的 options 必须为 ["正确","错误"] 且 answer 为 0 或 1。不要把 type 固定为 single_choice，也不要用省略字段的残缺题目。
 题目 id 必须在本次输出中唯一，不能重复使用 draft-001 等固定编号。
 single_choice 的 answer 是正确选项的从 0 开始下标；multiple_choice 的 answer 是正确选项下标数组；true_false 的 options 必须是 ["正确","错误"]，answer 只能是 0 或 1。必须根据来源证据填写真实答案，不要默认使用 0 或 A；同一批题目的正确答案应按来源内容分布，不能全部相同。past_paper 模式必须保留原题型、全部选项和原答案，不能自行改成单选题。
 现场材料字段为：
@@ -109,5 +109,13 @@ const normalizedItems = items.map((item, index) => {
   usedIds.add(id);
   return { ...item, id, sourceStatus: "pending_review" };
 });
+if (mode === "written_simulation" && normalizedItems.length >= 3) {
+  const types = new Set(normalizedItems.map((item) => item.type));
+  if (types.size < 3) {
+    const rawOutputPath = resolve("content/drafts/last-generation-response.txt");
+    await writeFile(rawOutputPath, content, "utf8");
+    throw new Error(`written simulation must contain all three question types; received ${[...types].join(", ") || "none"}; raw response saved to ${rawOutputPath}`);
+  }
+}
 await writeFile(resolve(outputPath), `${JSON.stringify({ generatedAt: new Date().toISOString(), source: sourceTextPath, model, mode, items: normalizedItems }, null, 2)}\n`);
 console.log(`Wrote ${normalizedItems.length} pending-review items to ${outputPath}`);

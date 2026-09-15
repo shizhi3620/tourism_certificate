@@ -127,13 +127,16 @@ async function publishApprovedDraft() {
   const items = draft.items ?? draft.questions ?? [];
   const approved = items.filter((item) => item.reviewStatus === "approved");
   if (!approved.length) throw Object.assign(new Error("no_approved_items"), { status: 400 });
-  const invalid = approved.find((item) => reviewFlags(item).length || !["single_choice", "multiple_choice", "true_false"].includes(item.type));
-  if (invalid) throw Object.assign(new Error(`item_not_publishable:${invalid.id}`), { status: 400 });
+  const publishable = approved.filter((item) => !reviewFlags(item).length && ["single_choice", "multiple_choice", "true_false"].includes(item.type));
+  const skipped = approved
+    .filter((item) => !publishable.includes(item))
+    .map((item) => ({ id: item.id ?? "missing-id", reasons: reviewFlags(item).length ? reviewFlags(item) : ["题型不受支持"] }));
+  if (!publishable.length) throw Object.assign(new Error(`no_publishable_items:${skipped.map((item) => item.id).join(",")}`), { status: 400 });
   const exam = JSON.parse(await readFile(contentPath, "utf8"));
   const existingIds = new Set(exam.questions.map((question) => question.id));
   const usedIds = new Set(existingIds);
   const generatedIdPrefix = `draft-${Date.now()}`;
-  const publishedItems = approved.map((item, index) => {
+  const publishedItems = publishable.map((item, index) => {
     let id = item.id;
     if (!id || usedIds.has(id)) id = `${generatedIdPrefix}-${index + 1}`;
     while (usedIds.has(id)) id = `${generatedIdPrefix}-${index + 1}-${usedIds.size}`;
@@ -154,13 +157,16 @@ async function publishApprovedDraft() {
     questions: [...exam.questions, ...publishedQuestions],
   };
   await writeFile(contentPath, `${JSON.stringify(updatedExam, null, 2)}\n`);
-  const remaining = items.filter((item) => !approved.includes(item)).map((item) => ({ ...item }));
-  const updatedDraft = { ...draft, items: remaining, publishedAt, publishedCount: publishedQuestions.length };
+  const remaining = items.filter((item) => !publishable.includes(item)).map((item) => ({
+    ...item,
+    ...(approved.includes(item) ? { reviewStatus: "pending" } : {}),
+  }));
+  const updatedDraft = { ...draft, items: remaining, publishedAt, publishedCount: publishedQuestions.length, skipped };
   await writeFile(draftPath, `${JSON.stringify(updatedDraft, null, 2)}\n`);
   await writeFile(join(draftDirectory, "publish-history.jsonl"), `${JSON.stringify({
     publishedAt, contentVersion, count: publishedQuestions.length, ids: publishedQuestions.map((item) => item.id),
   })}\n`, { flag: "a" });
-  return { published: publishedQuestions.length, contentVersion };
+  return { published: publishedQuestions.length, contentVersion, skipped };
 }
 async function importUploadedFile(file, fields) {
   const files = Array.isArray(file) ? file : [file];
@@ -380,7 +386,12 @@ export function createTourismServer() {
         const updates = new Map((payload.items ?? []).map((item) => [item.id, item]));
         const items = (draft.items ?? draft.questions ?? []).map((item) => {
           const update = updates.get(item.id);
-          return update ? { ...item, ...update, sourceStatus: "pending_review" } : item;
+          if (!update) return item;
+          const merged = { ...item, ...update, sourceStatus: "pending_review" };
+          if (merged.reviewStatus === "approved" && reviewFlags(merged).length) {
+            return { ...merged, reviewStatus: "pending" };
+          }
+          return merged;
         });
         await writeFile(draftPath, `${JSON.stringify({ ...draft, items, updatedAt: new Date().toISOString() }, null, 2)}\n`);
         return sendJson(response, 200, { updated: updates.size });
