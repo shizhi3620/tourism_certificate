@@ -130,6 +130,24 @@ test("protects the content admin page and accepts authenticated source uploads",
       headers: { authorization: "Bearer test-admin-token" },
       body: form,
     });
+
+    test("routes authenticated draft generation requests to the generator", async () => {
+      const server = createTourismServer().listen(0);
+      await once(server, "listening");
+      const { port } = server.address();
+      try {
+        const response = await fetch(`http://127.0.0.1:${port}/api/admin/generate`, {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ textPath: "content/sources/not-found.txt" }),
+        });
+        assert.equal(response.status, 401);
+        assert.deepEqual(await response.json(), { error: "admin_auth_required" });
+      } finally {
+        server.close();
+        await once(server, "close");
+      }
+    });
     assert.equal(response.status, 201);
     const payload = await response.json();
     assert.match(payload.textPath, /^content\/sources\//);

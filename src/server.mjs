@@ -1,7 +1,7 @@
 import { createServer } from "node:http";
 import { spawn } from "node:child_process";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { extname, join, normalize } from "node:path";
+import { access, mkdir, readFile, writeFile } from "node:fs/promises";
+import { extname, join, normalize, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { PDFParse } from "pdf-parse";
 
@@ -52,16 +52,16 @@ function parseMultipart(body, contentType) {
     const value = part.slice(separator + 4).replace(/\r\n$/, "");
     result[name] = filename ? { filename, data: Buffer.from(value, "latin1") } : value;
   }
-  function generateDraft(textPath, outputPath) {
-    return new Promise((resolvePromise, reject) => {
-      const child = spawn(process.execPath, ["scripts/generate-question-draft.mjs", textPath, outputPath], { cwd: root, env: process.env });
-      let stderr = "";
-      child.stderr.on("data", (chunk) => { stderr += chunk; });
-      child.on("error", reject);
-      child.on("close", (code) => code === 0 ? resolvePromise({ outputPath }) : reject(new Error(stderr.trim() || `generator exited with ${code}`)));
-    });
-  }
   return result;
+}
+function generateDraft(textPath, outputPath) {
+  return new Promise((resolvePromise, reject) => {
+    const child = spawn(process.execPath, ["scripts/generate-question-draft.mjs", textPath, outputPath], { cwd: root, env: process.env });
+    let stderr = "";
+    child.stderr.on("data", (chunk) => { stderr += chunk; });
+    child.on("error", reject);
+    child.on("close", (code) => code === 0 ? resolvePromise({ outputPath }) : reject(new Error(stderr.trim() || `generator exited with ${code}`)));
+  });
 }
 async function importUploadedFile(file, fields) {
   const files = Array.isArray(file) ? file : [file];
@@ -137,20 +137,25 @@ export function createTourismServer() {
       } catch (error) {
         return sendJson(response, error.status ?? 500, { error: error.message });
       }
-      if (pathname === "/api/admin/generate" && request.method === "POST") {
-        if (!adminAllowed(request)) return sendJson(response, 401, { error: "admin_auth_required" });
-        try {
-          const payload = JSON.parse((await readBody(request, 1024 * 1024)).toString("utf8"));
-          const sourceCandidate = payload.textPath ? resolve(root, payload.textPath) : "";
-          if (!payload.textPath || !sourceCandidate.startsWith(`${sourceDirectory}/`) || !sourceCandidate.endsWith(".txt")) {
-            return sendJson(response, 400, { error: "invalid_source_path" });
-          }
-          await mkdir(draftDirectory, { recursive: true });
-          const outputPath = "content/drafts/questions-pending-review.json";
-          return sendJson(response, 201, await generateDraft(payload.textPath, outputPath));
-        } catch (error) {
-          return sendJson(response, error.status ?? 500, { error: error.message });
+    }
+    if (pathname === "/api/admin/generate" && request.method === "POST") {
+      if (!adminAllowed(request)) return sendJson(response, 401, { error: "admin_auth_required" });
+      try {
+        const payload = JSON.parse((await readBody(request, 1024 * 1024)).toString("utf8"));
+        const sourceCandidate = payload.textPath ? resolve(root, payload.textPath) : "";
+        if (!payload.textPath || !sourceCandidate.startsWith(`${sourceDirectory}/`) || !sourceCandidate.endsWith(".txt")) {
+          return sendJson(response, 400, { error: "invalid_source_path" });
         }
+        try {
+          await access(sourceCandidate);
+        } catch {
+          return sendJson(response, 400, { error: "source_not_found" });
+        }
+        await mkdir(draftDirectory, { recursive: true });
+        const outputPath = "content/drafts/questions-pending-review.json";
+        return sendJson(response, 201, await generateDraft(payload.textPath, outputPath));
+      } catch (error) {
+        return sendJson(response, error.status ?? 500, { error: error.message });
       }
     }
     if (request.method !== "GET") return sendJson(response, 405, { error: "method_not_allowed" });
