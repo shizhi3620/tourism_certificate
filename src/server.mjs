@@ -82,7 +82,7 @@ function generateDraft(textPath, outputPath, context = {}) {
   return new Promise((resolvePromise, reject) => {
     const child = spawn(process.execPath, ["scripts/generate-question-draft.mjs", textPath, outputPath], {
       cwd: root,
-      env: { ...process.env, GENERATION_MODE: context.mode ?? "written_simulation", GENERATION_SUBJECT: context.subject ?? "", GENERATION_REGION: context.region ?? "全国" },
+      env: { ...process.env, GENERATION_MODE: context.mode ?? "written_simulation", GENERATION_SUBJECT: context.subject ?? "", GENERATION_REGION: context.region ?? "全国", GENERATION_CHAPTER: context.chapter ?? "" },
     });
     let stderr = "";
     child.stderr.on("data", (chunk) => { stderr += chunk; });
@@ -359,6 +359,7 @@ export function createTourismServer() {
           mode: payload.mode,
           subject: payload.subject,
           region: payload.region,
+          chapter: payload.chapter,
         }));
       } catch (error) {
         return sendJson(response, error.status ?? 500, { error: error.message });

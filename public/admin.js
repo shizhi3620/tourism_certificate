@@ -123,6 +123,7 @@ form.addEventListener("submit", async (event) => {
     generationContext = {
       mode: data.get("mode") || "written_simulation",
       subject: data.get("subject") || "",
+      chapter: data.get("chapter") || "",
       region: data.get("region") || "全国",
     };
     await loadMaterials();
@@ -148,6 +149,7 @@ generateButton.addEventListener("click", async () => {
         mode: formData.get("mode") || generationContext.mode || "written_simulation",
         subject: formData.get("subject") || generationContext.subject || "",
         region: formData.get("region") || generationContext.region || "全国",
+        chapter: formData.get("chapter") || generationContext.chapter || "",
         textPaths: [
           textPath,
           ...[...materialsList.querySelectorAll("input[data-text-path]:checked")].map((input) => input.dataset.textPath),

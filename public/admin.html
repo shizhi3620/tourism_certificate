@@ -38,6 +38,7 @@
       <label>年份（真题适用）<input name="year" placeholder="如：2025"></label>
       <label>水印文字（可选，多个用英文逗号分隔）<input name="watermark" placeholder="如：仅供学习使用,某某网"></label>
       <label>科目<input name="subject" placeholder="如：政策与法律法规"></label>
+      <label>章节范围（章节练习可选）<input name="chapter" placeholder="如：第三章 宪法的基本知识"></label>
       <label>地区<input name="region" value="全国"></label>
       <label>文字识别方式
         <select name="extractionMethod">
@@ -64,6 +65,7 @@
       <select name="mode" form="import-form">
         <option value="past_paper">历年真题：按科目拆分单题</option>
         <option value="written_simulation">笔试模拟题：教材 + 全国大纲</option>
+        <option value="chapter_practice">章节练习：按教材章节生成</option>
         <option value="practical_material">四川现场材料：按现场考纲生成讲解与问答</option>
       </select>
     </label>

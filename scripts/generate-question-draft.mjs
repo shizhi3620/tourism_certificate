@@ -26,13 +26,16 @@ if (manifest.ocrRequired) throw new Error("source requires OCR before question g
 
 const subject = process.env.GENERATION_SUBJECT || manifest.subject || "待审核";
 const region = process.env.GENERATION_REGION || manifest.region || "全国";
+const chapter = process.env.GENERATION_CHAPTER || manifest.chapter || "";
 const mode = process.env.GENERATION_MODE || manifest.mode || "written_simulation";
 const instructions = {
   past_paper: "从历年真题及答案中逐题拆分，保留题干、全部选项、正确答案和解析；不得改写成模拟题。",
   written_simulation: "结合教材和全国笔试大纲生成中文笔试模拟题；必须混合生成 single_choice（单选题）、multiple_choice（多选题）和 true_false（判断题），不得把全部题目生成成单选题。建议题型比例约为单选50%、多选25%、判断25%，答案必须来自原文证据。",
+  chapter_practice: "只围绕指定教材章节生成章节练习题；必须混合生成 single_choice（单选题）、multiple_choice（多选题）和 true_false（判断题），题型比例参考2025年全国导游资格考试两套卷合计比例：单选约54.4%、判断约22.5%、多选约23.1%。题量不足时取最接近整数。每题必须标注对应教材章节和大纲要求，答案必须来自原文证据。",
   practical_material: "结合现场考试大纲生成现场讲解材料，可包含景点讲解提纲、中文要点、英文表达和问答训练；不要生成全国笔试题。",
 }[mode] ?? "只生成原文能够支持的中文学习材料。";
 const prompt = `${instructions}
+章节范围：${chapter || "请根据材料中的章节结构合理分配"}
 不要编造法规、年份、数字或结论。所有输出都必须标记 pending_review，不能声称是官方真题。
 输出一个 JSON 对象，格式为 {"items":[...]}，不要输出 Markdown。笔试题字段为：
 笔试题必须完整包含以下字段：id、chapterId、subject、textbookSubject、textbookChapter、syllabusRequirement、sourcePages、sourceExcerpt、type、sourceType、sourceStatus、sourceNote、year、region、prompt、options、answer、explanation。type 必须从三种题型中选择：single_choice 示例 answer 为单个下标；multiple_choice 示例 answer 为下标数组；true_false 的 options 必须为 ["正确","错误"] 且 answer 为 0 或 1。不要把 type 固定为 single_choice，也不要用省略字段的残缺题目。
@@ -109,7 +112,7 @@ const normalizedItems = items.map((item, index) => {
   usedIds.add(id);
   return { ...item, id, sourceStatus: "pending_review" };
 });
-if (mode === "written_simulation" && normalizedItems.length >= 3) {
+if (["written_simulation", "chapter_practice"].includes(mode) && normalizedItems.length >= 3) {
   const types = new Set(normalizedItems.map((item) => item.type));
   if (types.size < 3) {
     const rawOutputPath = resolve("content/drafts/last-generation-response.txt");
