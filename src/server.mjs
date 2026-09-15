@@ -51,7 +51,7 @@ function parseMultipart(body, contentType) {
     const filename = headersText.match(/filename="([^"]*)"/i)?.[1];
     if (!name) continue;
     const value = part.slice(separator + 4).replace(/\r\n$/, "");
-    const parsed = filename ? { filename, data: Buffer.from(value, "latin1") } : value;
+    const parsed = filename ? { filename, fieldName: name, data: Buffer.from(value, "latin1") } : value;
     result[name] = result[name] ? [].concat(result[name], parsed) : parsed;
   }
   return result;
@@ -150,6 +150,13 @@ async function importUploadedFile(file, fields) {
   await mkdir(sourceDirectory, { recursive: true });
   const stored = join(sourceDirectory, sourceId);
   const sections = [];
+  const roleLabels = {
+    textbook: "教材",
+    syllabus: "考纲",
+    pastPaper: "历年真题",
+    answerFile: "答案",
+    file: "材料",
+  };
   let ocrUsed = false;
   for (const item of files) {
     const storedFile = `${stored}-${item.filename.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
@@ -161,13 +168,18 @@ async function importUploadedFile(file, fields) {
       section = await readFile(ocrPath, "utf8");
       ocrUsed = true;
     }
-    sections.push(`\n\n===== ${item.filename} =====\n${section}`);
+    const heading = item.fieldName && item.fieldName !== "file"
+      ? `${roleLabels[item.fieldName] ?? "材料"}：${item.filename}`
+      : item.filename;
+    sections.push(`\n\n===== ${heading} =====\n${section}`);
   }
   const text = sections.join("");
   const extractedByTextLayer = text.replace(/[=\s-]/g, "").length;
   await writeFile(`${stored}.txt`, text, "utf8");
   await writeFile(`${stored}.json`, `${JSON.stringify({
-    sourceId, originalName: files.map((item) => item.filename), storedFile: stored, extractedText: `${stored}.txt`,
+    sourceId, originalName: files.map((item) => item.filename), fileRoles: files.map((item) => ({
+      filename: item.filename, role: roleLabels[item.fieldName] ?? "材料",
+    })), storedFile: stored, extractedText: `${stored}.txt`,
     subject: fields.subject ?? null, region: fields.region ?? "全国", mode: fields.mode ?? "written_simulation",
     year: fields.year ?? null, answerFile: fields.answerFile ?? null, watermark: fields.watermark ?? null,
     status: "extracted", extractedByTextLayer, ocrUsed, ocrRequired: extractedByTextLayer < 100 && !ocrUsed,
@@ -214,7 +226,13 @@ export function createTourismServer() {
       if (!adminAllowed(request)) return sendJson(response, 401, { error: "admin_auth_required" });
       const fields = parseMultipart(await readBody(request), request.headers["content-type"] ?? "");
       try {
-        const uploadedFiles = [fields.file, fields.answerFile].flat().filter(Boolean);
+        const uploadedFiles = [
+          fields.file,
+          fields.textbook,
+          fields.syllabus,
+          fields.pastPaper,
+          fields.answerFile,
+        ].flat().filter(Boolean);
         return sendJson(response, 201, await importUploadedFile(uploadedFiles, fields));
       } catch (error) {
         return sendJson(response, error.status ?? 500, { error: error.message });

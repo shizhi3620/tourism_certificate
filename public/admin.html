@@ -1,16 +1,70 @@
 <!doctype html>
 <html lang="zh-CN">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>题库内容管理</title><link rel="stylesheet" href="/styles.css"></head>
-<body><main class="shell"><header class="hero"><p class="eyebrow">TOURISM · CONTENT ADMIN</p><h1>题库与现场材料生成</h1><p class="muted">上传材料后仅生成待审核草稿，不会自动发布。</p></header>
-<section class="card"><form id="import-form">
-<label>管理令牌<input name="token" type="password" required></label>
-<label>材料 PDF（可多选，系统会逐份调用 DeepSeek OCR）<input name="file" type="file" accept=".pdf,.txt,.md" multiple required></label>
-<label>答案 PDF（可选）<input name="answerFile" type="file" accept=".pdf,.txt,.md"></label>
-<label>年份（如适用）<input name="year" placeholder="如：2025"></label>
-<label>水印文字（可选，多个用英文逗号分隔）<input name="watermark" placeholder="如：仅供学习使用,某某网"></label>
-<label>生成类型<select name="mode"><option value="past_paper">历年真题：按科目拆分单题</option><option value="written_simulation">笔试模拟题：教材+全国大纲</option><option value="practical_material">现场材料：按考纲生成讲解与问答</option></select></label>
-<label>科目<input name="subject" placeholder="如：政策与法律法规"></label><label>地区<input name="region" value="全国"></label>
-<button type="submit">上传并提取文本</button></form><button id="generate" hidden>调用 DeepSeek 生成待审核草稿</button><p id="result" class="notice" hidden></p></section>
-<section class="card"><h2>材料要求</h2><ul><li>扫描 PDF 需要先 OCR；系统会检测文本层，文字过少时禁止直接生成。</li><li>历年真题可一次选择多个按年份命名的 PDF，答案 PDF 单独上传；请保留题干、完整选项、答案、年份和地区。</li><li>教材和考纲用于模拟题时，建议分别上传并分开生成，便于审核来源。</li><li>现场材料应包含地区、景点范围、评分要点和语言要求；英语只用于现场训练。</li></ul></section>
-<section class="card"><h2>审核工作台</h2><p class="muted">只需重点检查异常题目；审核通过后，点击下方按钮才会发布到正式题库。</p><button id="load-review" class="primary">加载待审核题目</button><button id="publish" class="small">发布已通过题目</button><div id="review-list"></div></section>
-</main><script type="module" src="/admin.js"></script></body></html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>题库内容管理</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<main class="shell">
+  <header class="hero">
+    <p class="eyebrow">TOURISM · CONTENT ADMIN</p>
+    <h1>题库与现场材料生成</h1>
+    <p class="muted">先按用途上传材料，再选择生成目标。系统只生成待审核草稿，不会自动发布。</p>
+  </header>
+
+  <section class="card">
+    <h2>第一步：上传材料</h2>
+    <p class="muted">支持扫描 PDF、普通 PDF、TXT 和 MD。扫描 PDF 会逐页调用 DeepSeek OCR，原始文件不会被修改。</p>
+    <form id="import-form">
+      <label>管理令牌<input name="token" type="password" required></label>
+      <label>教材 PDF（可多选）
+        <input name="textbook" type="file" accept=".pdf,.txt,.md" multiple>
+        <span class="muted">四本教材分别对应四个笔试科目；可一次上传同一科目的多个文件。</span>
+      </label>
+      <label>考试大纲 PDF（可多选）
+        <input name="syllabus" type="file" accept=".pdf,.txt,.md" multiple>
+        <span class="muted">上传全国笔试大纲；四川现场材料生成时，再上传四川现场考试大纲。</span>
+      </label>
+      <label>历年真题 PDF（可多选）
+        <input name="pastPaper" type="file" accept=".pdf,.txt,.md" multiple>
+        <span class="muted">建议按年份命名，例如 2025-四川-政策与法律法规.pdf。</span>
+      </label>
+      <label>历年真题答案 PDF（可多选）
+        <input name="answerFile" type="file" accept=".pdf,.txt,.md" multiple>
+        <span class="muted">答案与真题分开时放这里；系统会保留“答案”来源标记，无法匹配的题目仍需人工确认。</span>
+      </label>
+      <label>年份（真题适用）<input name="year" placeholder="如：2025"></label>
+      <label>水印文字（可选，多个用英文逗号分隔）<input name="watermark" placeholder="如：仅供学习使用,某某网"></label>
+      <label>科目<input name="subject" placeholder="如：政策与法律法规"></label>
+      <label>地区<input name="region" value="全国"></label>
+      <button type="submit">上传并提取文字</button>
+    </form>
+    <button id="generate" hidden>第二步：调用 DeepSeek 生成待审核草稿</button>
+    <p id="result" class="notice" hidden></p>
+  </section>
+
+  <section class="card">
+    <h2>第三步：选择生成目标</h2>
+    <label>生成类型
+      <select name="mode" form="import-form">
+        <option value="past_paper">历年真题：按科目拆分单题</option>
+        <option value="written_simulation">笔试模拟题：教材 + 全国大纲</option>
+        <option value="practical_material">四川现场材料：按现场考纲生成讲解与问答</option>
+      </select>
+    </label>
+    <p class="muted">选择“笔试模拟题”时，至少上传对应教材和全国大纲；选择“历年真题”时，上传真题及其答案；选择“现场材料”时，上传四川现场考试大纲和相关官方材料。</p>
+  </section>
+
+  <section class="card">
+    <h2>第四步：审核与发布</h2>
+    <p class="muted">加载后重点检查题干、答案、教材章节、大纲要求、来源页码和引用片段。审核通过后，再点击“发布已通过题目”。</p>
+    <button id="load-review" class="primary">加载待审核题目</button>
+    <button id="publish" class="small">发布已通过题目</button>
+    <div id="review-list"></div>
+  </section>
+</main>
+<script type="module" src="/admin.js"></script>
+</body>
+</html>
