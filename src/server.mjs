@@ -178,10 +178,17 @@ async function importUploadedFile(file, fields) {
     await writeFile(storedFile, item.data);
     let section = item.data.toString("utf8");
     if (/\.pdf$/i.test(item.filename)) {
-      const ocrPath = `${storedFile}.ocr.txt`;
-      await runDeepSeekOcr(storedFile, ocrPath, fields.watermark ?? "");
-      section = await readFile(ocrPath, "utf8");
-      ocrUsed = true;
+      if (fields.extractionMethod === "ocr") {
+        const ocrPath = `${storedFile}.ocr.txt`;
+        await runDeepSeekOcr(storedFile, ocrPath, fields.watermark ?? "");
+        section = await readFile(ocrPath, "utf8");
+        ocrUsed = true;
+      } else {
+        const parser = new PDFParse({ data: item.data });
+        const parsed = await parser.getText();
+        section = parsed.text;
+        await parser.destroy();
+      }
     }
     const heading = item.fieldName && item.fieldName !== "file"
       ? `${roleLabels[item.fieldName] ?? "材料"}：${item.filename}`
@@ -205,7 +212,7 @@ async function importUploadedFile(file, fields) {
   const extractedByTextLayer = text.replace(/[=\s-]/g, "").length;
   await writeFile(`${stored}.txt`, text, "utf8");
   await writeFile(`${stored}.json`, `${JSON.stringify({
-    sourceId, originalName: files.map((item) => item.filename), fileRoles: files.map((item) => ({
+    sourceId, originalName: files.map((item) => item.filename), extractionMethod: fields.extractionMethod ?? "local", fileRoles: files.map((item) => ({
       filename: item.filename, role: roleLabels[item.fieldName] ?? "材料",
     })), storedFile: stored, extractedText: `${stored}.txt`,
     subject: fields.subject ?? null, region: fields.region ?? "全国", mode: fields.mode ?? "written_simulation",
@@ -218,6 +225,7 @@ async function importUploadedFile(file, fields) {
     sourceId, textPath: `content/sources/${sourceId}.txt`, extractedCharacters: text.length,
     ocrRequired: extractedByTextLayer < 100 && !ocrUsed,
     ocrUsed,
+    extractionMethod: fields.extractionMethod ?? "local",
     message: extractedByTextLayer < 100 ? "PDF 没有足够文本层，请先 OCR 后再生成。" : "文本已提取。",
   };
 }

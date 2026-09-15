@@ -39,6 +39,13 @@
       <label>水印文字（可选，多个用英文逗号分隔）<input name="watermark" placeholder="如：仅供学习使用,某某网"></label>
       <label>科目<input name="subject" placeholder="如：政策与法律法规"></label>
       <label>地区<input name="region" value="全国"></label>
+      <label>文字识别方式
+        <select name="extractionMethod">
+          <option value="local" selected>本地提取 PDF 文本层（不调用 OCR）</option>
+          <option value="ocr">DeepSeek OCR 识别扫描 PDF</option>
+        </select>
+        <span class="muted">本地方式适合有文字层的 PDF；扫描 PDF 通常需要选择 DeepSeek OCR。</span>
+      </label>
       <label><input name="addToLibrary" type="checkbox" checked> OCR 后保存到材料库，供以后生成模拟题复用</label>
       <button type="button" id="load-materials">加载已保存材料</button>
       <button type="submit">上传并提取文字</button>
