@@ -4,7 +4,7 @@
 <body><main class="shell"><header class="hero"><p class="eyebrow">TOURISM · CONTENT ADMIN</p><h1>题库与现场材料生成</h1><p class="muted">上传材料后仅生成待审核草稿，不会自动发布。</p></header>
 <section class="card"><form id="import-form">
 <label>管理令牌<input name="token" type="password" required></label>
-<label>历年真题 PDF（可多选，按年份上传）<input name="file" type="file" accept=".pdf,.txt,.md" multiple required></label>
+<label>材料 PDF（可多选，系统会逐份调用 DeepSeek OCR）<input name="file" type="file" accept=".pdf,.txt,.md" multiple required></label>
 <label>答案 PDF（可选）<input name="answerFile" type="file" accept=".pdf,.txt,.md"></label>
 <label>年份（如适用）<input name="year" placeholder="如：2025"></label>
 <label>生成类型<select name="mode"><option value="past_paper">历年真题：按科目拆分单题</option><option value="written_simulation">笔试模拟题：教材+全国大纲</option><option value="practical_material">现场材料：按考纲生成讲解与问答</option></select></label>

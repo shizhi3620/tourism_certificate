@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { once } from "node:events";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { createTourismServer } from "../src/server.mjs";
 
@@ -125,6 +126,7 @@ test("protects the content admin page and accepts authenticated source uploads",
     form.append("mode", "past_paper");
     form.append("subject", "政策与法律法规");
     form.append("file", new Blob(["1. 示例题\nA. 甲\nB. 乙\n答案：A"], { type: "text/plain" }), "past-paper.txt");
+    form.append("file", new Blob(["2. 第二题\nA. 丙\nB. 丁\n答案：B"], { type: "text/plain" }), "past-paper-2.txt");
     const response = await fetch(`http://127.0.0.1:${port}/api/admin/import`, {
       method: "POST",
       headers: { authorization: "Bearer test-admin-token" },
@@ -152,6 +154,9 @@ test("protects the content admin page and accepts authenticated source uploads",
     const payload = await response.json();
     assert.match(payload.textPath, /^content\/sources\//);
     assert.ok(payload.extractedCharacters > 0);
+    const extracted = await readFile(payload.textPath, "utf8");
+    assert.match(extracted, /===== past-paper\.txt =====/);
+    assert.match(extracted, /===== past-paper-2\.txt =====/);
   } finally {
     if (previousToken === undefined) delete process.env.ADMIN_TOKEN;
     else process.env.ADMIN_TOKEN = previousToken;

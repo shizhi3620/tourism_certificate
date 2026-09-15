@@ -50,9 +50,24 @@ function parseMultipart(body, contentType) {
     const filename = headersText.match(/filename="([^"]*)"/i)?.[1];
     if (!name) continue;
     const value = part.slice(separator + 4).replace(/\r\n$/, "");
-    result[name] = filename ? { filename, data: Buffer.from(value, "latin1") } : value;
+    const parsed = filename ? { filename, data: Buffer.from(value, "latin1") } : value;
+    result[name] = result[name] ? [].concat(result[name], parsed) : parsed;
   }
   return result;
+}
+function runDeepSeekOcr(inputPath, outputPath) {
+  return new Promise((resolvePromise, reject) => {
+    const child = spawn(process.execPath, ["scripts/ocr-source-deepseek.mjs", inputPath, outputPath], {
+      cwd: root,
+      env: process.env,
+    });
+    let stderr = "";
+    child.stderr.on("data", (chunk) => { stderr += chunk; });
+    child.on("error", reject);
+    child.on("close", (code) => code === 0
+      ? resolvePromise()
+      : reject(new Error(stderr.trim() || `DeepSeek OCR exited with ${code}`)));
+  });
 }
 function generateDraft(textPath, outputPath) {
   return new Promise((resolvePromise, reject) => {
@@ -72,13 +87,16 @@ async function importUploadedFile(file, fields) {
   await mkdir(sourceDirectory, { recursive: true });
   const stored = join(sourceDirectory, sourceId);
   const sections = [];
+  let ocrUsed = false;
   for (const item of files) {
-    await writeFile(`${stored}-${item.filename.replace(/[^a-zA-Z0-9._-]/g, "_")}`, item.data);
+    const storedFile = `${stored}-${item.filename.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+    await writeFile(storedFile, item.data);
     let section = item.data.toString("utf8");
     if (/\.pdf$/i.test(item.filename)) {
-      const parser = new PDFParse({ data: item.data });
-      ({ text: section } = await parser.getText());
-      await parser.destroy();
+      const ocrPath = `${storedFile}.ocr.txt`;
+      await runDeepSeekOcr(storedFile, ocrPath);
+      section = await readFile(ocrPath, "utf8");
+      ocrUsed = true;
     }
     sections.push(`\n\n===== ${item.filename} =====\n${section}`);
   }
@@ -89,12 +107,13 @@ async function importUploadedFile(file, fields) {
     sourceId, originalName: files.map((item) => item.filename), storedFile: stored, extractedText: `${stored}.txt`,
     subject: fields.subject ?? null, region: fields.region ?? "全国", mode: fields.mode ?? "written_simulation",
     year: fields.year ?? null, answerFile: fields.answerFile ?? null,
-    status: "extracted", extractedByTextLayer, ocrRequired: extractedByTextLayer < 100,
+    status: "extracted", extractedByTextLayer, ocrUsed, ocrRequired: extractedByTextLayer < 100 && !ocrUsed,
     importedAt: new Date().toISOString(), questionStatus: "not_generated",
   }, null, 2)}\n`);
   return {
     sourceId, textPath: `content/sources/${sourceId}.txt`, extractedCharacters: text.length,
-    ocrRequired: extractedByTextLayer < 100,
+    ocrRequired: extractedByTextLayer < 100 && !ocrUsed,
+    ocrUsed,
     message: extractedByTextLayer < 100 ? "PDF 没有足够文本层，请先 OCR 后再生成。" : "文本已提取。",
   };
 }

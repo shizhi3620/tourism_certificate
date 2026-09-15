@@ -23,7 +23,7 @@ form.addEventListener("submit", async (event) => {
     generateButton.hidden = false;
     result.textContent = payload.ocrRequired
       ? `提取到的文字较少（${payload.extractedCharacters} 个字符），请先对扫描 PDF 做 OCR，再生成草稿。`
-      : `已提取 ${payload.extractedCharacters} 个字符，可继续调用 DeepSeek 生成待审核草稿。`;
+      : `已处理全部上传材料（${payload.ocrUsed ? "已使用 DeepSeek OCR" : "文本提取"}），共 ${payload.extractedCharacters} 个字符，可继续生成待审核草稿。`;
   } catch (error) {
     result.textContent = error.message;
   }
