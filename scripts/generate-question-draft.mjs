@@ -1,5 +1,6 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { basename, dirname, resolve } from "node:path";
+import { jsonrepair } from "jsonrepair";
 
 const sourceTextPath = process.argv[2];
 const outputPath = process.argv[3] ?? "content/drafts/questions-pending-review.json";
@@ -71,8 +72,8 @@ function parseModelJson(raw) {
   }));
   const end = Math.max(unfenced.lastIndexOf("}"), unfenced.lastIndexOf("]"));
   if (start >= end) throw new Error("generator output did not contain a JSON object");
-  const candidate = unfenced.slice(start, end + 1).replace(/,\s*([}\]])/g, "$1");
-  return JSON.parse(candidate);
+  const candidate = unfenced.slice(start, end + 1);
+  return JSON.parse(jsonrepair(candidate));
 }
 
 let parsed;

@@ -55,11 +55,11 @@ function parseMultipart(body, contentType) {
   }
   return result;
 }
-function runDeepSeekOcr(inputPath, outputPath) {
+function runDeepSeekOcr(inputPath, outputPath, watermark = "") {
   return new Promise((resolvePromise, reject) => {
     const child = spawn(process.execPath, ["scripts/ocr-source-deepseek.mjs", inputPath, outputPath], {
       cwd: root,
-      env: process.env,
+      env: { ...process.env, DEEPSEEK_OCR_WATERMARKS: watermark },
     });
     let stderr = "";
     child.stderr.on("data", (chunk) => { stderr += chunk; });
@@ -94,7 +94,7 @@ async function importUploadedFile(file, fields) {
     let section = item.data.toString("utf8");
     if (/\.pdf$/i.test(item.filename)) {
       const ocrPath = `${storedFile}.ocr.txt`;
-      await runDeepSeekOcr(storedFile, ocrPath);
+      await runDeepSeekOcr(storedFile, ocrPath, fields.watermark ?? "");
       section = await readFile(ocrPath, "utf8");
       ocrUsed = true;
     }
@@ -106,7 +106,7 @@ async function importUploadedFile(file, fields) {
   await writeFile(`${stored}.json`, `${JSON.stringify({
     sourceId, originalName: files.map((item) => item.filename), storedFile: stored, extractedText: `${stored}.txt`,
     subject: fields.subject ?? null, region: fields.region ?? "全国", mode: fields.mode ?? "written_simulation",
-    year: fields.year ?? null, answerFile: fields.answerFile ?? null,
+    year: fields.year ?? null, answerFile: fields.answerFile ?? null, watermark: fields.watermark ?? null,
     status: "extracted", extractedByTextLayer, ocrUsed, ocrRequired: extractedByTextLayer < 100 && !ocrUsed,
     importedAt: new Date().toISOString(), questionStatus: "not_generated",
   }, null, 2)}\n`);

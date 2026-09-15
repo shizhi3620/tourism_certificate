@@ -12,6 +12,10 @@ const apiKey = process.env.DEEPSEEK_API_KEY;
 if (!apiKey) throw new Error("DEEPSEEK_API_KEY is required for DeepSeek OCR");
 const model = process.env.DEEPSEEK_OCR_MODEL ?? "deepseek-chat";
 const baseUrl = (process.env.DEEPSEEK_BASE_URL ?? "https://api.deepseek.com/v1").replace(/\/$/, "");
+const watermarkTerms = (process.env.DEEPSEEK_OCR_WATERMARKS ?? "")
+  .split(",")
+  .map((term) => term.trim())
+  .filter(Boolean);
 const root = resolve(".");
 const workDirectory = resolve("content/drafts", `ocr-${Date.now()}`);
 await mkdir(workDirectory, { recursive: true });
@@ -36,7 +40,7 @@ for (const [index, page] of pages.entries()) {
       messages: [{
         role: "user",
         content: [
-          { type: "text", text: "请逐字识别图片中的中文文字。保留题号、选项、答案、表格和页眉页脚，不要总结，不要补写看不清的内容；看不清处写[无法识别]。" },
+          { type: "text", text: `请逐字识别图片中的中文文字。保留题号、选项、答案和表格，不要总结，不要补写看不清的内容；看不清处写[无法识别]。${watermarkTerms.length ? `请不要输出以下水印文字：${watermarkTerms.join("、")}。` : "无法确认的页眉页脚不要擅自删除。"}` },
           { type: "image_url", image_url: { url: `data:image/png;base64,${image}` } },
         ],
       }],
@@ -44,7 +48,11 @@ for (const [index, page] of pages.entries()) {
   });
   if (!response.ok) throw new Error(`DeepSeek OCR failed on page ${index + 1}: ${response.status} ${await response.text()}`);
   const payload = await response.json();
-  sections.push(`\n\n===== OCR PAGE ${index + 1} =====\n${payload.choices?.[0]?.message?.content ?? ""}`);
+  let text = payload.choices?.[0]?.message?.content ?? "";
+  for (const term of watermarkTerms) {
+    text = text.split("\n").filter((line) => !line.includes(term)).join("\n");
+  }
+  sections.push(`\n\n===== OCR PAGE ${index + 1} =====\n${text}`);
   console.log(`OCR page ${index + 1}/${pages.length}`);
 }
 await writeFile(resolve(outputPath), sections.join(""), "utf8");
