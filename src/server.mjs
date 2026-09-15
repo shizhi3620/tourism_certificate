@@ -64,24 +64,39 @@ function parseMultipart(body, contentType) {
   return result;
 }
 async function importUploadedFile(file, fields) {
-  if (!file?.filename || !/\.(pdf|txt|md)$/i.test(file.filename)) throw Object.assign(new Error("only_pdf_or_text"), { status: 400 });
-  const sourceId = `${Date.now()}-${file.filename.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+  const files = Array.isArray(file) ? file : [file];
+  if (!files.length || files.some((item) => !item?.filename || !/\.(pdf|txt|md)$/i.test(item.filename))) {
+    throw Object.assign(new Error("only_pdf_or_text"), { status: 400 });
+  }
+  const sourceId = `${Date.now()}-${files[0].filename.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
   await mkdir(sourceDirectory, { recursive: true });
   const stored = join(sourceDirectory, sourceId);
-  await writeFile(stored, file.data);
-  let text = file.data.toString("utf8");
-  if (/\.pdf$/i.test(file.filename)) {
-    const parser = new PDFParse({ data: file.data });
-    ({ text } = await parser.getText());
-    await parser.destroy();
+  const sections = [];
+  for (const item of files) {
+    await writeFile(`${stored}-${item.filename.replace(/[^a-zA-Z0-9._-]/g, "_")}`, item.data);
+    let section = item.data.toString("utf8");
+    if (/\.pdf$/i.test(item.filename)) {
+      const parser = new PDFParse({ data: item.data });
+      ({ text: section } = await parser.getText());
+      await parser.destroy();
+    }
+    sections.push(`\n\n===== ${item.filename} =====\n${section}`);
   }
+  const text = sections.join("");
+  const extractedByTextLayer = text.replace(/[=\s-]/g, "").length;
   await writeFile(`${stored}.txt`, text, "utf8");
   await writeFile(`${stored}.json`, `${JSON.stringify({
-    sourceId, originalName: file.filename, storedFile: stored, extractedText: `${stored}.txt`,
+    sourceId, originalName: files.map((item) => item.filename), storedFile: stored, extractedText: `${stored}.txt`,
     subject: fields.subject ?? null, region: fields.region ?? "全国", mode: fields.mode ?? "written_simulation",
-    status: "extracted", importedAt: new Date().toISOString(), questionStatus: "not_generated",
+    year: fields.year ?? null, answerFile: fields.answerFile ?? null,
+    status: "extracted", extractedByTextLayer, ocrRequired: extractedByTextLayer < 100,
+    importedAt: new Date().toISOString(), questionStatus: "not_generated",
   }, null, 2)}\n`);
-  return { sourceId, textPath: `content/sources/${sourceId}.txt`, extractedCharacters: text.length };
+  return {
+    sourceId, textPath: `content/sources/${sourceId}.txt`, extractedCharacters: text.length,
+    ocrRequired: extractedByTextLayer < 100,
+    message: extractedByTextLayer < 100 ? "PDF 没有足够文本层，请先 OCR 后再生成。" : "文本已提取。",
+  };
 }
 function published(content) {
   return { ...content, questions: content.questions.filter((question) => question.sourceStatus === "published") };
@@ -117,7 +132,8 @@ export function createTourismServer() {
       if (!adminAllowed(request)) return sendJson(response, 401, { error: "admin_auth_required" });
       const fields = parseMultipart(await readBody(request), request.headers["content-type"] ?? "");
       try {
-        return sendJson(response, 201, await importUploadedFile(fields.file, fields));
+        const uploadedFiles = [fields.file, fields.answerFile].flat().filter(Boolean);
+        return sendJson(response, 201, await importUploadedFile(uploadedFiles, fields));
       } catch (error) {
         return sendJson(response, error.status ?? 500, { error: error.message });
       }

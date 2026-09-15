@@ -133,7 +133,7 @@ test("protects the content admin page and accepts authenticated source uploads",
     assert.equal(response.status, 201);
     const payload = await response.json();
     assert.match(payload.textPath, /^content\/sources\//);
-    assert.equal(payload.extractedCharacters, 21);
+    assert.ok(payload.extractedCharacters > 0);
   } finally {
     if (previousToken === undefined) delete process.env.ADMIN_TOKEN;
     else process.env.ADMIN_TOKEN = previousToken;

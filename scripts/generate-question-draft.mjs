@@ -24,6 +24,9 @@ try {
 const subject = manifest.subject ?? "待审核";
 const region = manifest.region ?? "全国";
 const mode = manifest.mode ?? "written_simulation";
+if (manifest.ocrRequired) {
+  throw new Error("source requires OCR before question generation");
+}
 const instructions = {
   past_paper: "从历年真题及答案中逐题拆分，保留题干、全部选项、正确答案和解析；不得改写成模拟题。",
   written_simulation: "结合教材和全国笔试大纲生成中文单选模拟题；只生成原文和大纲能够支持的内容。",

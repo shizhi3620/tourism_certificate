@@ -4,9 +4,11 @@
 <body><main class="shell"><header class="hero"><p class="eyebrow">TOURISM · CONTENT ADMIN</p><h1>题库与现场材料生成</h1><p class="muted">上传材料后仅生成待审核草稿，不会自动发布。</p></header>
 <section class="card"><form id="import-form">
 <label>管理令牌<input name="token" type="password" required></label>
-<label>材料文件（PDF、TXT、MD，最大 15 MB）<input name="file" type="file" accept=".pdf,.txt,.md" required></label>
+<label>历年真题 PDF（可多选，按年份上传）<input name="file" type="file" accept=".pdf,.txt,.md" multiple required></label>
+<label>答案 PDF（可选）<input name="answerFile" type="file" accept=".pdf,.txt,.md"></label>
+<label>年份（如适用）<input name="year" placeholder="如：2025"></label>
 <label>生成类型<select name="mode"><option value="past_paper">历年真题：按科目拆分单题</option><option value="written_simulation">笔试模拟题：教材+全国大纲</option><option value="practical_material">现场材料：按考纲生成讲解与问答</option></select></label>
 <label>科目<input name="subject" placeholder="如：政策与法律法规"></label><label>地区<input name="region" value="全国"></label>
 <button type="submit">上传并提取文本</button></form><button id="generate" hidden>调用 DeepSeek 生成待审核草稿</button><p id="result" class="notice" hidden></p></section>
-<section class="card"><h2>材料要求</h2><ul><li>PDF 最好有可复制文本层；扫描件可能需要先 OCR。</li><li>历年真题请尽量包含题干、完整选项、答案和年份/地区；系统只拆分，不自动认定为官方真题。</li><li>教材和考纲用于模拟题时，建议分别上传并分开生成，便于审核来源。</li><li>现场材料应包含地区、景点范围、评分要点和语言要求；英语只用于现场训练。</li></ul></section>
+<section class="card"><h2>材料要求</h2><ul><li>扫描 PDF 需要先 OCR；系统会检测文本层，文字过少时禁止直接生成。</li><li>历年真题可一次选择多个按年份命名的 PDF，答案 PDF 单独上传；请保留题干、完整选项、答案、年份和地区。</li><li>教材和考纲用于模拟题时，建议分别上传并分开生成，便于审核来源。</li><li>现场材料应包含地区、景点范围、评分要点和语言要求；英语只用于现场训练。</li></ul></section>
 </main><script type="module" src="/admin.js"></script></body></html>
