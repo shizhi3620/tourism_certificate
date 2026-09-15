@@ -11,6 +11,7 @@
     "validate:content": "node scripts/validate-content.mjs",
     "import:source": "node scripts/import-source.mjs",
     "generate:draft": "node scripts/generate-question-draft.mjs",
+    "ocr:source": "node scripts/ocr-source-deepseek.mjs",
     "start": "node src/server.mjs",
     "test": "node --test test/**/*.test.mjs"
   },

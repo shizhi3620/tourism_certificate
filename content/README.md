@@ -32,6 +32,19 @@ OpenAI-compatible 服务，并将 `OPENAI_BASE_URL` 指向内网地址。
 
 生成工具或 AI 只能辅助起草，不能替代人工核对大纲、答案、解析、版权和语言。
 
+扫描 PDF 可用 DeepSeek 进行逐页 OCR 试运行：
+
+```sh
+npm run ocr:source -- content/sources/<source-id>-原文件.pdf
+```
+
+该命令会在本机用 PDFKit 渲染页面，再逐页调用 DeepSeek 视觉输入接口；
+默认模型为 `DEEPSEEK_OCR_MODEL`（未设置时使用 `deepseek-chat`），结果写入
+同目录的 `.ocr.txt`。不同 DeepSeek 账户/模型对图片输入的支持可能不同；
+如果接口不支持视觉输入，会明确报错，不会伪造文字。OCR 文本仍需人工抽查。
+当前 macOS 实现使用系统 `PDFKit` 将每页渲染为 PNG；临时图片放在
+`content/drafts/ocr-<时间戳>/`，OCR 完成后可删除该目录。
+
 ## 审核与发布
 
 1. 新题先设置 `sourceStatus: "pending_review"`。
