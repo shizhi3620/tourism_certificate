@@ -12,6 +12,7 @@ const loadMaterialsButton = document.querySelector("#load-materials");
 let token;
 let textPath;
 let materials = [];
+let generationContext = {};
 
 const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (character) => ({
   "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;",
@@ -117,6 +118,11 @@ form.addEventListener("submit", async (event) => {
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error ?? "上传失败");
     textPath = payload.textPath;
+    generationContext = {
+      mode: data.get("mode") || "written_simulation",
+      subject: data.get("subject") || "",
+      region: data.get("region") || "全国",
+    };
     await loadMaterials();
     generateButton.hidden = false;
     result.textContent = payload.ocrRequired
@@ -131,10 +137,15 @@ generateButton.addEventListener("click", async () => {
   result.hidden = false;
   result.textContent = "正在调用 DeepSeek…";
   try {
+    const formData = new FormData(form);
     const response = await fetch("/api/admin/generate", {
       method: "POST",
       headers: authHeaders({ "content-type": "application/json" }),
       body: JSON.stringify({
+        ...generationContext,
+        mode: formData.get("mode") || generationContext.mode || "written_simulation",
+        subject: formData.get("subject") || generationContext.subject || "",
+        region: formData.get("region") || generationContext.region || "全国",
         textPaths: [
           textPath,
           ...[...materialsList.querySelectorAll("input[data-text-path]:checked")].map((input) => input.dataset.textPath),
@@ -168,8 +179,29 @@ async function loadReview() {
     const card = document.createElement("article");
     card.className = `review-card review-${item.reviewStatus}`;
     const flags = item.reviewFlags.length ? `<p class="notice">${escapeHtml(item.reviewFlags.join("；"))}</p>` : "";
-    card.innerHTML = `<label><input type="checkbox" data-id="${escapeHtml(item.id)}"> 选择此题</label>${flags}<h3>${escapeHtml(item.prompt ?? item.title ?? item.id)}</h3><p>${(item.options ?? []).map((option, index) => `${String.fromCharCode(65 + index)}. ${escapeHtml(option)}`).join("<br>")}</p><p class="review-meta"><span class="review-status">审核状态：${escapeHtml(item.reviewStatus)}</span><br>答案：${escapeHtml(answerLabel(item.answer, item.options))}<br>教材：${escapeHtml(item.textbookSubject ?? "待补充")} / ${escapeHtml(item.textbookChapter ?? "待补充")}<br>大纲：${escapeHtml(item.syllabusRequirement ?? "待补充")}<br>来源：${escapeHtml((item.sourcePages ?? []).join(", "))}　${escapeHtml(item.sourceExcerpt ?? "待补充")}</p>`;
+    const answerOptions = Array.isArray(item.options)
+      ? item.options.map((option, index) => `<option value="${index}" ${item.answer === index ? "selected" : ""}>${String.fromCharCode(65 + index)}（第 ${index + 1} 项）</option>`).join("")
+      : "";
+    card.innerHTML = `<label><input type="checkbox" data-id="${escapeHtml(item.id)}"> 选择此题</label>${flags}<h3>${escapeHtml(item.prompt ?? item.title ?? item.id)}</h3><p>${(item.options ?? []).map((option, index) => `${String.fromCharCode(65 + index)}. ${escapeHtml(option)}`).join("<br>")}</p><p class="review-meta"><span class="review-status">审核状态：${escapeHtml(item.reviewStatus)}</span><br>答案：${escapeHtml(answerLabel(item.answer, item.options))}<br>教材：${escapeHtml(item.textbookSubject ?? "待补充")} / ${escapeHtml(item.textbookChapter ?? "待补充")}<br>大纲：${escapeHtml(item.syllabusRequirement ?? "待补充")}<br>来源：${escapeHtml((item.sourcePages ?? []).join(", "))}　${escapeHtml(item.sourceExcerpt ?? "待补充")}</p>${answerOptions ? `<label>人工确认答案<select data-answer>${answerOptions}</select></label><button type="button" class="small" data-save-answer>保存答案</button>` : ""}`;
+    card.querySelector("[data-save-answer]")?.addEventListener("click", async () => {
+      try {
+        await saveReviewFields(item.id, { answer: Number(card.querySelector("[data-answer]").value) });
+      } catch (error) {
+        reviewList.insertAdjacentHTML("afterbegin", `<p class="notice">答案保存失败：${escapeHtml(error.message)}</p>`);
+      }
+    });
       reviewList.append(card);
+    }
+
+    async function saveReviewFields(id, fields) {
+      const response = await fetch("/api/admin/review", {
+        method: "POST",
+        headers: authHeaders({ "content-type": "application/json" }),
+        body: JSON.stringify({ items: [{ id, ...fields }] }),
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error ?? "保存失败");
+      await loadReview();
     }
     const save = async (status) => {
       const ids = [...reviewList.querySelectorAll("input[data-id]:checked")].map((input) => input.dataset.id);

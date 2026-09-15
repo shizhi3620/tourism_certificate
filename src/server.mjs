@@ -78,9 +78,12 @@ function runDeepSeekOcr(inputPath, outputPath, watermark = "") {
       : reject(new Error(stderr.trim() || `DeepSeek OCR exited with ${code}`)));
   });
 }
-function generateDraft(textPath, outputPath) {
+function generateDraft(textPath, outputPath, context = {}) {
   return new Promise((resolvePromise, reject) => {
-    const child = spawn(process.execPath, ["scripts/generate-question-draft.mjs", textPath, outputPath], { cwd: root, env: process.env });
+    const child = spawn(process.execPath, ["scripts/generate-question-draft.mjs", textPath, outputPath], {
+      cwd: root,
+      env: { ...process.env, GENERATION_MODE: context.mode ?? "written_simulation", GENERATION_SUBJECT: context.subject ?? "", GENERATION_REGION: context.region ?? "全国" },
+    });
     let stderr = "";
     child.stderr.on("data", (chunk) => { stderr += chunk; });
     child.on("error", reject);
@@ -336,7 +339,11 @@ export function createTourismServer() {
         await writeFile(generatedInput, sourceText, "utf8");
         await mkdir(draftDirectory, { recursive: true });
         const outputPath = "content/drafts/questions-pending-review.json";
-        return sendJson(response, 201, await generateDraft("content/drafts/generation-input.txt", outputPath));
+        return sendJson(response, 201, await generateDraft("content/drafts/generation-input.txt", outputPath, {
+          mode: payload.mode,
+          subject: payload.subject,
+          region: payload.region,
+        }));
       } catch (error) {
         return sendJson(response, error.status ?? 500, { error: error.message });
       }

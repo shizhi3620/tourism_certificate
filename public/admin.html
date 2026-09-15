@@ -50,12 +50,11 @@
       <button type="button" id="load-materials">加载已保存材料</button>
       <button type="submit">上传并提取文字</button>
     </form>
-    <button id="generate" class="primary" hidden>第二步：调用 DeepSeek 生成待审核草稿</button>
     <p id="result" class="notice" hidden></p>
   </section>
 
   <section class="card">
-    <h2>第三步：选择生成目标</h2>
+    <h2>第二步：选择材料并生成题库</h2>
     <div id="materials-list"><p class="muted">请输入管理令牌后点击“加载已保存材料”。</p></div>
     <div id="materials-actions" hidden>
       <button type="button" class="small" id="select-all-materials">全选已启用材料</button>
@@ -69,10 +68,11 @@
       </select>
     </label>
     <p class="muted">教材和大纲不是每次必传。首次识别后会保存在材料库；以后直接勾选要使用的已启用材料即可。旧版本可停用但不会删除。</p>
+    <button id="generate" class="primary" hidden>调用 DeepSeek 生成待审核草稿</button>
   </section>
 
   <section class="card">
-    <h2>第四步：审核与发布</h2>
+    <h2>第三步：审核与发布</h2>
     <p class="muted">加载后重点检查题干、答案、教材章节、大纲要求、来源页码和引用片段。审核通过后，再点击“发布已通过题目”。</p>
     <button id="load-review" class="primary">加载待审核题目</button>
     <button id="publish" class="small">发布全部已通过题目</button>

@@ -24,18 +24,19 @@ try {
 }
 if (manifest.ocrRequired) throw new Error("source requires OCR before question generation");
 
-const subject = manifest.subject ?? "待审核";
-const region = manifest.region ?? "全国";
-const mode = manifest.mode ?? "written_simulation";
+const subject = process.env.GENERATION_SUBJECT || manifest.subject || "待审核";
+const region = process.env.GENERATION_REGION || manifest.region || "全国";
+const mode = process.env.GENERATION_MODE || manifest.mode || "written_simulation";
 const instructions = {
   past_paper: "从历年真题及答案中逐题拆分，保留题干、全部选项、正确答案和解析；不得改写成模拟题。",
-  written_simulation: "结合教材和全国笔试大纲生成中文单选模拟题；只生成原文和大纲能够支持的内容。",
+  written_simulation: "结合教材和全国笔试大纲生成中文笔试模拟题；题型可以是 single_choice（单选题）、multiple_choice（多选题）或 true_false（判断题），按原文适合的题型生成，答案必须来自原文证据。",
   practical_material: "结合现场考试大纲生成现场讲解材料，可包含景点讲解提纲、中文要点、英文表达和问答训练；不要生成全国笔试题。",
 }[mode] ?? "只生成原文能够支持的中文学习材料。";
 const prompt = `${instructions}
 不要编造法规、年份、数字或结论。所有输出都必须标记 pending_review，不能声称是官方真题。
 输出一个 JSON 对象，格式为 {"items":[...]}，不要输出 Markdown。笔试题字段为：
-{"id":"draft-...","chapterId":"待审核","subject":"${subject}","textbookSubject":"${subject}","textbookChapter":"必须填写教材章节","syllabusRequirement":"必须填写对应大纲要求","sourcePages":["OCR PAGE 1"],"sourceExcerpt":"必须填写支持答案的原文短引文","type":"single_choice","sourceType":"${mode === "past_paper" ? "past_exam" : "self_authored"}","sourceStatus":"pending_review","sourceNote":"教材文件名和页码待人工补充","year":null,"region":"${region}","prompt":"...","options":["...","...","...","..."],"answer":0,"explanation":"..."}。
+{"id":"draft-...","chapterId":"待审核","subject":"${subject}","textbookSubject":"${subject}","textbookChapter":"必须填写教材章节","syllabusRequirement":"必须填写对应大纲要求","sourcePages":["OCR PAGE 1"],"sourceExcerpt":"必须填写支持答案的原文短引文","type":"single_choice","sourceType":"${mode === "past_paper" ? "past_exam" : "self_authored"}","sourceStatus":"pending_review","sourceNote":"教材文件名和页码待人工补充","year":null,"region":"${region}","prompt":"...","options":["...","...","...","..."],"answer":1,"explanation":"..."}。
+single_choice 的 answer 是正确选项的从 0 开始下标；multiple_choice 的 answer 是正确选项下标数组；true_false 的 options 必须是 ["正确","错误"]，answer 只能是 0 或 1。必须根据来源证据填写真实答案，不要默认使用 0 或 A；同一批题目的正确答案应按来源内容分布，不能全部相同。past_paper 模式必须保留原题型、全部选项和原答案，不能自行改成单选题。
 现场材料字段为：
 {"id":"draft-...","region":"${region}","type":"practical_material","sourceStatus":"pending_review","title":"...","outlinePoints":["..."],"scriptZh":"...","scriptEn":"...","qa":[{"questionEn":"...","answerEn":"...","answerZh":"..."}]}。
 
