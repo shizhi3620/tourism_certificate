@@ -16,12 +16,20 @@ let materials = [];
 const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (character) => ({
   "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;",
 }[character]));
+function authHeaders(extra = {}) {
+  const value = String(token ?? "").trim();
+  if (!value) throw new Error("请先输入管理令牌");
+  if (!/^[\x00-\x7f]+$/.test(value)) {
+    throw new Error("管理令牌只能包含英文、数字和符号，请确认没有粘贴中文或全角空格");
+  }
+  return { ...extra, authorization: `Bearer ${value}` };
+}
 
 async function publish() {
   if (!confirm("只发布审核状态为“approved”的笔试题，继续吗？")) return;
   const response = await fetch("/api/admin/publish", {
     method: "POST",
-    headers: { authorization: `Bearer ${token}` },
+    headers: authHeaders(),
   });
   const payload = await response.json();
   const message = response.ok
@@ -54,7 +62,7 @@ function renderMaterials() {
     input.addEventListener("change", async () => {
       const response = await fetch("/api/admin/materials", {
         method: "POST",
-        headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
+        headers: authHeaders({ "content-type": "application/json" }),
         body: JSON.stringify({ id: input.dataset.materialId, active: input.checked }),
       });
       if (!response.ok) input.checked = !input.checked;
@@ -63,7 +71,7 @@ function renderMaterials() {
 }
 
 async function loadMaterials() {
-  const response = await fetch("/api/admin/materials", { headers: { authorization: `Bearer ${token}` } });
+  const response = await fetch("/api/admin/materials", { headers: authHeaders() });
   const payload = await response.json();
   if (!response.ok) throw new Error(payload.error ?? "材料库加载失败");
   materials = payload.materials ?? [];
@@ -100,7 +108,7 @@ form.addEventListener("submit", async (event) => {
   try {
     const response = await fetch("/api/admin/import", {
       method: "POST",
-      headers: { authorization: `Bearer ${token}` },
+      headers: authHeaders(),
       body: data,
     });
     const payload = await response.json();
@@ -122,7 +130,7 @@ generateButton.addEventListener("click", async () => {
   try {
     const response = await fetch("/api/admin/generate", {
       method: "POST",
-      headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
+      headers: authHeaders({ "content-type": "application/json" }),
       body: JSON.stringify({
         textPaths: [
           textPath,
@@ -143,7 +151,7 @@ publishButton.addEventListener("click", publish);
 
 loadReviewButton.addEventListener("click", async () => {
   reviewList.textContent = "正在加载…";
-  const response = await fetch("/api/admin/review", { headers: { authorization: `Bearer ${token}` } });
+  const response = await fetch("/api/admin/review", { headers: authHeaders() });
   const payload = await response.json();
   if (!response.ok) {
     reviewList.textContent = payload.error ?? "加载失败";
@@ -166,7 +174,7 @@ loadReviewButton.addEventListener("click", async () => {
     const ids = [...reviewList.querySelectorAll("input[data-id]:checked")].map((input) => input.dataset.id);
     const saveResponse = await fetch("/api/admin/review", {
       method: "POST",
-      headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
+      headers: authHeaders({ "content-type": "application/json" }),
       body: JSON.stringify({ items: ids.map((id) => ({ id, reviewStatus: status })) }),
     });
     const saved = await saveResponse.json();
