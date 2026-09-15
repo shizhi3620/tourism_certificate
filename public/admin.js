@@ -5,6 +5,9 @@ const reviewList = document.querySelector("#review-list");
 const loadReviewButton = document.querySelector("#load-review");
 const publishButton = document.querySelector("#publish");
 const materialsList = document.querySelector("#materials-list");
+const materialsActions = document.querySelector("#materials-actions");
+const selectAllMaterialsButton = document.querySelector("#select-all-materials");
+const clearMaterialsButton = document.querySelector("#clear-materials");
 const loadMaterialsButton = document.querySelector("#load-materials");
 let token;
 let textPath;
@@ -27,10 +30,26 @@ async function publish() {
   reviewList.insertAdjacentHTML("afterbegin", `<p class="notice">${message}</p>`);
 }
 
+function answerLabel(answer, options = []) {
+  if (!Number.isInteger(answer)) return "待确认";
+  const letter = String.fromCharCode(65 + answer);
+  return options[answer] ? `${letter}（第 ${answer + 1} 项）` : `${letter}（第 ${answer + 1} 项，超出选项）`;
+}
+
+function setMaterialSelection(selected) {
+  materialsList.querySelectorAll("input[data-text-path]").forEach((input) => {
+    input.checked = selected && input.dataset.active === "true";
+  });
+}
+
+selectAllMaterialsButton.addEventListener("click", () => setMaterialSelection(true));
+clearMaterialsButton.addEventListener("click", () => setMaterialSelection(false));
+
 function renderMaterials() {
   materialsList.innerHTML = materials.length
-    ? materials.map((material) => `<label><input type="checkbox" data-material-id="${escapeHtml(material.id)}" data-text-path="${escapeHtml(material.textPath)}" ${material.active ? "checked" : ""}> ${escapeHtml(material.role)} · ${escapeHtml(material.filename)} · ${escapeHtml(material.subject ?? "未指定科目")} · ${material.active ? "已启用" : "已停用"}</label>`).join("")
+    ? materials.map((material) => `<label><input type="checkbox" data-material-id="${escapeHtml(material.id)}" data-text-path="${escapeHtml(material.textPath)}" data-active="${material.active}" ${material.active ? "checked" : ""}> ${escapeHtml(material.role)} · ${escapeHtml(material.filename)} · ${escapeHtml(material.subject ?? "未指定科目")} · ${material.active ? "已启用" : "已停用"}</label>`).join("")
     : '<p class="muted">暂无已保存材料，首次上传教材或大纲后会出现在这里。</p>';
+  materialsActions.hidden = !materials.length;
   materialsList.querySelectorAll("input[data-material-id]").forEach((input) => {
     input.addEventListener("change", async () => {
       const response = await fetch("/api/admin/materials", {
@@ -139,7 +158,7 @@ loadReviewButton.addEventListener("click", async () => {
     const card = document.createElement("article");
     card.className = "card question";
     const flags = item.reviewFlags.length ? `<p class="notice">${escapeHtml(item.reviewFlags.join("；"))}</p>` : "";
-    card.innerHTML = `<label><input type="checkbox" data-id="${escapeHtml(item.id)}" ${item.reviewStatus === "approved" ? "checked" : ""}> ${escapeHtml(item.reviewStatus)}</label>${flags}<h3>${escapeHtml(item.prompt ?? item.title ?? item.id)}</h3><p>${(item.options ?? []).map((option, index) => `${String.fromCharCode(65 + index)}. ${escapeHtml(option)}`).join("<br>")}</p><p class="muted">答案：${escapeHtml(item.answer ?? "待确认")}　教材：${escapeHtml(item.textbookSubject ?? "待补充")} / ${escapeHtml(item.textbookChapter ?? "待补充")}<br>大纲：${escapeHtml(item.syllabusRequirement ?? "待补充")}<br>来源：${escapeHtml((item.sourcePages ?? []).join(", "))}　${escapeHtml(item.sourceExcerpt ?? "待补充")}</p>`;
+    card.innerHTML = `<label><input type="checkbox" data-id="${escapeHtml(item.id)}" ${item.reviewStatus === "approved" ? "checked" : ""}> ${escapeHtml(item.reviewStatus)}</label>${flags}<h3>${escapeHtml(item.prompt ?? item.title ?? item.id)}</h3><p>${(item.options ?? []).map((option, index) => `${String.fromCharCode(65 + index)}. ${escapeHtml(option)}`).join("<br>")}</p><p class="muted">答案：${escapeHtml(answerLabel(item.answer, item.options))}　教材：${escapeHtml(item.textbookSubject ?? "待补充")} / ${escapeHtml(item.textbookChapter ?? "待补充")}<br>大纲：${escapeHtml(item.syllabusRequirement ?? "待补充")}<br>来源：${escapeHtml((item.sourcePages ?? []).join(", "))}　${escapeHtml(item.sourceExcerpt ?? "待补充")}</p>`;
     reviewList.append(card);
   }
   const save = async (status) => {
