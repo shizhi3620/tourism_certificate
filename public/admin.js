@@ -234,7 +234,8 @@ async function loadReview() {
         });
         const saved = await saveResponse.json();
         if (!saveResponse.ok) throw new Error(saved.error ?? "审核状态更新失败");
-        reviewList.insertAdjacentHTML("afterbegin", `<p class="notice">已${status === "approved" ? "通过" : "驳回"} ${saved.updated ?? ids.length} 题，审核列表已刷新。</p>`);
+        const blocked = (saved.blocked ?? []).map((item) => `${item.id}：${item.reasons.join("、")}`).join("；");
+        reviewList.insertAdjacentHTML("afterbegin", `<p class="notice">已${status === "approved" ? "通过" : "驳回"} ${saved.updated ?? ids.length} 题，审核列表已刷新。${blocked ? `以下题目仍为待审核：${escapeHtml(blocked)}` : ""}</p>`);
         await loadReview();
       } catch (error) {
         reviewList.insertAdjacentHTML("afterbegin", `<p class="notice">审核更新失败：${escapeHtml(error.message)}</p>`);

@@ -415,17 +415,21 @@ export function createTourismServer() {
         const payload = JSON.parse((await readBody(request, 2 * 1024 * 1024)).toString("utf8"));
         const draft = await readDraft();
         const updates = new Map((payload.items ?? []).map((item) => [item.id, item]));
+        const blocked = [];
         const items = (draft.items ?? draft.questions ?? []).map((item) => {
+          const normalized = { ...item, sourcePages: normalizeSourcePages(item.sourcePages) };
           const update = updates.get(item.id);
-          if (!update) return item;
-          const merged = { ...item, ...update, sourceStatus: "pending_review" };
-          if (merged.reviewStatus === "approved" && reviewFlags(merged).length) {
+          if (!update) return normalized;
+          const merged = { ...normalized, ...update, sourcePages: normalizeSourcePages(update.sourcePages ?? normalized.sourcePages), sourceStatus: "pending_review" };
+          const flags = reviewFlags(merged);
+          if (merged.reviewStatus === "approved" && flags.length) {
+            blocked.push({ id: item.id, reasons: flags });
             return { ...merged, reviewStatus: "pending" };
           }
           return merged;
         });
         await writeFile(draftPath, `${JSON.stringify({ ...draft, items, updatedAt: new Date().toISOString() }, null, 2)}\n`);
-        return sendJson(response, 200, { updated: updates.size });
+        return sendJson(response, 200, { updated: updates.size - blocked.length, blocked });
       } catch (error) {
         return sendJson(response, error.code === "ENOENT" ? 404 : 400, { error: error.code === "ENOENT" ? "draft_not_found" : error.message });
       }
