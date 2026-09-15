@@ -33,4 +33,26 @@ details { margin: 10px 0; padding: 10px; background: #f4f8f7; border-radius: 8px
 .progress i { display: block; height: 100%; background: #0f766e; }
 footer { display: flex; justify-content: space-between; margin-top: 28px; font-size: .8rem; }
 footer a { color: #0f766e; }
+.admin-shell { width: min(980px, 100%); }
+.admin-shell form { display: grid; gap: 14px; }
+.admin-shell label { display: grid; gap: 6px; font-weight: 600; }
+.admin-shell label:has(input[type="checkbox"]) { display: flex; align-items: center; gap: 8px; font-weight: 500; }
+.admin-shell input, .admin-shell select { width: 100%; border: 1px solid #c9dbd8; border-radius: 8px; padding: 10px 12px; background: #fff; color: inherit; font: inherit; }
+.admin-shell input[type="checkbox"] { width: auto; padding: 0; }
+.admin-shell input[type="file"] { padding: 8px; }
+.admin-shell form button { justify-self: start; }
+.admin-shell .muted { font-size: .88rem; font-weight: 400; }
+#materials-list { display: grid; gap: 8px; margin: 14px 0; }
+#materials-list label { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: #f5faf9; border: 1px solid #dce9e6; border-radius: 8px; font-weight: 500; }
+#materials-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+#review-list { margin-top: 18px; }
+.review-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 12px; background: #eef6f4; border-radius: 10px; }
+.review-toolbar p { flex: 1 1 100%; margin: 0 0 4px; }
+.review-toolbar label { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+.review-card { margin-top: 12px; padding: 16px; border: 1px solid #dce9e6; border-radius: 10px; background: #fff; }
+.review-card.review-approved { border-left: 4px solid #238b45; }
+.review-card.review-rejected { border-left: 4px solid #c44b4b; }
+.review-card h3 { margin: 10px 0; line-height: 1.55; }
+.review-card .review-meta { margin: 12px 0 0; padding-top: 10px; border-top: 1px solid #e8f0ef; line-height: 1.7; }
+.review-status { color: #0f766e; font-weight: 700; }
 @media (min-width: 600px) { .shell { padding-top: 52px; } }

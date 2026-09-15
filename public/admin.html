@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-<main class="shell">
+<main class="shell admin-shell">
   <header class="hero">
     <p class="eyebrow">TOURISM · CONTENT ADMIN</p>
     <h1>题库与现场材料生成</h1>
@@ -50,7 +50,7 @@
       <button type="button" id="load-materials">加载已保存材料</button>
       <button type="submit">上传并提取文字</button>
     </form>
-    <button id="generate" hidden>第二步：调用 DeepSeek 生成待审核草稿</button>
+    <button id="generate" class="primary" hidden>第二步：调用 DeepSeek 生成待审核草稿</button>
     <p id="result" class="notice" hidden></p>
   </section>
 
@@ -75,7 +75,7 @@
     <h2>第四步：审核与发布</h2>
     <p class="muted">加载后重点检查题干、答案、教材章节、大纲要求、来源页码和引用片段。审核通过后，再点击“发布已通过题目”。</p>
     <button id="load-review" class="primary">加载待审核题目</button>
-    <button id="publish" class="small">发布已通过题目</button>
+    <button id="publish" class="small">发布全部已通过题目</button>
     <div id="review-list"></div>
   </section>
 </main>
