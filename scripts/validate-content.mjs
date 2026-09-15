@@ -42,6 +42,9 @@ for (const question of exam.questions) {
   if (!Array.isArray(question.options) || question.answer < 0 || question.answer >= question.options.length) {
     throw new Error(`${question.id} has an invalid answer`);
   }
+  if (question.sourceStatus !== "published") {
+    throw new Error(`${question.id} is not published in the canonical exam content`);
+  }
   if (!question.syllabusRequirement || !question.textbookSubject || !question.textbookChapter
     || !Array.isArray(question.sourcePages) || !question.sourcePages.length || !question.sourceExcerpt) {
     throw new Error(`${question.id} is missing source traceability`);

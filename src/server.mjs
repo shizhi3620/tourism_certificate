@@ -82,9 +82,11 @@ function generateDraft(textPath, outputPath) {
 function reviewFlags(item) {
   const text = JSON.stringify(item);
   return [
+    ...["id", "chapterId", "sourceType", "sourceNote"].filter((field) => !item[field]).map((field) => `缺少${field}`),
     !item.prompt && !item.title ? "缺少题目内容" : null,
     item.type === "single_choice" && (!Array.isArray(item.options) || item.options.length < 2) ? "选项不足" : null,
     item.type === "single_choice" && !Number.isInteger(item.answer) ? "答案未确认" : null,
+    item.type === "single_choice" && (!Array.isArray(item.options) || item.answer < 0 || item.answer >= item.options.length) ? "答案超出选项范围" : null,
     text.includes("[无法识别]") ? "包含 OCR 无法识别标记" : null,
     !item.syllabusRequirement ? "缺少大纲要求定位" : null,
     !item.textbookSubject || !item.textbookChapter ? "缺少教材章节定位" : null,
@@ -260,13 +262,13 @@ export function createTourismServer() {
       } catch (error) {
         return sendJson(response, error.code === "ENOENT" ? 404 : 400, { error: error.code === "ENOENT" ? "draft_not_found" : error.message });
       }
-      if (pathname === "/api/admin/publish" && request.method === "POST") {
-        if (!adminAllowed(request)) return sendJson(response, 401, { error: "admin_auth_required" });
-        try {
-          return sendJson(response, 200, await publishApprovedDraft());
-        } catch (error) {
-          return sendJson(response, error.status ?? 500, { error: error.message });
-        }
+    }
+    if (pathname === "/api/admin/publish" && request.method === "POST") {
+      if (!adminAllowed(request)) return sendJson(response, 401, { error: "admin_auth_required" });
+      try {
+        return sendJson(response, 200, await publishApprovedDraft());
+      } catch (error) {
+        return sendJson(response, error.status ?? 500, { error: error.message });
       }
     }
     if (request.method !== "GET") return sendJson(response, 405, { error: "method_not_allowed" });
