@@ -85,8 +85,20 @@ try {
   throw new Error(`generator returned invalid JSON (${error.message}); raw response saved to ${rawOutputPath}`);
 }
 const items = Array.isArray(parsed) ? parsed : parsed.items;
-if (!Array.isArray(items) || items.some((item) => item.sourceStatus !== "pending_review")) {
-  throw new Error("generator output must contain an items array of pending_review items");
+if (!Array.isArray(items)) {
+  const rawOutputPath = resolve("content/drafts/last-generation-response.txt");
+  await writeFile(rawOutputPath, content, "utf8");
+  throw new Error(`generator output must contain an items array; raw response saved to ${rawOutputPath}`);
 }
-await writeFile(resolve(outputPath), `${JSON.stringify({ generatedAt: new Date().toISOString(), source: sourceTextPath, model, mode, items }, null, 2)}\n`);
-console.log(`Wrote ${items.length} pending-review items to ${outputPath}`);
+if (items.length === 0) {
+  const rawOutputPath = resolve("content/drafts/last-generation-response.txt");
+  await writeFile(rawOutputPath, content, "utf8");
+  throw new Error(`generator output contains an empty items array; raw response saved to ${rawOutputPath}`);
+}
+const invalidStatuses = items.filter((item) => item?.sourceStatus !== "pending_review").length;
+if (invalidStatuses > 0) {
+  console.warn(`Generator returned ${invalidStatuses} item(s) with an invalid sourceStatus; forcing all generated items to pending_review.`);
+}
+const normalizedItems = items.map((item) => ({ ...item, sourceStatus: "pending_review" }));
+await writeFile(resolve(outputPath), `${JSON.stringify({ generatedAt: new Date().toISOString(), source: sourceTextPath, model, mode, items: normalizedItems }, null, 2)}\n`);
+console.log(`Wrote ${normalizedItems.length} pending-review items to ${outputPath}`);
