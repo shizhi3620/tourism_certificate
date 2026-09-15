@@ -111,3 +111,33 @@ test("serves the reviewed Sichuan practical pack", async () => {
     await once(server, "close");
   }
 });
+
+test("protects the content admin page and accepts authenticated source uploads", async () => {
+  const previousToken = process.env.ADMIN_TOKEN;
+  process.env.ADMIN_TOKEN = "test-admin-token";
+  const server = createTourismServer().listen(0);
+  await once(server, "listening");
+  const { port } = server.address();
+  try {
+    const unauthorized = await fetch(`http://127.0.0.1:${port}/api/admin/import`, { method: "POST" });
+    assert.equal(unauthorized.status, 401);
+    const form = new FormData();
+    form.append("mode", "past_paper");
+    form.append("subject", "政策与法律法规");
+    form.append("file", new Blob(["1. 示例题\nA. 甲\nB. 乙\n答案：A"], { type: "text/plain" }), "past-paper.txt");
+    const response = await fetch(`http://127.0.0.1:${port}/api/admin/import`, {
+      method: "POST",
+      headers: { authorization: "Bearer test-admin-token" },
+      body: form,
+    });
+    assert.equal(response.status, 201);
+    const payload = await response.json();
+    assert.match(payload.textPath, /^content\/sources\//);
+    assert.equal(payload.extractedCharacters, 21);
+  } finally {
+    if (previousToken === undefined) delete process.env.ADMIN_TOKEN;
+    else process.env.ADMIN_TOKEN = previousToken;
+    server.close();
+    await once(server, "close");
+  }
+});

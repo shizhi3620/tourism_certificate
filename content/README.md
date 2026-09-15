@@ -46,6 +46,12 @@ OpenAI-compatible 服务，并将 `OPENAI_BASE_URL` 指向内网地址。
 
 当前没有公网题库上传接口，这是有意的安全边界。通过 Git 在受控环境发布：
 
+本地内容管理页面已提供上传和 DeepSeek 草稿生成入口：启动服务后访问
+`/admin`，设置 `ADMIN_TOKEN` 后使用管理令牌登录。支持 PDF、TXT、MD，单文件
+最大 15 MB；生成结果仍写入 `content/drafts/` 并保持 `pending_review`。
+管理员页面不是公开用户功能，NAS/Cloudflare 部署时必须配置强随机令牌，并限制
+管理入口只允许内网或受保护访问。
+
 ```sh
 # 本地验证
 npm run validate:content
