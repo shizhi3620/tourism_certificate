@@ -70,6 +70,15 @@ generateButton.addEventListener("click", async () => {
           headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
           body: JSON.stringify({ items: ids.map((id) => ({ id, reviewStatus: status })) }),
         });
+        document.querySelector("#publish").addEventListener("click", async () => {
+          if (!confirm("只发布审核状态为“approved”的笔试题，继续吗？")) return;
+          const response = await fetch("/api/admin/publish", {
+            method: "POST",
+            headers: { authorization: `Bearer ${token}` },
+          });
+          const payload = await response.json();
+          reviewList.insertAdjacentHTML("afterbegin", `<p class="notice">${response.ok ? `已发布 ${payload.published} 题，内容版本 ${payload.contentVersion}` : escapeHtml(payload.error ?? "发布失败")}</p>`);
+        });
         const saved = await result.json();
         reviewList.insertAdjacentHTML("afterbegin", `<p class="notice">已更新 ${saved.updated ?? 0} 题</p>`);
       };

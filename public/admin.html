@@ -12,5 +12,5 @@
 <label>科目<input name="subject" placeholder="如：政策与法律法规"></label><label>地区<input name="region" value="全国"></label>
 <button type="submit">上传并提取文本</button></form><button id="generate" hidden>调用 DeepSeek 生成待审核草稿</button><p id="result" class="notice" hidden></p></section>
 <section class="card"><h2>材料要求</h2><ul><li>扫描 PDF 需要先 OCR；系统会检测文本层，文字过少时禁止直接生成。</li><li>历年真题可一次选择多个按年份命名的 PDF，答案 PDF 单独上传；请保留题干、完整选项、答案、年份和地区。</li><li>教材和考纲用于模拟题时，建议分别上传并分开生成，便于审核来源。</li><li>现场材料应包含地区、景点范围、评分要点和语言要求；英语只用于现场训练。</li></ul></section>
-<section class="card"><h2>审核工作台</h2><p class="muted">只需重点检查异常题目；批量通过会保留为待审核状态，正式发布仍需单独导入内容包。</p><button id="load-review" class="primary">加载待审核题目</button><div id="review-list"></div></section>
+<section class="card"><h2>审核工作台</h2><p class="muted">只需重点检查异常题目；审核通过后，点击下方按钮才会发布到正式题库。</p><button id="load-review" class="primary">加载待审核题目</button><button id="publish" class="small">发布已通过题目</button><div id="review-list"></div></section>
 </main><script type="module" src="/admin.js"></script></body></html>

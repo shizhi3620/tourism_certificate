@@ -88,8 +88,46 @@ function reviewFlags(item) {
     text.includes("[无法识别]") ? "包含 OCR 无法识别标记" : null,
   ].filter(Boolean);
 }
+function nextContentVersion(version) {
+  const match = /^(\d{4})\.(\d+)\.(\d+)$/.exec(version);
+  if (!match) throw new Error(`invalid contentVersion: ${version}`);
+  return `${match[1]}.${match[2]}.${Number(match[3]) + 1}`;
+}
 async function readDraft() {
   return JSON.parse(await readFile(draftPath, "utf8"));
+}
+async function publishApprovedDraft() {
+  const draft = await readDraft();
+  const items = draft.items ?? draft.questions ?? [];
+  const approved = items.filter((item) => item.reviewStatus === "approved");
+  if (!approved.length) throw Object.assign(new Error("no_approved_items"), { status: 400 });
+  const invalid = approved.find((item) => reviewFlags(item).length || item.type !== "single_choice");
+  if (invalid) throw Object.assign(new Error(`item_not_publishable:${invalid.id}`), { status: 400 });
+  const exam = JSON.parse(await readFile(contentPath, "utf8"));
+  const existingIds = new Set(exam.questions.map((question) => question.id));
+  const duplicate = approved.find((item) => existingIds.has(item.id));
+  if (duplicate) throw Object.assign(new Error(`duplicate_question_id:${duplicate.id}`), { status: 400 });
+  const publishedAt = new Date().toISOString();
+  const contentVersion = nextContentVersion(exam.contentVersion);
+  const publishedQuestions = approved.map(({ reviewStatus, reviewFlags: ignored, ...item }) => ({
+    ...item,
+    sourceStatus: "published",
+    publishedAt,
+  }));
+  const updatedExam = {
+    ...exam,
+    contentVersion,
+    publishedAt,
+    questions: [...exam.questions, ...publishedQuestions],
+  };
+  await writeFile(contentPath, `${JSON.stringify(updatedExam, null, 2)}\n`);
+  const remaining = items.filter((item) => !approved.includes(item)).map((item) => ({ ...item }));
+  const updatedDraft = { ...draft, items: remaining, publishedAt, publishedCount: publishedQuestions.length };
+  await writeFile(draftPath, `${JSON.stringify(updatedDraft, null, 2)}\n`);
+  await writeFile(join(draftDirectory, "publish-history.jsonl"), `${JSON.stringify({
+    publishedAt, contentVersion, count: publishedQuestions.length, ids: publishedQuestions.map((item) => item.id),
+  })}\n`, { flag: "a" });
+  return { published: publishedQuestions.length, contentVersion };
 }
 async function importUploadedFile(file, fields) {
   const files = Array.isArray(file) ? file : [file];
@@ -218,6 +256,14 @@ export function createTourismServer() {
         return sendJson(response, 200, { updated: updates.size });
       } catch (error) {
         return sendJson(response, error.code === "ENOENT" ? 404 : 400, { error: error.code === "ENOENT" ? "draft_not_found" : error.message });
+      }
+      if (pathname === "/api/admin/publish" && request.method === "POST") {
+        if (!adminAllowed(request)) return sendJson(response, 401, { error: "admin_auth_required" });
+        try {
+          return sendJson(response, 200, await publishApprovedDraft());
+        } catch (error) {
+          return sendJson(response, error.status ?? 500, { error: error.message });
+        }
       }
     }
     if (request.method !== "GET") return sendJson(response, 405, { error: "method_not_allowed" });
