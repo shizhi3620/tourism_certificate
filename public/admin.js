@@ -159,7 +159,11 @@ generateButton.addEventListener("click", async () => {
 
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error ?? "生成失败");
-    result.textContent = `已生成待审核草稿：${payload.outputPath}。请人工审核后再发布。`;
+    const coverage = payload.syllabusCoverage;
+    const coverageText = coverage
+      ? `大纲覆盖率（估算）：${coverage.covered}/${coverage.total}（${coverage.percent}%）`
+      : "未找到已选择的大纲材料，暂无法计算覆盖率";
+    result.textContent = `已生成待审核草稿：${payload.outputPath}。${coverageText} 请人工审核后再发布。`;
   } catch (error) {
     result.textContent = error.message;
   }
@@ -177,7 +181,9 @@ async function loadReview() {
     const items = payload.items ?? [];
     const toolbar = document.createElement("div");
     toolbar.className = "review-toolbar";
-    toolbar.innerHTML = `<p>共 ${items.length} 题，异常 ${items.filter((item) => item.reviewFlags.length).length} 题</p><label><input type="checkbox" data-action="select-all-review"> 全选题目</label><button class="small" data-action="approve">批量通过选中题目</button><button class="small" data-action="reject">批量驳回选中题目</button>`;
+    const coverage = payload.syllabusCoverage;
+    const coverageText = coverage ? `大纲覆盖率（估算）：${coverage.covered}/${coverage.total}（${coverage.percent}%）` : "大纲覆盖率：暂无数据";
+    toolbar.innerHTML = `<p>共 ${items.length} 题，异常 ${items.filter((item) => item.reviewFlags.length).length} 题 · ${coverageText}</p><label><input type="checkbox" data-action="select-all-review"> 全选题目</label><button class="small" data-action="approve">批量通过选中题目</button><button class="small" data-action="reject">批量驳回选中题目</button>`;
     reviewList.append(toolbar);
     for (const item of items) {
     const card = document.createElement("article");

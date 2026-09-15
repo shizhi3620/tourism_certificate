@@ -90,6 +90,21 @@ function generateDraft(textPath, outputPath, context = {}) {
     child.on("close", (code) => code === 0 ? resolvePromise({ outputPath }) : reject(new Error(stderr.trim() || `generator exited with ${code}`)));
   });
 }
+function syllabusCoverage(syllabusText, items) {
+  const scopeLines = [...new Set(syllabusText.split(/\r?\n/)
+    .map((line) => line.replace(/\s+/g, " ").trim())
+    .filter((line) => line.length >= 4 && line.length <= 100)
+    .filter((line) => /^(第[一二三四五六七八九十百零0-9]+章|[一二三四五六七八九十百零0-9]+[、.)]|[（(]?[一二三四五六七八九十百零0-9]+[）)])/.test(line)))];
+  const requirements = [...new Set((items ?? []).map((item) => item.syllabusRequirement?.trim())
+    .filter((value) => value && !["待补充", "待确认", "必须填写对应大纲要求"].includes(value)))];
+  const covered = requirements.filter((requirement) => scopeLines.some((scope) => scope.includes(requirement) || requirement.includes(scope)));
+  return {
+    total: scopeLines.length,
+    covered: covered.length,
+    percent: scopeLines.length ? Math.min(100, Math.round(covered.length / scopeLines.length * 100)) : 0,
+    estimated: true,
+  };
+}
 function reviewFlags(item) {
   const text = JSON.stringify(item);
   const placeholderValues = new Set(["必须填写教材章节", "必须填写支持答案的原文短引文", "待补充", "待确认"]);
@@ -355,12 +370,19 @@ export function createTourismServer() {
         await writeFile(generatedInput, sourceText, "utf8");
         await mkdir(draftDirectory, { recursive: true });
         const outputPath = "content/drafts/questions-pending-review.json";
-        return sendJson(response, 201, await generateDraft("content/drafts/generation-input.txt", outputPath, {
+        const generated = await generateDraft("content/drafts/generation-input.txt", outputPath, {
           mode: payload.mode,
           subject: payload.subject,
           region: payload.region,
           chapter: payload.chapter,
-        }));
+        });
+        const selectedMaterials = await readMaterials();
+        const syllabusPaths = paths.filter((path) => selectedMaterials.some((material) => material.textPath === path && material.role === "考纲"));
+        const syllabusText = (await Promise.all(syllabusPaths.map((path) => readFile(sourcePath(path), "utf8")))).join("\n");
+        const generatedDraft = await readDraft();
+        const coverage = syllabusCoverage(syllabusText, generatedDraft.items ?? []);
+        await writeFile(draftPath, `${JSON.stringify({ ...generatedDraft, syllabusCoverage: coverage }, null, 2)}\n`);
+        return sendJson(response, 201, { ...generated, syllabusCoverage: coverage });
       } catch (error) {
         return sendJson(response, error.status ?? 500, { error: error.message });
       }
