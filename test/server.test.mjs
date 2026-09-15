@@ -123,7 +123,9 @@ test("protects the content admin page and accepts authenticated source uploads",
       headers: { authorization: "Bearer test-admin-token" },
     });
     assert.equal(materials.status, 200);
-    assert.ok((await materials.json()).materials.some((material) => material.filename === "past-paper.txt"));
+    assert.ok((await materials.json()).materials.some((material) => (
+      material.filename === "past-paper.txt" && material.subject === "政策与法律法规"
+    )));
   } finally {
     if (previousToken === undefined) delete process.env.ADMIN_TOKEN;
     else process.env.ADMIN_TOKEN = previousToken;

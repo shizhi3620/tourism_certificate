@@ -42,6 +42,9 @@ function adminAllowed(request) {
   const configured = process.env.ADMIN_TOKEN?.trim();
   return configured && request.headers.authorization === `Bearer ${configured}`;
 }
+function decodeMultipartText(value) {
+  return Buffer.from(value, "latin1").toString("utf8");
+}
 function parseMultipart(body, contentType) {
   const boundary = contentType.match(/boundary=(?:"([^"]+)"|([^;]+))/i)?.[1] ?? contentType.match(/boundary=(?:"([^"]+)"|([^;]+))/i)?.[2];
   if (!boundary) throw Object.assign(new Error("invalid_multipart"), { status: 400 });
@@ -54,7 +57,9 @@ function parseMultipart(body, contentType) {
     const filename = headersText.match(/filename="([^"]*)"/i)?.[1];
     if (!name) continue;
     const value = part.slice(separator + 4).replace(/\r\n$/, "");
-    const parsed = filename ? { filename, fieldName: name, data: Buffer.from(value, "latin1") } : value;
+    const parsed = filename
+      ? { filename: decodeMultipartText(filename), fieldName: name, data: Buffer.from(value, "latin1") }
+      : decodeMultipartText(value);
     result[name] = result[name] ? [].concat(result[name], parsed) : parsed;
   }
   return result;
@@ -218,10 +223,21 @@ async function importUploadedFile(file, fields) {
 }
 async function readMaterials() {
   try {
-    return JSON.parse(await readFile(materialsPath, "utf8"));
+    const materials = JSON.parse(await readFile(materialsPath, "utf8"));
+    return materials.map((material) => ({
+      ...material,
+      filename: repairMojibake(material.filename),
+      subject: repairMojibake(material.subject),
+      region: repairMojibake(material.region),
+      role: repairMojibake(material.role),
+    }));
   } catch (error) {
     if (error.code === "ENOENT") return [];
     throw error;
+  }
+  function repairMojibake(value) {
+    if (typeof value !== "string" || !/[ÃÂâ€žœžšŸæåçèéêëìíîïðñòóôõöùúûü]/.test(value)) return value;
+    return Buffer.from(value, "latin1").toString("utf8");
   }
 }
 function sourcePath(candidate) {
