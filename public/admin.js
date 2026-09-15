@@ -43,7 +43,31 @@ generateButton.addEventListener("click", async () => {
     const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (character) => ({
       "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;",
     }[character]));
+    document.querySelector("#publish").onclick = async () => {
+      if (!confirm("只发布审核状态为“approved”的笔试题，继续吗？")) return;
+      const response = await fetch("/api/admin/publish", {
+        method: "POST",
+        headers: { authorization: token },
+      });
+      const payload = await response.json();
+      const message = response.ok
+        ? `已发布 ${payload.published} 题，内容版本 ${payload.contentVersion}`
+        : escapeHtml(payload.error ?? "发布失败");
+      reviewList.insertAdjacentHTML("afterbegin", `<p class="notice">${message}</p>`);
+    };
     document.querySelector("#load-review").addEventListener("click", async () => {
+      document.querySelector("#publish").onclick = async () => {
+        if (!confirm("只发布审核状态为“approved”的笔试题，继续吗？")) return;
+        const response = await fetch("/api/admin/publish", {
+          method: "POST",
+          headers: { authorization: token },
+        });
+        const payload = await response.json();
+        const message = response.ok
+          ? `已发布 ${payload.published} 题，内容版本 ${payload.contentVersion}`
+          : escapeHtml(payload.error ?? "发布失败");
+        reviewList.insertAdjacentHTML("afterbegin", `<p class="notice">${message}</p>`);
+      };
       reviewList.textContent = "正在加载…";
       const response = await fetch("/api/admin/review", { headers: { authorization: `Bearer ${token}` } });
       const payload = await response.json();
@@ -70,7 +94,8 @@ generateButton.addEventListener("click", async () => {
           headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
           body: JSON.stringify({ items: ids.map((id) => ({ id, reviewStatus: status })) }),
         });
-        document.querySelector("#publish").addEventListener("click", async () => {
+        /* publish is bound once when the review controls are initialized */
+        /*
           if (!confirm("只发布审核状态为“approved”的笔试题，继续吗？")) return;
           const response = await fetch("/api/admin/publish", {
             method: "POST",
@@ -78,7 +103,7 @@ generateButton.addEventListener("click", async () => {
           });
           const payload = await response.json();
           reviewList.insertAdjacentHTML("afterbegin", `<p class="notice">${response.ok ? `已发布 ${payload.published} 题，内容版本 ${payload.contentVersion}` : escapeHtml(payload.error ?? "发布失败")}</p>`);
-        });
+        */
         const saved = await result.json();
         reviewList.insertAdjacentHTML("afterbegin", `<p class="notice">已更新 ${saved.updated ?? 0} 题</p>`);
       };

@@ -81,6 +81,13 @@ function generateDraft(textPath, outputPath) {
 }
 function reviewFlags(item) {
   const text = JSON.stringify(item);
+  const placeholderValues = new Set(["必须填写教材章节", "必须填写支持答案的原文短引文", "待补充", "待确认"]);
+  const hasMeaningfulValue = (value) => typeof value === "string"
+    ? value.trim().length > 0 && !placeholderValues.has(value.trim())
+    : Boolean(value);
+  const hasMeaningfulPages = Array.isArray(item.sourcePages)
+    && item.sourcePages.length > 0
+    && item.sourcePages.every((page) => hasMeaningfulValue(page));
   return [
     ...["id", "chapterId", "sourceType", "sourceNote"].filter((field) => !item[field]).map((field) => `缺少${field}`),
     !item.prompt && !item.title ? "缺少题目内容" : null,
@@ -88,9 +95,9 @@ function reviewFlags(item) {
     item.type === "single_choice" && !Number.isInteger(item.answer) ? "答案未确认" : null,
     item.type === "single_choice" && (!Array.isArray(item.options) || item.answer < 0 || item.answer >= item.options.length) ? "答案超出选项范围" : null,
     text.includes("[无法识别]") ? "包含 OCR 无法识别标记" : null,
-    !item.syllabusRequirement ? "缺少大纲要求定位" : null,
-    !item.textbookSubject || !item.textbookChapter ? "缺少教材章节定位" : null,
-    !Array.isArray(item.sourcePages) || !item.sourcePages.length || !item.sourceExcerpt ? "缺少来源页码或引用" : null,
+    !hasMeaningfulValue(item.syllabusRequirement) ? "缺少大纲要求定位" : null,
+    !hasMeaningfulValue(item.textbookSubject) || !hasMeaningfulValue(item.textbookChapter) ? "缺少教材章节定位" : null,
+    !hasMeaningfulPages || !hasMeaningfulValue(item.sourceExcerpt) ? "缺少来源页码或引用" : null,
   ].filter(Boolean);
 }
 function nextContentVersion(version) {
