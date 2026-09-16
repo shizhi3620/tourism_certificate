@@ -101,6 +101,10 @@ _Avoid_: Downloaded bank, offline copy, local bank
 A cached content package whose content version is no longer the one the server publishes. A candidate must be able to see that they are studying stale content.
 _Avoid_: Old questions, outdated app
 
+**Study-record export format**:
+The versioned shape of a study-record export: the progress counters, the content version they were earned under, and an export timestamp. It does not carry per-attempt answer history.
+_Avoid_: Backup format, sync payload
+
 
 - **Candidate**: A person preparing for the national tour-guide qualification
   exam and, where applicable, an English-language practical exam.
