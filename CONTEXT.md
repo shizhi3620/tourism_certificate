@@ -73,6 +73,22 @@ _Avoid_: Written-question queue
 Province-pack material for on-site exam training, including attraction explanations and interview Q&A. It is not a written question and is not part of the written question bank.
 _Avoid_: Practical question type, practical material as a question type
 
+**Candidate installation**:
+One device-local copy of the candidate-facing app that holds the study record for exactly one candidate.
+_Avoid_: User, account, session
+
+**Study record**:
+The practice attempts, wrong-question marks, and mock results that belong to one candidate installation.
+_Avoid_: Progress, user data, score
+
+**Study-record export**:
+A candidate-controlled file that can be imported into another candidate installation to restore its study record.
+_Avoid_: Sync, cloud backup, server copy
+
+**Local-first study data**:
+The boundary that a study record lives on the candidate's own device and is not uploaded to the server in the MVP.
+_Avoid_: Server-side progress, account sync
+
 
 - **Candidate**: A person preparing for the national tour-guide qualification
   exam and, where applicable, an English-language practical exam.
