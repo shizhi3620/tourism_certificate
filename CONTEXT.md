@@ -89,6 +89,18 @@ _Avoid_: Sync, cloud backup, server copy
 The boundary that a study record lives on the candidate's own device and is not uploaded to the server in the MVP.
 _Avoid_: Server-side progress, account sync
 
+**Content version**:
+The identifier of one published revision of exam content. A candidate installation holds exactly one content version at a time.
+_Avoid_: App version, build number, release
+
+**Cached content package**:
+The last content version a candidate installation loaded successfully, kept for use while the server is unreachable.
+_Avoid_: Downloaded bank, offline copy, local bank
+
+**Stale content**:
+A cached content package whose content version is no longer the one the server publishes. A candidate must be able to see that they are studying stale content.
+_Avoid_: Old questions, outdated app
+
 
 - **Candidate**: A person preparing for the national tour-guide qualification
   exam and, where applicable, an English-language practical exam.
