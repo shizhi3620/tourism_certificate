@@ -80,8 +80,10 @@ npm run ocr:source -- content/sources/<source-id>-原文件.pdf
 相同文件按 SHA-256 跳过重复识别；旧材料可以停用，来源文件和 OCR 文本仍保留。
 未勾选“保存到材料库”的本次上传只用于当前生成。生成结果仍写入
 `content/drafts/` 并保持 `pending_review`。
-管理员页面不是公开用户功能，NAS/Cloudflare 部署时必须配置强随机令牌，并限制
-管理入口只允许内网或受保护访问。
+管理员页面不是公开用户功能。生产 NAS 容器默认不注入 `ADMIN_TOKEN`，并且以只读方式
+运行，管理 API 不可写；内容应先在受控环境完成审核，再通过 Git 发布。若启用独立管理
+环境，必须配置强随机令牌、限制入口只允许内网或受保护访问，并为草稿和发布数据提供受控
+的可写存储。详见 `docs/deployment-nas-cloudflare.md`。
 
 ```sh
 # 本地验证

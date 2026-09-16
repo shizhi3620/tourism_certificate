@@ -1,0 +1,17 @@
+.git
+.gitignore
+node_modules
+npm-debug.log*
+.env
+.env.*
+!.env.example
+coverage
+*.log
+content/sources
+content/drafts
+*.pdf
+.DS_Store
+docs
+requirements
+test
+scripts
