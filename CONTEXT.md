@@ -105,6 +105,10 @@ _Avoid_: Old questions, outdated app
 The versioned shape of a study-record export: the progress counters, the content version they were earned under, and an export timestamp. It does not carry per-attempt answer history.
 _Avoid_: Backup format, sync payload
 
+**Candidate settings**:
+The candidate-facing surface that holds install guidance, study-record export and import, and the currently served content version.
+_Avoid_: Admin panel, account page, profile
+
 
 - **Candidate**: A person preparing for the national tour-guide qualification
   exam and, where applicable, an English-language practical exam.
