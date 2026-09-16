@@ -109,6 +109,10 @@ _Avoid_: Backup format, sync payload
 The candidate-facing surface that holds install guidance, study-record export and import, and the currently served content version.
 _Avoid_: Admin panel, account page, profile
 
+**Install guidance**:
+The candidate-facing instructions that explain how to add the app to the home screen. Its purpose is protecting the study record from browser storage eviction, so it is offered once the study record stops being empty.
+_Avoid_: Onboarding, tutorial, promotion
+
 
 - **Candidate**: A person preparing for the national tour-guide qualification
   exam and, where applicable, an English-language practical exam.

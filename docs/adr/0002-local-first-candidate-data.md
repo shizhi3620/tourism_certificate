@@ -28,3 +28,13 @@ lose their record through normal browser behaviour, not through user error.
   `identity` seam so that migration does not require rewriting stored records.
 - The server stays a read-only content service. No endpoint may accept a study
   record in the MVP.
+
+## Install guidance timing
+
+Install guidance is shown once, after the candidate's first answered question —
+the moment the study record stops being empty and starts being worth protecting.
+It can be dismissed permanently, and the same guidance stays reachable from
+**Candidate settings**. Detection uses `navigator.standalone` and the
+`display-mode: standalone` media query, because iOS exposes no install API.
+Android uses the real `beforeinstallprompt` flow; the two platforms do not share
+one script.
