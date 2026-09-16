@@ -1,9 +1,10 @@
 import { adjacentQuestionId, questionPosition, questionsForChapter } from "./question-navigation.js";
 import { questionTypeFor, validateQuestionTypeCatalog, validateWrittenQuestion } from "./question-types.js";
+import { exportStudyRecord, importStudyRecord, describeVersionMismatch } from "./study-record.js";
 
 const load = (key, fallback) => { try { return JSON.parse(localStorage.getItem(key) ?? JSON.stringify(fallback)); } catch { return fallback; } };
 const save = (key, value) => localStorage.setItem(key, JSON.stringify(value));
-const state = { content: null, practical: null, records: load("tourism-study-records", {}), mocks: load("tourism-mock-results", []), selectedView: "practice", mock: null, mockTimer: null };
+const state = { content: null, practical: null, records: load("tourism-study-records", {}), mocks: load("tourism-mock-results", []), selectedView: "practice", mock: null, mockTimer: null, installPrompt: null };
 const recordFor = (id) => state.records[id] ?? { attempts: 0, correct: 0, wrong: false };
 const label = (q) => q.sourceType === "past_exam" ? `历年真题 · ${q.year} · ${q.region}` : q.sourceType === "mock" ? "模拟题" : "示例题";
 const catalog = () => state.content?.exam?.writtenExam?.questionTypes ?? [];
@@ -19,6 +20,70 @@ const answerMatches = (question, selected) => {
     ? Array.isArray(selected) && Array.isArray(question.answer) && selected.length === question.answer.length && selected.every((value) => question.answer.includes(value))
     : selected === question.answer;
 };
+const totalAttempts = () => Object.values(state.records).reduce((n, record) => n + (record?.attempts ?? 0), 0);
+
+const INSTALL_DISMISSED_KEY = "tourism-install-guide-dismissed";
+const isStandalone = () => window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+const isIOS = () => /iPad|iPhone|iPod/.test(window.navigator.userAgent)
+  || (window.navigator.platform === "MacIntel" && window.navigator.maxTouchPoints > 1);
+const installDismissed = () => load(INSTALL_DISMISSED_KEY, false) === true;
+
+function renderContentVersion() {
+  const chip = document.querySelector("#content-version");
+  if (!chip) return;
+  chip.textContent = state.content ? `内容版本 ${state.content.contentVersion}` : "";
+}
+
+function installGuideMarkup() {
+  if (isStandalone()) {
+    return `<p><strong>已安装到主屏幕</strong></p><p class="muted">当前已作为独立应用运行，学习记录受主屏幕应用存储保护，不会被浏览器自动清除。</p>`;
+  }
+  if (isIOS()) {
+    return `<p><strong>装到主屏幕，才能保住你的错题记录</strong></p><ol class="install-steps"><li>点 Safari 底部的“分享”按钮</li><li>向下滑动，选择“添加到主屏幕”</li><li>点右上角“添加”</li></ol><p class="muted">iOS 会清除 7 天未打开的网站数据；装到主屏幕后可免除。</p>`;
+  }
+  if (state.installPrompt) {
+    return `<p><strong>把题库装成独立应用</strong></p><p class="muted">安装后可在主屏幕直接打开，并保留离线浏览能力。</p><button type="button" class="primary" id="install-now">立即安装</button>`;
+  }
+  return `<p><strong>把题库装成独立应用</strong></p><p class="muted">请在浏览器菜单里选择“安装应用”或“添加到主屏幕”。</p>`;
+}
+
+function renderInstallGuide(target) {
+  if (!target) return;
+  target.innerHTML = installGuideMarkup();
+  target.hidden = false;
+  target.querySelector("#dismiss-install-guide")?.addEventListener("click", () => {
+    save(INSTALL_DISMISSED_KEY, true);
+    target.hidden = true;
+  });
+  target.querySelector("#install-now")?.addEventListener("click", async () => {
+    const prompt = state.installPrompt;
+    if (!prompt) return;
+    prompt.prompt();
+    await prompt.userChoice;
+    state.installPrompt = null;
+    renderInstallGuide(target);
+  });
+}
+
+function maybeShowInstallGuide() {
+  if (isStandalone() || installDismissed()) return;
+  const target = document.querySelector("#install-guide");
+  if (!target || !target.hidden) return;
+  target.innerHTML = `${installGuideMarkup()}<p><button type="button" class="small" id="dismiss-install-guide">暂不安装</button></p>`;
+  target.hidden = false;
+  target.querySelector("#dismiss-install-guide")?.addEventListener("click", () => {
+    save(INSTALL_DISMISSED_KEY, true);
+    target.hidden = true;
+  });
+  target.querySelector("#install-now")?.addEventListener("click", async () => {
+    const prompt = state.installPrompt;
+    if (!prompt) return;
+    prompt.prompt();
+    await prompt.userChoice;
+    state.installPrompt = null;
+    target.hidden = true;
+  });
+}
 
 function renderStats() {
   const records = Object.values(state.records), attempts = records.reduce((n, r) => n + r.attempts, 0), correct = records.reduce((n, r) => n + r.correct, 0);
@@ -27,6 +92,7 @@ function renderStats() {
   document.querySelector("#wrong-count").textContent = records.filter((r) => r.wrong).length;
 }
 function answer(question, selected, container, onDone = () => {}) {
+  const wasEmpty = totalAttempts() === 0;
   const correct = answerMatches(question, selected);
   const record = recordFor(question.id);
   record.attempts += 1; record.correct += correct ? 1 : 0; record.wrong = !correct; state.records[question.id] = record; save("tourism-study-records", state.records);
@@ -36,6 +102,7 @@ function answer(question, selected, container, onDone = () => {}) {
   const result = container.querySelector(".result"); result.hidden = false;
   result.innerHTML = `<strong>${correct ? "回答正确" : "回答错误"}</strong> · 正确答案：${correctIndexes.map((index) => String.fromCharCode(65 + index)).join("、")}<br>${question.explanation}`;
   renderStats(); renderWrong(); renderOutline(); onDone(correct);
+  if (wasEmpty) maybeShowInstallGuide();
 }
 let practiceIds = [];
 let practiceQuestionId = null;
@@ -132,9 +199,59 @@ function renderPractical() {
   const el = document.querySelector("#practical-view"), a = state.practical.attractions[0];
   el.innerHTML = `<div class="card"><p class="eyebrow">四川省 · ${state.practical.packVersion}</p><h2>${a.name}</h2><p>${a.chineseDescription}</p><h3>English practice</h3><p>${a.englishScript}</p><p class="muted">${a.chineseMeaning}</p><h3>现场问答</h3>${a.questions.map((q) => `<details><summary>${q.promptZh}</summary><p>${q.promptEn}</p><p class="muted">${q.answerGuideZh}</p></details>`).join("")}<p class="muted">自评：${state.practical.scoringDimensions.join(" · ")}</p></div>`;
 }
+function renderSettings() {
+  const el = document.querySelector("#settings-view");
+  const answered = totalAttempts();
+  el.innerHTML = `<div class="card"><h2>我的</h2>
+    <p>当前内容版本：<strong>${state.content.contentVersion}</strong> · 大纲版本 ${state.content.syllabusVersion}</p>
+    <p class="muted">学习记录、错题和模考成绩只保存在这台设备上，不会上传服务器。换手机或重装前请先导出。</p>
+    <h3>设备与安装</h3>
+    <div class="settings-block" id="settings-install"></div>
+    <h3>学习记录</h3>
+    <p class="muted">已记录 ${answered} 次作答 · ${Object.keys(state.records).length} 道题 · ${state.mocks.length} 次模考</p>
+    <p><button type="button" class="primary" id="export-record">导出学习记录</button></p>
+    <p><label class="file-label">导入学习记录<input type="file" id="import-record" accept="application/json,.json"></label></p>
+    <p id="record-message" class="muted"></p>
+  </div>`;
+  renderInstallGuide(el.querySelector("#settings-install"));
+  el.querySelector("#export-record").addEventListener("click", exportRecord);
+  el.querySelector("#import-record").addEventListener("change", importRecord);
+}
+function exportRecord() {
+  const message = document.querySelector("#record-message");
+  const payload = exportStudyRecord({ records: state.records, mocks: state.mocks, contentVersion: state.content.contentVersion });
+  const blob = new Blob([`${JSON.stringify(payload, null, 2)}\n`], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `tourism-study-record-${payload.exportedAt.slice(0, 10)}.json`;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+  if (message) message.textContent = `已导出学习记录（内容版本 ${payload.contentVersion || "未知"}）。`;
+}
+async function importRecord(event) {
+  const input = event.target;
+  const message = document.querySelector("#record-message");
+  const file = input.files?.[0];
+  if (!file) return;
+  try {
+    const payload = importStudyRecord(JSON.parse(await file.text()));
+    state.records = payload.records; state.mocks = payload.mocks;
+    save("tourism-study-records", state.records); save("tourism-mock-results", state.mocks);
+    renderStats(); renderOutline(); renderSettings();
+    const mismatch = describeVersionMismatch(payload.contentVersion, state.content.contentVersion);
+    document.querySelector("#record-message").textContent = mismatch || "学习记录已导入。";
+  } catch (error) {
+    if (message) message.textContent = `导入失败：${error.message}`;
+  } finally {
+    input.value = "";
+  }
+}
 function selectView(view) {
   state.selectedView = view; document.querySelectorAll(".tab").forEach((t) => t.classList.toggle("active", t.dataset.view === view)); document.querySelectorAll(".view").forEach((s) => { s.hidden = s.id !== `${view}-view`; });
-  if (view === "wrong") renderWrong(); if (view === "outline") renderOutline(); if (view === "mock") renderMock(); if (view === "practical") renderPractical();
+  if (view === "wrong") renderWrong(); if (view === "outline") renderOutline(); if (view === "mock") renderMock(); if (view === "practical") renderPractical(); if (view === "settings") renderSettings();
 }
 function assertContentContract(content) {
   const errors = validateQuestionTypeCatalog(content?.exam?.writtenExam?.questionTypes ?? []);
@@ -146,6 +263,7 @@ async function loadContent() {
   const content = await response.json();
   assertContentContract(content);
   state.content = content;
+  renderContentVersion();
   return state.content;
 }
 async function refreshContent() {
@@ -163,6 +281,7 @@ async function refreshContent() {
     else if (state.selectedView === "outline") renderOutline();
     else if (state.selectedView === "mock") renderMock();
     else if (state.selectedView === "practical") renderPractical();
+    else if (state.selectedView === "settings") renderSettings();
     else renderPractice(undefined, practiceQuestionId);
   } catch (error) {
     const notice = document.querySelector("#notice");
@@ -182,7 +301,9 @@ async function init() {
   document.querySelector("#notice").textContent = state.content.notice; document.querySelector("#notice").hidden = false;
   if (state.content.donationUrl) { const link = document.querySelector("#donation-link"); link.href = state.content.donationUrl; link.target = "_blank"; link.hidden = false; }
   document.querySelectorAll(".tab").forEach((tab) => tab.addEventListener("click", () => selectView(tab.dataset.view)));
-  renderStats(); renderPractice();
+  renderContentVersion(); renderStats(); renderPractice();
 }
+window.addEventListener("beforeinstallprompt", (event) => { event.preventDefault(); state.installPrompt = event; });
 document.querySelector("#refresh-content").addEventListener("click", refreshContent);
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(() => {});
 init().catch((error) => { document.querySelector("#practice-view").innerHTML = `<div class="card"><h2>加载失败</h2><p>${error.message}</p></div>`; });

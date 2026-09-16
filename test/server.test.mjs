@@ -219,3 +219,30 @@ test("requires authentication for draft generation", async () => {
     await once(server, "close");
   }
 });
+
+test("serves the installable PWA shell and its assets", async () => {
+  const server = await startServer();
+  try {
+    const base = `http://127.0.0.1:${server.address().port}`;
+    const page = await (await fetch(`${base}/`)).text();
+    assert.match(page, /manifest\.webmanifest/);
+    assert.match(page, /apple-touch-icon/);
+    assert.match(page, /data-view="settings"/);
+    const manifestResponse = await fetch(`${base}/manifest.webmanifest`);
+    assert.equal(manifestResponse.status, 200);
+    assert.match(manifestResponse.headers.get("content-type"), /manifest\+json/);
+    const manifest = await manifestResponse.json();
+    assert.equal(manifest.display, "standalone");
+    assert.equal(manifest.start_url, "/");
+    assert.ok(manifest.icons.some((icon) => icon.sizes === "192x192"));
+    const worker = await fetch(`${base}/sw.js`);
+    assert.equal(worker.status, 200);
+    assert.match(await worker.text(), /networkFirst/);
+    const icon = await fetch(`${base}/icons/icon-192.png`);
+    assert.equal(icon.status, 200);
+    assert.equal(icon.headers.get("content-type"), "image/png");
+  } finally {
+    server.close();
+    await once(server, "close");
+  }
+});

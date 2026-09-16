@@ -20,7 +20,7 @@ const writtenPublishHistoryPath = join(draftDirectory, "publish-history.jsonl");
 const practicalPublishHistoryPath = join(draftDirectory, "practical-publish-history.jsonl");
 const materialsPath = join(sourceDirectory, "materials.json");
 const uploadMaxBytes = 200 * 1024 * 1024;
-const contentTypes = { ".css": "text/css; charset=utf-8", ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".json": "application/json; charset=utf-8" };
+const contentTypes = { ".css": "text/css; charset=utf-8", ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".json": "application/json; charset=utf-8", ".webmanifest": "application/manifest+json; charset=utf-8", ".png": "image/png", ".svg": "image/svg+xml" };
 const requests = new Map();
 const windowMs = 60_000;
 const configuredLimit = Number.parseInt(process.env.RATE_LIMIT ?? "120", 10);

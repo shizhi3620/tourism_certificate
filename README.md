@@ -20,6 +20,12 @@ npm start
 题库维护、审核、上传和更新流程见 [`content/README.md`](content/README.md)；
 当前通过 Git 发布内容，不提供公网题库上传接口。
 
+## 用户端与安装
+
+用户端是安装式 PWA，支持 iOS 和安卓。学习记录只保存在本机，不上传服务器；
+换手机或重装前请在「我的」中导出学习记录，导入到新设备。离线时使用最近一次
+成功加载的题库，界面始终显示当前内容版本，联网后可点「刷新题库」更新。
+
 ## 部署
 
 NAS/Cloudflare Tunnel 的最小权限、认证、限流、备份和恢复步骤见
@@ -76,7 +82,10 @@ commit credentials or local runtime data.
 - `src/server.mjs` - HTTP server and request routing.
 - `content/exam.json` - versioned syllabus, chapter and question data.
 - `content/README.md` - content generation, review, and update workflow.
-- `public/` - browser study experience with local progress storage.
+- `public/` - installable PWA study experience with local progress storage.
+- `public/sw.js` - network-first service worker; cached fallback only when the NAS is unreachable.
+- `public/manifest.webmanifest` - PWA manifest and home-screen icons.
+- `public/study-record.js` - versioned study-record export and import.
 - `test/server.test.mjs` - smoke tests for the public HTTP contract.
 - `CONTEXT.md` - initial domain vocabulary and boundaries.
 - `requirements/PRD-001-tourism-mvp-v0.1.1.md` - formal MVP product requirements.
