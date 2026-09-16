@@ -56,3 +56,5 @@ footer a { color: #0f766e; }
 .review-card .review-meta { margin: 12px 0 0; padding-top: 10px; border-top: 1px solid #e8f0ef; line-height: 1.7; }
 .review-status { color: #0f766e; font-weight: 700; }
 @media (min-width: 600px) { .shell { padding-top: 52px; } }
+.practice-nav { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 8px 0 14px; color: #668092; font-size: .9rem; }
+.chapter-link { padding: 0; border: 0; background: transparent; color: #0f766e; font-weight: 700; text-align: left; }

@@ -7,7 +7,72 @@ with English-language practical-exam training for the selected province. The
 MVP starts with Sichuan candidates and is designed to expand to every province
 without duplicating the application code.
 
-## Initial Vocabulary
+## Language
+
+**Written question**:
+A candidate-facing question in the shared national written-exam question bank.
+_Avoid_: Practical training material, generation item
+
+**Question type contract**:
+The declarative rules for one question type: stable identifier, display label, selection mode, correct-option limits, option limits, and any fixed options. Generation, review, publication, presentation, and scoring must all use the same contract.
+_Avoid_: Screen-specific type behavior
+
+**Question type identifier**:
+A stable, never-reused identifier for one question type. Its display label may change, but its answer and scoring semantics may not change without a new identifier and a migration.
+_Avoid_: Reused type ID, mutable type meaning
+
+**Question type catalog**:
+The versioned set of question types defined by the national written-exam configuration. Generation, review, publication, and candidate presentation all use this catalog as the authoritative list, and the catalog is delivered with the questions under the same content version. An invalid catalog blocks publication.
+_Avoid_: Per-screen type list, generator-only enum, client-only enum
+
+**Generation mode**:
+The process used to create a draft. Past-paper extraction, written simulation, and chapter practice target the written-question review queue; practical-material drafting targets the practical-material review queue.
+_Avoid_: Question type
+
+**Generation policy**:
+The versioned rules for a generation mode, including which question types it may produce and their target distribution. It is not part of a question type definition.
+_Avoid_: Question type rule
+
+**Question type**:
+The answer format of a written question: single-choice, multiple-choice, or true-false.
+_Avoid_: Generation mode, content type
+
+**Single-choice question**:
+A written question with exactly one correct option.
+_Avoid_: Single question, option question
+
+**Exact-match scoring**:
+MVP written-question scoring is correct only when the selected options exactly match the correct options; multiple-choice questions receive no partial credit.
+_Avoid_: Partial-credit scoring
+
+**Multiple-choice question**:
+A written question with at least two correct options. Every option may be structurally correct, although generation policy should normally include at least one distractor.
+_Avoid_: Multi-answer question when the answer shape is unclear
+
+**True-false question**:
+A written question with exactly two options, "正确" and "错误" in that order, and exactly one correct option. It remains a distinct question type even when its answer control reuses single-choice behavior.
+_Avoid_: Two-option single-choice question
+
+**Type-driven presentation**:
+Candidate-facing classification is determined only by a written question's question type from the question type catalog. It is never inferred from option count or answer shape, and the question type is a question property rather than a top-level navigation category.
+_Avoid_: Shape-based question classification, type-based navigation
+
+**Invalid written question**:
+A written question whose question type is absent from the question type catalog or whose answer data does not satisfy that type. It must not be presented to a candidate.
+_Avoid_: Fallback question
+
+**Written-question review queue**:
+Drafts intended for the national written question bank. Items are reviewed and published only under the question type catalog.
+_Avoid_: Shared content queue
+
+**Practical-material review queue**:
+Drafts intended for a province practical-exam pack. Items are reviewed and published under the practical training material schema.
+_Avoid_: Written-question queue
+
+**Practical training material**:
+Province-pack material for on-site exam training, including attraction explanations and interview Q&A. It is not a written question and is not part of the written question bank.
+_Avoid_: Practical question type, practical material as a question type
+
 
 - **Candidate**: A person preparing for the national tour-guide qualification
   exam and, where applicable, an English-language practical exam.

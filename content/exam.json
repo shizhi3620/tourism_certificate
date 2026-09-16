@@ -1,8 +1,8 @@
 {
   "version": "2026.0",
-  "contentVersion": "2026.1.2",
+  "contentVersion": "2026.1.8",
   "syllabusVersion": "2026.0",
-  "publishedAt": "2026-01-01",
+  "publishedAt": "2026-09-16T02:18:05.666Z",
   "title": "2026 四川导游资格证备考",
   "notice": "题库仅收录公开、合成或已获许可的内容；标记为待审核的内容不会进入默认练习和模考。",
   "exam": {
@@ -10,7 +10,70 @@
     "writtenExam": {
       "language": "中文",
       "subjectCount": 4,
-      "scope": "全国导游资格考试大纲"
+      "scope": "全国导游资格考试大纲",
+      "questionTypes": [
+        {
+          "id": "single_choice",
+          "label": "单选题",
+          "selectionMode": "single",
+          "minCorrect": 1,
+          "maxCorrect": 1,
+          "minOptions": 2,
+          "maxOptions": null
+        },
+        {
+          "id": "multiple_choice",
+          "label": "多选题",
+          "selectionMode": "multiple",
+          "minCorrect": 2,
+          "maxCorrect": null,
+          "minOptions": 2,
+          "maxOptions": null
+        },
+        {
+          "id": "true_false",
+          "label": "判断题",
+          "selectionMode": "single",
+          "minCorrect": 1,
+          "maxCorrect": 1,
+          "minOptions": 2,
+          "maxOptions": 2,
+          "fixedOptions": [
+            "正确",
+            "错误"
+          ]
+        }
+      ],
+      "generationPolicies": {
+        "past_paper": {
+          "preserveSourceTypes": true,
+          "requiredTypes": []
+        },
+        "written_simulation": {
+          "requiredTypes": [
+            "single_choice",
+            "multiple_choice",
+            "true_false"
+          ],
+          "targetDistribution": {
+            "single_choice": 50,
+            "multiple_choice": 25,
+            "true_false": 25
+          }
+        },
+        "chapter_practice": {
+          "requiredTypes": [
+            "single_choice",
+            "multiple_choice",
+            "true_false"
+          ],
+          "targetDistribution": {
+            "single_choice": 54.4,
+            "multiple_choice": 23.1,
+            "true_false": 22.5
+          }
+        }
+      }
     },
     "practicalExam": {
       "region": "四川省",
@@ -20,48 +83,3326 @@
     "practicalSyllabus": "附件3：《四川省2026年全国导游资格考试现场考试大纲》.pdf"
   },
   "subjects": [
-    { "id": "policy", "name": "政策与法律法规" },
-    { "id": "business", "name": "导游业务" },
-    { "id": "national", "name": "全国导游基础知识" },
-    { "id": "local", "name": "地方导游基础知识" }
+    {
+      "id": "policy",
+      "name": "政策与法律法规"
+    },
+    {
+      "id": "business",
+      "name": "导游业务"
+    },
+    {
+      "id": "national",
+      "name": "全国导游基础知识"
+    },
+    {
+      "id": "local",
+      "name": "地方导游基础知识"
+    }
   ],
   "chapters": [
-    { "id": "policy-01", "subjectId": "policy", "name": "旅游政策与法规", "description": "旅游业发展与游客权益保护的基础规则。" },
-    { "id": "business-01", "subjectId": "business", "name": "导游服务规范", "description": "导游服务流程、应急处理和职业规范。" },
-    { "id": "national-01", "subjectId": "national", "name": "中国历史文化", "description": "中国历史、文化遗产和旅游资源。" },
-    { "id": "local-01", "subjectId": "local", "name": "四川旅游资源", "description": "四川自然与人文旅游资源。" }
+    {
+      "id": "policy-01",
+      "subjectId": "policy",
+      "name": "旅游政策与法规",
+      "description": "旅游业发展与游客权益保护的基础规则。"
+    },
+    {
+      "id": "business-01",
+      "subjectId": "business",
+      "name": "导游服务规范",
+      "description": "导游服务流程、应急处理和职业规范。"
+    },
+    {
+      "id": "national-01",
+      "subjectId": "national",
+      "name": "中国历史文化",
+      "description": "中国历史、文化遗产和旅游资源。"
+    },
+    {
+      "id": "local-01",
+      "subjectId": "local",
+      "name": "四川旅游资源",
+      "description": "四川自然与人文旅游资源。"
+    },
+    {
+      "id": "chapter-01",
+      "subjectId": "policy",
+      "name": "党的二十大和二十届历次全会精神",
+      "description": "政策与法律法规 · 党的二十大和二十届历次全会精神"
+    },
+    {
+      "id": "chapter-02",
+      "subjectId": "policy",
+      "name": "旅游方针政策",
+      "description": "政策与法律法规 · 旅游方针政策"
+    },
+    {
+      "id": "chapter-03",
+      "subjectId": "policy",
+      "name": "宪法的基本知识",
+      "description": "政策与法律法规 · 宪法的基本知识"
+    },
+    {
+      "id": "chapter-04",
+      "subjectId": "policy",
+      "name": "宪法相关法的基本知识",
+      "description": "政策与法律法规 · 宪法相关法的基本知识"
+    },
+    {
+      "id": "chapter-05",
+      "subjectId": "policy",
+      "name": "民法的基本知识",
+      "description": "政策与法律法规 · 民法的基本知识"
+    },
+    {
+      "id": "chapter-06",
+      "subjectId": "policy",
+      "name": "合同法律制度",
+      "description": "政策与法律法规 · 合同法律制度"
+    },
+    {
+      "id": "chapter-07",
+      "subjectId": "policy",
+      "name": "侵权责任法律制度",
+      "description": "政策与法律法规 · 侵权责任法律制度"
+    }
   ],
   "questions": [
     {
-      "id": "demo-001", "chapterId": "policy-01", "subject": "政策与法律法规",
-      "type": "single_choice", "sourceType": "self_authored", "sourceStatus": "published",
-      "sourceNote": "合成流程示例题，不代表正式考试真题。", "year": null, "region": "全国",
-      "textbookSubject": "政策与法律法规", "textbookChapter": "旅游政策与法规", "syllabusRequirement": "旅游者知情权与旅行社信息披露", "sourcePages": ["demo"], "sourceExcerpt": "合成流程示例题，仅用于验证内容结构。",
+      "id": "demo-001",
+      "chapterId": "policy-01",
+      "subject": "政策与法律法规",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "合成流程示例题，不代表正式考试真题。",
+      "year": null,
+      "region": "全国",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "旅游政策与法规",
+      "syllabusRequirement": "旅游者知情权与旅行社信息披露",
+      "sourcePages": [
+        "demo"
+      ],
+      "sourceExcerpt": "合成流程示例题，仅用于验证内容结构。",
       "prompt": "下列哪种做法最能保障游客获取准确信息的权利？",
-      "options": ["提供清晰、真实的行程信息", "隐瞒自费项目", "未经说明擅自更改行程", "拒绝回答游客的合理问题"],
-      "answer": 0, "explanation": "Clear and truthful information supports informed choices and protects visitor rights."
+      "options": [
+        "提供清晰、真实的行程信息",
+        "隐瞒自费项目",
+        "未经说明擅自更改行程",
+        "拒绝回答游客的合理问题"
+      ],
+      "answer": 0,
+      "explanation": "Clear and truthful information supports informed choices and protects visitor rights."
     },
     {
-      "id": "past-2024-sichuan-001", "chapterId": "local-01", "subject": "地方导游基础知识",
-      "type": "single_choice", "sourceType": "past_exam", "sourceStatus": "published",
-      "sourceNote": "Synthetic licensed-style practice item; not a reproduction of an exam paper.", "year": 2024, "region": "四川省",
-      "textbookSubject": "地方导游基础知识", "textbookChapter": "四川旅游资源", "syllabusRequirement": "四川自然与人文旅游资源", "sourcePages": ["demo"], "sourceExcerpt": "Synthetic licensed-style practice item.",
+      "id": "past-2024-sichuan-001",
+      "chapterId": "local-01",
+      "subject": "地方导游基础知识",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "Synthetic licensed-style practice item; not a reproduction of an exam paper.",
+      "year": 2024,
+      "region": "四川省",
+      "textbookSubject": "地方导游基础知识",
+      "textbookChapter": "四川旅游资源",
+      "syllabusRequirement": "四川自然与人文旅游资源",
+      "sourcePages": [
+        "demo"
+      ],
+      "sourceExcerpt": "Synthetic licensed-style practice item.",
       "prompt": "关于四川旅游资源，下列哪项描述最恰当？",
-      "options": ["四川兼具多样的自然景观和鲜活的地域文化", "四川旅游资源只有滨海度假区", "四川没有任何自然保护地", "四川旅游资源仅集中在一个城市"],
-      "answer": 0, "explanation": "四川拥有多样的山地景观、文化遗产、美食和鲜活的地域传统。"
+      "options": [
+        "四川兼具多样的自然景观和鲜活的地域文化",
+        "四川旅游资源只有滨海度假区",
+        "四川没有任何自然保护地",
+        "四川旅游资源仅集中在一个城市"
+      ],
+      "answer": 0,
+      "explanation": "四川拥有多样的山地景观、文化遗产、美食和鲜活的地域传统。"
     },
     {
-      "id": "mock-001", "chapterId": "business-01", "subject": "导游业务",
-      "type": "single_choice", "sourceType": "mock", "sourceStatus": "published",
-      "sourceNote": "合成模拟题。", "year": null, "region": "全国",
-      "textbookSubject": "导游业务", "textbookChapter": "导游服务规范", "syllabusRequirement": "突发情况与行程变化处理", "sourcePages": ["demo"], "sourceExcerpt": "合成模拟题，仅用于验证内容结构。",
+      "id": "mock-001",
+      "chapterId": "business-01",
+      "subject": "导游业务",
+      "type": "single_choice",
+      "sourceType": "mock",
+      "sourceStatus": "published",
+      "sourceNote": "合成模拟题。",
+      "year": null,
+      "region": "全国",
+      "textbookSubject": "导游业务",
+      "textbookChapter": "导游服务规范",
+      "syllabusRequirement": "突发情况与行程变化处理",
+      "sourcePages": [
+        "demo"
+      ],
+      "sourceExcerpt": "合成模拟题，仅用于验证内容结构。",
       "prompt": "行程出现突发变化时，导游首先应当怎么做？",
-      "options": ["说明已经核实的情况，并与游客协商安全的替代方案", "责怪游客没有配合", "直接删除原行程", "承诺无法保证的结果"],
-      "answer": 0, "explanation": "冷静、准确地说明情况并提出安全替代方案，是专业导游的处理方式。"
+      "options": [
+        "说明已经核实的情况，并与游客协商安全的替代方案",
+        "责怪游客没有配合",
+        "直接删除原行程",
+        "承诺无法保证的结果"
+      ],
+      "answer": 0,
+      "explanation": "冷静、准确地说明情况并提出安全替代方案，是专业导游的处理方式。"
+    },
+    {
+      "id": "draft-001",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "掌握宪法的特征",
+      "sourcePages": [
+        "OCR PAGE 55"
+      ],
+      "sourceExcerpt": "《宪法》第5条第3款规定，一切法律、行政法规和地方性法规都不得同宪法相抵触。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》，下列关于宪法效力的说法正确的是（）。",
+      "options": [
+        "一切法律、行政法规和地方性法规都不得同宪法相抵触",
+        "宪法与普通法律具有同等效力",
+        "行政法规的效力高于宪法",
+        "地方性法规可以与宪法相抵触"
+      ],
+      "answer": 0,
+      "explanation": "《宪法》第5条第3款规定，一切法律、行政法规和地方性法规都不得同宪法相抵触。因此选项A正确。",
+      "publishedAt": "2026-09-15T09:17:51.329Z"
+    },
+    {
+      "id": "draft-002",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "掌握宪法的特征",
+      "sourcePages": [
+        "OCR PAGE 54"
+      ],
+      "sourceExcerpt": "《宪法》第64条规定，宪法的修改，由全国人民代表大会常务委员会或1/5以上全国人民代表大会代表提议，并由全国人民代表大会以全体代表的2/3以上的多数通过。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》，宪法的修改由全国人民代表大会常务委员会或者（）以上的全国人民代表大会代表提议。",
+      "options": [
+        "1/5",
+        "1/3",
+        "1/2",
+        "2/3"
+      ],
+      "answer": 0,
+      "explanation": "《宪法》第64条规定，宪法的修改，由全国人民代表大会常务委员会或1/5以上全国人民代表大会代表提议。因此选项A正确。",
+      "publishedAt": "2026-09-15T09:17:51.329Z"
+    },
+    {
+      "id": "draft-003",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "掌握宪法的特征",
+      "sourcePages": [
+        "OCR PAGE 54"
+      ],
+      "sourceExcerpt": "《宪法》第64条规定，宪法的修改，由全国人民代表大会常务委员会或1/5以上全国人民代表大会代表提议，并由全国人民代表大会以全体代表的2/3以上的多数通过。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》，宪法的修改由全国人民代表大会以全体代表的（）以上的多数通过。",
+      "options": [
+        "1/2",
+        "2/3",
+        "3/4",
+        "4/5"
+      ],
+      "answer": 1,
+      "explanation": "《宪法》第64条规定，宪法的修改由全国人民代表大会以全体代表的2/3以上的多数通过。因此选项B正确。",
+      "publishedAt": "2026-09-15T09:17:51.329Z"
+    },
+    {
+      "id": "draft-004",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "熟悉宪法的基本原则",
+      "sourcePages": [
+        "OCR PAGE 55"
+      ],
+      "sourceExcerpt": "《宪法》第1条第2款规定，中国共产党领导是中国特色社会主义最本质的特征。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》，中国特色社会主义最本质的特征是（）。",
+      "options": [
+        "人民民主专政",
+        "中国共产党领导",
+        "社会主义制度",
+        "人民代表大会制度"
+      ],
+      "answer": 1,
+      "explanation": "《宪法》第1条第2款规定，中国共产党领导是中国特色社会主义最本质的特征。因此选项B正确。",
+      "publishedAt": "2026-09-15T09:17:51.329Z"
+    },
+    {
+      "id": "draft-005",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "熟悉宪法的基本原则",
+      "sourcePages": [
+        "OCR PAGE 55"
+      ],
+      "sourceExcerpt": "《宪法》第2条规定，中华人民共和国的一切权力属于人民；人民行使国家权力的机关是全国人民代表大会和地方各级人民代表大会。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》，人民行使国家权力的机关是（）。",
+      "options": [
+        "全国人民代表大会和地方各级人民代表大会",
+        "国务院",
+        "最高人民法院",
+        "中国人民政治协商会议"
+      ],
+      "answer": 0,
+      "explanation": "《宪法》第2条规定，人民行使国家权力的机关是全国人民代表大会和地方各级人民代表大会。因此选项A正确。",
+      "publishedAt": "2026-09-15T09:17:51.329Z"
+    },
+    {
+      "id": "draft-006",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "掌握公民的基本权利和义务",
+      "sourcePages": [
+        "OCR PAGE 61"
+      ],
+      "sourceExcerpt": "《宪法》第34条规定，中华人民共和国年满18周岁的公民，不分民族、种族、性别、职业、家庭出身、宗教信仰、教育程度、财产状况、居住期限，都有选举权和被选举权；但是依照法律被剥夺政治权利的人除外。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》，中华人民共和国年满（）周岁的公民，都有选举权和被选举权，但是依照法律被剥夺政治权利的人除外。",
+      "options": [
+        "16",
+        "18",
+        "20",
+        "22"
+      ],
+      "answer": 1,
+      "explanation": "《宪法》第34条规定，中华人民共和国年满18周岁的公民，都有选举权和被选举权；但是依照法律被剥夺政治权利的人除外。因此选项B正确。",
+      "publishedAt": "2026-09-15T09:17:51.329Z"
+    },
+    {
+      "id": "draft-007",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "掌握公民的基本权利和义务",
+      "sourcePages": [
+        "OCR PAGE 62"
+      ],
+      "sourceExcerpt": "《宪法》第33条第2款规定，中华人民共和国公民在法律面前一律平等。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》，中华人民共和国公民在（）一律平等。",
+      "options": [
+        "法律面前",
+        "经济地位上",
+        "政治地位上",
+        "社会地位上"
+      ],
+      "answer": 0,
+      "explanation": "《宪法》第33条第2款规定，中华人民共和国公民在法律面前一律平等。因此选项A正确。",
+      "publishedAt": "2026-09-15T09:17:51.329Z"
+    },
+    {
+      "id": "draft-008",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "掌握公民的基本权利和义务",
+      "sourcePages": [
+        "OCR PAGE 63"
+      ],
+      "sourceExcerpt": "《宪法》第37条第1款规定，中华人民共和国公民的人身自由不受侵犯。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》，中华人民共和国公民的（）不受侵犯。",
+      "options": [
+        "人身自由",
+        "选举权",
+        "言论自由",
+        "宗教信仰自由"
+      ],
+      "answer": 0,
+      "explanation": "《宪法》第37条第1款规定，中华人民共和国公民的人身自由不受侵犯。因此选项A正确。",
+      "publishedAt": "2026-09-15T09:17:51.329Z"
+    },
+    {
+      "id": "draft-009",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "掌握公民的基本权利和义务",
+      "sourcePages": [
+        "OCR PAGE 63"
+      ],
+      "sourceExcerpt": "《宪法》第38条规定，中华人民共和国公民的人格尊严不受侵犯。禁止用任何方法对公民进行侮辱、诽谤和诬告陷害。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》，中华人民共和国公民的（）不受侵犯。禁止用任何方法对公民进行侮辱、诽谤和诬告陷害。",
+      "options": [
+        "人格尊严",
+        "住宅",
+        "通信自由",
+        "财产"
+      ],
+      "answer": 0,
+      "explanation": "《宪法》第38条规定，中华人民共和国公民的人格尊严不受侵犯。禁止用任何方法对公民进行侮辱、诽谤和诬告陷害。因此选项A正确。",
+      "publishedAt": "2026-09-15T09:17:51.329Z"
+    },
+    {
+      "id": "draft-010",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "掌握公民的基本权利和义务",
+      "sourcePages": [
+        "OCR PAGE 63"
+      ],
+      "sourceExcerpt": "《宪法》第39条规定，中华人民共和国公民的住宅不受侵犯。禁止非法搜查或者非法侵入公民的住宅。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》，中华人民共和国公民的（）不受侵犯。禁止非法搜查或者非法侵入公民的住宅。",
+      "options": [
+        "住宅",
+        "人身自由",
+        "人格尊严",
+        "通信秘密"
+      ],
+      "answer": 0,
+      "explanation": "《宪法》第39条规定，中华人民共和国公民的住宅不受侵犯。禁止非法搜查或者非法侵入公民的住宅。因此选项A正确。",
+      "publishedAt": "2026-09-15T09:17:51.329Z"
+    },
+    {
+      "id": "draft-011",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "掌握公民的基本权利和义务",
+      "sourcePages": [
+        "OCR PAGE 63"
+      ],
+      "sourceExcerpt": "《宪法》第40条规定，中华人民共和国公民的通信自由和通信秘密受法律的保护。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》，中华人民共和国公民的（）受法律的保护。",
+      "options": [
+        "通信自由和通信秘密",
+        "言论自由",
+        "出版自由",
+        "集会自由"
+      ],
+      "answer": 0,
+      "explanation": "《宪法》第40条规定，中华人民共和国公民的通信自由和通信秘密受法律的保护。因此选项A正确。",
+      "publishedAt": "2026-09-15T09:17:51.329Z"
+    },
+    {
+      "id": "draft-012",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "掌握公民的基本权利和义务",
+      "sourcePages": [
+        "OCR PAGE 63"
+      ],
+      "sourceExcerpt": "《宪法》第42条规定，中华人民共和国公民有劳动的权利和义务。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》，中华人民共和国公民有（）的权利和义务。",
+      "options": [
+        "劳动",
+        "休息",
+        "纳税",
+        "服兵役"
+      ],
+      "answer": 0,
+      "explanation": "《宪法》第42条规定，中华人民共和国公民有劳动的权利和义务。因此选项A正确。",
+      "publishedAt": "2026-09-15T09:17:51.329Z"
+    },
+    {
+      "id": "draft-013",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "掌握公民的基本权利和义务",
+      "sourcePages": [
+        "OCR PAGE 64"
+      ],
+      "sourceExcerpt": "《宪法》第46条规定，中华人民共和国公民有受教育的权利和义务。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》，中华人民共和国公民有（）的权利和义务。",
+      "options": [
+        "受教育",
+        "劳动",
+        "纳税",
+        "服兵役"
+      ],
+      "answer": 0,
+      "explanation": "《宪法》第46条规定，中华人民共和国公民有受教育的权利和义务。因此选项A正确。",
+      "publishedAt": "2026-09-15T09:17:51.329Z"
+    },
+    {
+      "id": "draft-014",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "掌握公民的基本权利和义务",
+      "sourcePages": [
+        "OCR PAGE 66"
+      ],
+      "sourceExcerpt": "《宪法》第56条规定，中华人民共和国公民有依照法律纳税的义务。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》，中华人民共和国公民有依照法律（）的义务。",
+      "options": [
+        "纳税",
+        "服兵役",
+        "劳动",
+        "受教育"
+      ],
+      "answer": 0,
+      "explanation": "《宪法》第56条规定，中华人民共和国公民有依照法律纳税的义务。因此选项A正确。",
+      "publishedAt": "2026-09-15T09:17:51.329Z"
+    },
+    {
+      "id": "draft-015",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "掌握公民的基本权利和义务",
+      "sourcePages": [
+        "OCR PAGE 65"
+      ],
+      "sourceExcerpt": "《宪法》第55条规定，保卫祖国、抵抗侵略是每一个公民的神圣职责。依照法律服兵役和参加民兵组织是中国公民的光荣义务。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》，依照法律服兵役和参加民兵组织是中国公民的（）。",
+      "options": [
+        "光荣义务",
+        "权利",
+        "自愿行为",
+        "职业选择"
+      ],
+      "answer": 0,
+      "explanation": "《宪法》第55条规定，依照法律服兵役和参加民兵组织是中国公民的光荣义务。因此选项A正确。",
+      "publishedAt": "2026-09-15T09:17:51.329Z"
+    },
+    {
+      "id": "draft-016",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "熟悉国家制度",
+      "sourcePages": [
+        "OCR PAGE 58"
+      ],
+      "sourceExcerpt": "《宪法》第1条规定，中华人民共和国是工人阶级领导的、以工农联盟为基础的人民民主专政的社会主义国家。社会主义制度是中华人民共和国的根本制度。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》，中华人民共和国的根本制度是（）。",
+      "options": [
+        "社会主义制度",
+        "人民代表大会制度",
+        "民族区域自治制度",
+        "基层群众自治制度"
+      ],
+      "answer": 0,
+      "explanation": "《宪法》第1条规定，社会主义制度是中华人民共和国的根本制度。因此选项A正确。",
+      "publishedAt": "2026-09-15T09:17:51.329Z"
+    },
+    {
+      "id": "draft-017",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "熟悉国家制度",
+      "sourcePages": [
+        "OCR PAGE 58"
+      ],
+      "sourceExcerpt": "人民代表大会制度是我国的政权组织形式。《宪法》第2条第2款规定，人民行使国家权力的机关是全国人民代表大会和地方各级人民代表大会。这表明，人民代表大会制度是我国的根本政治制度，是我国的政体。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》，我国的根本政治制度是（）。",
+      "options": [
+        "人民代表大会制度",
+        "社会主义制度",
+        "民族区域自治制度",
+        "中国共产党领导的多党合作和政治协商制度"
+      ],
+      "answer": 0,
+      "explanation": "人民代表大会制度是我国的根本政治制度，是我国的政体。因此选项A正确。",
+      "publishedAt": "2026-09-15T09:17:51.329Z"
+    },
+    {
+      "id": "draft-018",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "熟悉国家制度",
+      "sourcePages": [
+        "OCR PAGE 59"
+      ],
+      "sourceExcerpt": "《宪法》第4条第3款规定，各少数民族聚居的地方实行区域自治，设立自治机关，行使自治权。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》，各少数民族聚居的地方实行（），设立自治机关，行使自治权。",
+      "options": [
+        "区域自治",
+        "基层群众自治",
+        "特别行政区制度",
+        "民族共治"
+      ],
+      "answer": 0,
+      "explanation": "《宪法》第4条第3款规定，各少数民族聚居的地方实行区域自治，设立自治机关，行使自治权。因此选项A正确。",
+      "publishedAt": "2026-09-15T09:17:51.329Z"
+    },
+    {
+      "id": "draft-019",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "熟悉国家制度",
+      "sourcePages": [
+        "OCR PAGE 60"
+      ],
+      "sourceExcerpt": "《宪法》第111条第1款规定，城市和农村按居民居住地区设立的居民委员会或者村民委员会是基层群众性自治组织。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》，城市和农村按居民居住地区设立的居民委员会或者村民委员会是（）。",
+      "options": [
+        "基层群众性自治组织",
+        "基层政权机关",
+        "地方人民政府的派出机关",
+        "社会团体"
+      ],
+      "answer": 0,
+      "explanation": "《宪法》第111条第1款规定，城市和农村按居民居住地区设立的居民委员会或者村民委员会是基层群众性自治组织。因此选项A正确。",
+      "publishedAt": "2026-09-15T09:17:51.329Z"
+    },
+    {
+      "id": "draft-020",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "熟悉国家制度",
+      "sourcePages": [
+        "OCR PAGE 60"
+      ],
+      "sourceExcerpt": "《宪法》第31条规定，国家在必要时得设立特别行政区。在特别行政区内实行的制度按照具体情况由全国人民代表大会以法律规定。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》，国家在必要时得设立特别行政区。在特别行政区内实行的制度按照具体情况由（）以法律规定。",
+      "options": [
+        "全国人民代表大会",
+        "全国人民代表大会常务委员会",
+        "国务院",
+        "中央军事委员会"
+      ],
+      "answer": 0,
+      "explanation": "《宪法》第31条规定，在特别行政区内实行的制度按照具体情况由全国人民代表大会以法律规定。因此选项A正确。",
+      "publishedAt": "2026-09-15T09:17:51.329Z"
+    },
+    {
+      "id": "draft-1789466255082-1",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神",
+      "syllabusRequirement": "习近平新时代中国特色社会主义思想、党的二十大和二十届二中、三中、四中全会精神。习近平新时代中国特色社会主义思想的核心要义；习近平法治思想、习近平文化思想、习近平生态文明思想、习近平外交思想的主要内容；2025年以来习近平总书记关于文化和旅游工作的重要论述。",
+      "sourcePages": [
+        "OCR PAGE 9"
+      ],
+      "sourceExcerpt": "党的二十大主题是：“高举中国特色社会主义伟大旗帜，全面贯彻新时代中国特色社会主义思想，弘扬伟大建党精神，自信自强、守正创新，踔厉奋发、勇毅前行，为全面建设社会主义现代化国家、全面推进中华民族伟大复兴而团结奋斗。”",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "党的二十大主题是（ ）。",
+      "options": [
+        "高举中国特色社会主义伟大旗帜，全面贯彻新时代中国特色社会主义思想，弘扬伟大建党精神，自信自强、守正创新，踔厉奋发、勇毅前行，为全面建设社会主义现代化国家、全面推进中华民族伟大复兴而团结奋斗",
+        "高举邓小平理论伟大旗帜，全面贯彻“三个代表”重要思想，继往开来，与时俱进，全面建设小康社会，加快推进社会主义现代化，为开创中国特色社会主义事业新局面而奋斗",
+        "高举中国特色社会主义伟大旗帜，以邓小平理论和“三个代表”重要思想为指导，深入贯彻落实科学发展观，继续解放思想，坚持改革开放，推动科学发展，促进社会和谐，为夺取全面建设小康社会新胜利而奋斗",
+        "不忘初心，牢记使命，高举中国特色社会主义伟大旗帜，决胜全面建成小康社会，夺取新时代中国特色社会主义伟大胜利，为实现中华民族伟大复兴的中国梦不懈奋斗"
+      ],
+      "answer": 0,
+      "explanation": "根据教材原文，党的二十大主题是：“高举中国特色社会主义伟大旗帜，全面贯彻新时代中国特色社会主义思想，弘扬伟大建党精神，自信自强、守正创新，踔厉奋发、勇毅前行，为全面建设社会主义现代化国家、全面推进中华民族伟大复兴而团结奋斗。”",
+      "publishedAt": "2026-09-15T09:57:35.082Z"
+    },
+    {
+      "id": "draft-1789466255082-2",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神",
+      "syllabusRequirement": "习近平新时代中国特色社会主义思想、党的二十大和二十届二中、三中、四中全会精神。习近平新时代中国特色社会主义思想的核心要义；习近平法治思想、习近平文化思想、习近平生态文明思想、习近平外交思想的主要内容；2025年以来习近平总书记关于文化和旅游工作的重要论述。",
+      "sourcePages": [
+        "OCR PAGE 18"
+      ],
+      "sourceExcerpt": "习近平新时代中国特色社会主义思想的核心要义，就是坚持和发展中国特色社会主义。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "习近平新时代中国特色社会主义思想的核心要义是（ ）。",
+      "options": [
+        "坚持和发展中国特色社会主义",
+        "实现中华民族伟大复兴",
+        "全面深化改革",
+        "全面从严治党"
+      ],
+      "answer": 0,
+      "explanation": "根据教材原文，习近平新时代中国特色社会主义思想的核心要义，就是坚持和发展中国特色社会主义。",
+      "publishedAt": "2026-09-15T09:57:35.082Z"
+    },
+    {
+      "id": "draft-1789466255082-3",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神",
+      "syllabusRequirement": "习近平新时代中国特色社会主义思想、党的二十大和二十届二中、三中、四中全会精神。习近平新时代中国特色社会主义思想的核心要义；习近平法治思想、习近平文化思想、习近平生态文明思想、习近平外交思想的主要内容；2025年以来习近平总书记关于文化和旅游工作的重要论述。",
+      "sourcePages": [
+        "OCR PAGE 27"
+      ],
+      "sourceExcerpt": "习近平法治思想内涵丰富、论述深刻、逻辑严密、系统完备，主要内容集中体现为“十二个坚持”",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "习近平法治思想的主要内容集中体现为（ ）。",
+      "options": [
+        "十二个坚持",
+        "十个坚持",
+        "十四个坚持",
+        "七个着力"
+      ],
+      "answer": 0,
+      "explanation": "根据教材原文，习近平法治思想内涵丰富、论述深刻、逻辑严密、系统完备，主要内容集中体现为“十二个坚持”。",
+      "publishedAt": "2026-09-15T09:57:35.082Z"
+    },
+    {
+      "id": "draft-1789466255082-4",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神",
+      "syllabusRequirement": "习近平新时代中国特色社会主义思想、党的二十大和二十届二中、三中、四中全会精神。习近平新时代中国特色社会主义思想的核心要义；习近平法治思想、习近平文化思想、习近平生态文明思想、习近平外交思想的主要内容；2025年以来习近平总书记关于文化和旅游工作的重要论述。",
+      "sourcePages": [
+        "OCR PAGE 28"
+      ],
+      "sourceExcerpt": "习近平文化思想内涵丰富，思想深邃，博大精深，主要集中体现为“七个着力”",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "习近平文化思想的主要内容集中体现为（ ）。",
+      "options": [
+        "七个着力",
+        "十个坚持",
+        "十二个坚持",
+        "十四个坚持"
+      ],
+      "answer": 0,
+      "explanation": "根据教材原文，习近平文化思想内涵丰富，思想深邃，博大精深，主要集中体现为“七个着力”。",
+      "publishedAt": "2026-09-15T09:57:35.082Z"
+    },
+    {
+      "id": "draft-1789466255082-5",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神",
+      "syllabusRequirement": "习近平新时代中国特色社会主义思想、党的二十大和二十届二中、三中、四中全会精神。习近平新时代中国特色社会主义思想的核心要义；习近平法治思想、习近平文化思想、习近平生态文明思想、习近平外交思想的主要内容；2025年以来习近平总书记关于文化和旅游工作的重要论述。",
+      "sourcePages": [
+        "OCR PAGE 29"
+      ],
+      "sourceExcerpt": "习近平生态文明思想系统完整、逻辑严密，核心要义集中体现为“十个坚持”",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "习近平生态文明思想的核心要义集中体现为（ ）。",
+      "options": [
+        "十个坚持",
+        "七个着力",
+        "十二个坚持",
+        "十四个坚持"
+      ],
+      "answer": 0,
+      "explanation": "根据教材原文，习近平生态文明思想系统完整、逻辑严密，核心要义集中体现为“十个坚持”。",
+      "publishedAt": "2026-09-15T09:57:35.082Z"
+    },
+    {
+      "id": "draft-1789466255082-6",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神",
+      "syllabusRequirement": "习近平新时代中国特色社会主义思想、党的二十大和二十届二中、三中、四中全会精神。习近平新时代中国特色社会主义思想的核心要义；习近平法治思想、习近平文化思想、习近平生态文明思想、习近平外交思想的主要内容；2025年以来习近平总书记关于文化和旅游工作的重要论述。",
+      "sourcePages": [
+        "OCR PAGE 30"
+      ],
+      "sourceExcerpt": "习近平外交思想体系完备、内涵丰富，核心要义集中体现为“十个坚持”",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "习近平外交思想的核心要义集中体现为（ ）。",
+      "options": [
+        "十个坚持",
+        "七个着力",
+        "十二个坚持",
+        "十四个坚持"
+      ],
+      "answer": 0,
+      "explanation": "根据教材原文，习近平外交思想体系完备、内涵丰富，核心要义集中体现为“十个坚持”。",
+      "publishedAt": "2026-09-15T09:57:35.082Z"
+    },
+    {
+      "id": "draft-1789466255082-7",
+      "chapterId": "chapter-02",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第二章 旅游方针政策",
+      "syllabusRequirement": "《旅游强国建设“十五五”规划》《国务院办公厅关于进一步加强旅游市场综合监管的通知》（国办函〔2025〕95号）、《文化和旅游部市场监管总局关于印发2026年版团队旅游合同（示范文本）的通知》（文旅市场发〔2026〕5号）、《文化和旅游部关于推动在线旅游市场高质量发展的意见》（文旅市场发〔2023〕41号）、《文化和旅游部办公厅 公安部办公厅交通运输部办公厅关于进一步规范旅游客运 安全带使用保障游客出行安全有关工作的通知》（办市场发〔2023〕20号）的主要内容。",
+      "sourcePages": [
+        "OCR PAGE 46"
+      ],
+      "sourceExcerpt": "到2030年，旅游业高质量发展取得明显成效，现代旅游业体系更加完善，旅游强国建设取得显著进展。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《旅游强国建设“十五五”规划》，到2030年，旅游业高质量发展取得明显成效，现代旅游业体系更加完善，（ ）取得显著进展。",
+      "options": [
+        "旅游强国建设",
+        "世界旅游强国建设",
+        "国际旅游目的地建设",
+        "全域旅游示范区建设"
+      ],
+      "answer": 0,
+      "explanation": "根据教材原文，到2030年，旅游业高质量发展取得明显成效，现代旅游业体系更加完善，旅游强国建设取得显著进展。",
+      "publishedAt": "2026-09-15T09:57:35.082Z"
+    },
+    {
+      "id": "draft-1789466255082-8",
+      "chapterId": "chapter-02",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第二章 旅游方针政策",
+      "syllabusRequirement": "《旅游强国建设“十五五”规划》《国务院办公厅关于进一步加强旅游市场综合监管的通知》（国办函〔2025〕95号）、《文化和旅游部市场监管总局关于印发2026年版团队旅游合同（示范文本）的通知》（文旅市场发〔2026〕5号）、《文化和旅游部关于推动在线旅游市场高质量发展的意见》（文旅市场发〔2023〕41号）、《文化和旅游部办公厅 公安部办公厅交通运输部办公厅关于进一步规范旅游客运 安全带使用保障游客出行安全有关工作的通知》（办市场发〔2023〕20号）的主要内容。",
+      "sourcePages": [
+        "OCR PAGE 49"
+      ],
+      "sourceExcerpt": "2026年版团队旅游合同（示范文本）包括《团队境内旅游合同（示范文本）》《团队出境旅游合同（示范文本）》《大陆居民赴台湾地区旅游合同（示范文本）》《境内旅游“一日游”合同（示范文本）》《境内旅游组团社与地接社合同（示范文本）》《研学旅游合同（示范文本）》六个示范文本。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "2026年版团队旅游合同（示范文本）包括（ ）个示范文本。",
+      "options": [
+        "六",
+        "五",
+        "七",
+        "四"
+      ],
+      "answer": 0,
+      "explanation": "根据教材原文，2026年版团队旅游合同（示范文本）包括《团队境内旅游合同（示范文本）》《团队出境旅游合同（示范文本）》《大陆居民赴台湾地区旅游合同（示范文本）》《境内旅游“一日游”合同（示范文本）》《境内旅游组团社与地接社合同（示范文本）》《研学旅游合同（示范文本）》六个示范文本。",
+      "publishedAt": "2026-09-15T09:57:35.082Z"
+    },
+    {
+      "id": "draft-1789466255082-9",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "《中华人民共和国宪法》（以下简称《宪法》）的基本原则；《宪法》关于我国的基本制度和根本任务；关于加强社会主义精神文明建设以及公民的基本权利和义务的规定。",
+      "sourcePages": [
+        "OCR PAGE 54"
+      ],
+      "sourceExcerpt": "1982年12月4日，第五届全国人大第5次会议通过《宪法》，此后历经1988年、1993年、1999年、2004年、2018年五次修订。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "我国现行宪法是1982年12月4日第五届全国人大第5次会议通过的，此后历经（ ）次修订。",
+      "options": [
+        "五",
+        "四",
+        "六",
+        "三"
+      ],
+      "answer": 0,
+      "explanation": "根据教材原文，1982年12月4日，第五届全国人大第5次会议通过《宪法》，此后历经1988年、1993年、1999年、2004年、2018年五次修订。",
+      "publishedAt": "2026-09-15T09:57:35.082Z"
+    },
+    {
+      "id": "draft-1789466255082-10",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "《中华人民共和国宪法》（以下简称《宪法》）的基本原则；《宪法》关于我国的基本制度和根本任务；关于加强社会主义精神文明建设以及公民的基本权利和义务的规定。",
+      "sourcePages": [
+        "OCR PAGE 54"
+      ],
+      "sourceExcerpt": "《宪法》第64条规定，宪法的修改，由全国人民代表大会常务委员会或1/5以上全国人民代表大会代表提议，并由全国人民代表大会以全体代表的2/3以上的多数通过。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》第64条规定，宪法的修改，由全国人民代表大会常务委员会或（ ）以上的全国人民代表大会代表提议，并由全国人民代表大会以全体代表的2/3以上的多数通过。",
+      "options": [
+        "1/5",
+        "1/3",
+        "1/2",
+        "2/3"
+      ],
+      "answer": 0,
+      "explanation": "根据教材原文，《宪法》第64条规定，宪法的修改，由全国人民代表大会常务委员会或1/5以上全国人民代表大会代表提议，并由全国人民代表大会以全体代表的2/3以上的多数通过。",
+      "publishedAt": "2026-09-15T09:57:35.082Z"
+    },
+    {
+      "id": "draft-1789466255082-11",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "《中华人民共和国宪法》（以下简称《宪法》）的基本原则；《宪法》关于我国的基本制度和根本任务；关于加强社会主义精神文明建设以及公民的基本权利和义务的规定。",
+      "sourcePages": [
+        "OCR PAGE 55"
+      ],
+      "sourceExcerpt": "《宪法》序言规定，国家的根本任务是，沿着中国特色社会主义道路，集中力量进行社会主义现代化建设。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》序言规定，国家的根本任务是（ ）。",
+      "options": [
+        "沿着中国特色社会主义道路，集中力量进行社会主义现代化建设",
+        "坚持人民民主专政",
+        "坚持中国共产党的领导",
+        "坚持社会主义制度"
+      ],
+      "answer": 0,
+      "explanation": "根据教材原文，《宪法》序言规定，国家的根本任务是，沿着中国特色社会主义道路，集中力量进行社会主义现代化建设。",
+      "publishedAt": "2026-09-15T09:57:35.082Z"
+    },
+    {
+      "id": "draft-1789466255082-12",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "《中华人民共和国宪法》（以下简称《宪法》）的基本原则；《宪法》关于我国的基本制度和根本任务；关于加强社会主义精神文明建设以及公民的基本权利和义务的规定。",
+      "sourcePages": [
+        "OCR PAGE 55"
+      ],
+      "sourceExcerpt": "《宪法》第1条第2款规定，中国共产党领导是中国特色社会主义最本质的特征。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》第1条第2款规定，（ ）是中国特色社会主义最本质的特征。",
+      "options": [
+        "中国共产党领导",
+        "人民民主专政",
+        "社会主义制度",
+        "人民代表大会制度"
+      ],
+      "answer": 0,
+      "explanation": "根据教材原文，《宪法》第1条第2款规定，中国共产党领导是中国特色社会主义最本质的特征。",
+      "publishedAt": "2026-09-15T09:57:35.082Z"
+    },
+    {
+      "id": "draft-1789466255082-13",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "《中华人民共和国宪法》（以下简称《宪法》）的基本原则；《宪法》关于我国的基本制度和根本任务；关于加强社会主义精神文明建设以及公民的基本权利和义务的规定。",
+      "sourcePages": [
+        "OCR PAGE 56"
+      ],
+      "sourceExcerpt": "《宪法》第33条第3款规定，国家尊重和保障人权。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》第33条第3款规定，国家（ ）和保障人权。",
+      "options": [
+        "尊重",
+        "保护",
+        "维护",
+        "重视"
+      ],
+      "answer": 0,
+      "explanation": "根据教材原文，《宪法》第33条第3款规定，国家尊重和保障人权。",
+      "publishedAt": "2026-09-15T09:57:35.082Z"
+    },
+    {
+      "id": "draft-1789466255082-14",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "《中华人民共和国宪法》（以下简称《宪法》）的基本原则；《宪法》关于我国的基本制度和根本任务；关于加强社会主义精神文明建设以及公民的基本权利和义务的规定。",
+      "sourcePages": [
+        "OCR PAGE 57"
+      ],
+      "sourceExcerpt": "《宪法》第24条第2款规定，国家倡导社会主义核心价值观，提倡爱祖国、爱人民、爱劳动、爱科学、爱社会主义的公德",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》第24条第2款规定，国家倡导社会主义核心价值观，提倡爱祖国、爱人民、爱劳动、爱科学、（ ）的公德。",
+      "options": [
+        "爱社会主义",
+        "爱集体",
+        "爱和平",
+        "爱家园"
+      ],
+      "answer": 0,
+      "explanation": "根据教材原文，《宪法》第24条第2款规定，国家倡导社会主义核心价值观，提倡爱祖国、爱人民、爱劳动、爱科学、爱社会主义的公德。",
+      "publishedAt": "2026-09-15T09:57:35.082Z"
+    },
+    {
+      "id": "draft-1789466255082-15",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "《中华人民共和国宪法》（以下简称《宪法》）的基本原则；《宪法》关于我国的基本制度和根本任务；关于加强社会主义精神文明建设以及公民的基本权利和义务的规定。",
+      "sourcePages": [
+        "OCR PAGE 58"
+      ],
+      "sourceExcerpt": "《宪法》第1条规定，中华人民共和国是工人阶级领导的、以工农联盟为基础的人民民主专政的社会主义国家。社会主义制度是中华人民共和国的根本制度。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》第1条规定，中华人民共和国的根本制度是（ ）。",
+      "options": [
+        "社会主义制度",
+        "人民代表大会制度",
+        "中国共产党领导的多党合作和政治协商制度",
+        "民族区域自治制度"
+      ],
+      "answer": 0,
+      "explanation": "根据教材原文，《宪法》第1条规定，中华人民共和国是工人阶级领导的、以工农联盟为基础的人民民主专政的社会主义国家。社会主义制度是中华人民共和国的根本制度。",
+      "publishedAt": "2026-09-15T09:57:35.082Z"
+    },
+    {
+      "id": "draft-1789466255082-16",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "《中华人民共和国宪法》（以下简称《宪法》）的基本原则；《宪法》关于我国的基本制度和根本任务；关于加强社会主义精神文明建设以及公民的基本权利和义务的规定。",
+      "sourcePages": [
+        "OCR PAGE 58"
+      ],
+      "sourceExcerpt": "人民代表大会制度是我国的政权组织形式。《宪法》第2条第2款规定，人民行使国家权力的机关是全国人民代表大会和地方各级人民代表大会。这表明，人民代表大会制度是我国的根本政治制度，是我国的政体。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "我国的根本政治制度是（ ）。",
+      "options": [
+        "人民代表大会制度",
+        "社会主义制度",
+        "中国共产党领导的多党合作和政治协商制度",
+        "民族区域自治制度"
+      ],
+      "answer": 0,
+      "explanation": "根据教材原文，人民代表大会制度是我国的政权组织形式，是我国的根本政治制度，是我国的政体。",
+      "publishedAt": "2026-09-15T09:57:35.082Z"
+    },
+    {
+      "id": "draft-1789466255082-17",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "《中华人民共和国宪法》（以下简称《宪法》）的基本原则；《宪法》关于我国的基本制度和根本任务；关于加强社会主义精神文明建设以及公民的基本权利和义务的规定。",
+      "sourcePages": [
+        "OCR PAGE 59"
+      ],
+      "sourceExcerpt": "《宪法》第34条规定，中华人民共和国年满18周岁的公民，不分民族、种族、性别、职业、家庭出身、宗教信仰、教育程度、财产状况、居住期限，都有选举权和被选举权；但是依照法律被剥夺政治权利的人除外。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》第34条规定，中华人民共和国年满（ ）周岁的公民，都有选举权和被选举权；但是依照法律被剥夺政治权利的人除外。",
+      "options": [
+        "18",
+        "16",
+        "20",
+        "22"
+      ],
+      "answer": 0,
+      "explanation": "根据教材原文，《宪法》第34条规定，中华人民共和国年满18周岁的公民，不分民族、种族、性别、职业、家庭出身、宗教信仰、教育程度、财产状况、居住期限，都有选举权和被选举权；但是依照法律被剥夺政治权利的人除外。",
+      "publishedAt": "2026-09-15T09:57:35.082Z"
+    },
+    {
+      "id": "draft-1789466255082-18",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "《中华人民共和国宪法》（以下简称《宪法》）的基本原则；《宪法》关于我国的基本制度和根本任务；关于加强社会主义精神文明建设以及公民的基本权利和义务的规定。",
+      "sourcePages": [
+        "OCR PAGE 60"
+      ],
+      "sourceExcerpt": "《宪法》第111条第1款规定，城市和农村按居民居住地区设立的居民委员会或者村民委员会是基层群众性自治组织。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》第111条第1款规定，城市和农村按居民居住地区设立的居民委员会或者村民委员会是（ ）。",
+      "options": [
+        "基层群众性自治组织",
+        "基层政权机关",
+        "基层人民政府的派出机关",
+        "基层群众性组织"
+      ],
+      "answer": 0,
+      "explanation": "根据教材原文，《宪法》第111条第1款规定，城市和农村按居民居住地区设立的居民委员会或者村民委员会是基层群众性自治组织。",
+      "publishedAt": "2026-09-15T09:57:35.082Z"
+    },
+    {
+      "id": "draft-1789466255082-19",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "《中华人民共和国宪法》（以下简称《宪法》）的基本原则；《宪法》关于我国的基本制度和根本任务；关于加强社会主义精神文明建设以及公民的基本权利和义务的规定。",
+      "sourcePages": [
+        "OCR PAGE 61"
+      ],
+      "sourceExcerpt": "《宪法》第33条第1款规定，凡具有中华人民共和国国籍的人都是中华人民共和国公民。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》第33条第1款规定，凡具有中华人民共和国国籍的人都是中华人民共和国（ ）。",
+      "options": [
+        "公民",
+        "人民",
+        "国民",
+        "居民"
+      ],
+      "answer": 0,
+      "explanation": "根据教材原文，《宪法》第33条第1款规定，凡具有中华人民共和国国籍的人都是中华人民共和国公民。",
+      "publishedAt": "2026-09-15T09:57:35.082Z"
+    },
+    {
+      "id": "draft-1789466255082-20",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "《中华人民共和国宪法》（以下简称《宪法》）的基本原则；《宪法》关于我国的基本制度和根本任务；关于加强社会主义精神文明建设以及公民的基本权利和义务的规定。",
+      "sourcePages": [
+        "OCR PAGE 61"
+      ],
+      "sourceExcerpt": "《宪法》第35条规定，公民有言论、出版、集会、结社、游行、示威的自由。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》第35条规定，公民有言论、出版、集会、结社、游行、（ ）的自由。",
+      "options": [
+        "示威",
+        "罢工",
+        "迁徙",
+        "信仰"
+      ],
+      "answer": 0,
+      "explanation": "根据教材原文，《宪法》第35条规定，公民有言论、出版、集会、结社、游行、示威的自由。",
+      "publishedAt": "2026-09-15T09:57:35.082Z"
+    },
+    {
+      "id": "draft-021",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "《中华人民共和国宪法》（以下简称《宪法》）的基本原则；《宪法》关于我国的基本制度和根本任务；关于加强社会主义精神文明建设以及公民的基本权利和义务的规定。",
+      "sourcePages": [
+        "OCR PAGE 62"
+      ],
+      "sourceExcerpt": "《宪法》第33条第2款规定，中华人民共和国公民在法律面前一律平等。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》第33条第2款规定，中华人民共和国公民在法律面前（ ）。",
+      "options": [
+        "一律平等",
+        "完全平等",
+        "绝对平等",
+        "相对平等"
+      ],
+      "answer": 0,
+      "explanation": "根据教材原文，《宪法》第33条第2款规定，中华人民共和国公民在法律面前一律平等。",
+      "publishedAt": "2026-09-15T09:57:35.082Z"
+    },
+    {
+      "id": "draft-022",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "《中华人民共和国宪法》（以下简称《宪法》）的基本原则；《宪法》关于我国的基本制度和根本任务；关于加强社会主义精神文明建设以及公民的基本权利和义务的规定。",
+      "sourcePages": [
+        "OCR PAGE 62"
+      ],
+      "sourceExcerpt": "《宪法》第36条第1款规定，中华人民共和国公民有宗教信仰自由。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》第36条第1款规定，中华人民共和国公民有（ ）自由。",
+      "options": [
+        "宗教信仰",
+        "言论",
+        "出版",
+        "集会"
+      ],
+      "answer": 0,
+      "explanation": "根据教材原文，《宪法》第36条第1款规定，中华人民共和国公民有宗教信仰自由。",
+      "publishedAt": "2026-09-15T09:57:35.082Z"
+    },
+    {
+      "id": "draft-023",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "《中华人民共和国宪法》（以下简称《宪法》）的基本原则；《宪法》关于我国的基本制度和根本任务；关于加强社会主义精神文明建设以及公民的基本权利和义务的规定。",
+      "sourcePages": [
+        "OCR PAGE 63"
+      ],
+      "sourceExcerpt": "《宪法》第37条第1款规定，中华人民共和国公民的人身自由不受侵犯。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》第37条第1款规定，中华人民共和国公民的（ ）不受侵犯。",
+      "options": [
+        "人身自由",
+        "人格尊严",
+        "住宅",
+        "通信自由"
+      ],
+      "answer": 0,
+      "explanation": "根据教材原文，《宪法》第37条第1款规定，中华人民共和国公民的人身自由不受侵犯。",
+      "publishedAt": "2026-09-15T09:57:35.082Z"
+    },
+    {
+      "id": "draft-024",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "《中华人民共和国宪法》（以下简称《宪法》）的基本原则；《宪法》关于我国的基本制度和根本任务；关于加强社会主义精神文明建设以及公民的基本权利和义务的规定。",
+      "sourcePages": [
+        "OCR PAGE 63"
+      ],
+      "sourceExcerpt": "《宪法》第13条规定，公民的合法的私有财产不受侵犯。国家依照法律规定保护公民的私有财产权和继承权。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》第13条规定，公民的合法的私有财产不受侵犯。国家依照法律规定保护公民的私有财产权和（ ）。",
+      "options": [
+        "继承权",
+        "收益权",
+        "处分权",
+        "使用权"
+      ],
+      "answer": 0,
+      "explanation": "根据教材原文，《宪法》第13条规定，公民的合法的私有财产不受侵犯。国家依照法律规定保护公民的私有财产权和继承权。",
+      "publishedAt": "2026-09-15T09:57:35.082Z"
+    },
+    {
+      "id": "draft-025",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "《中华人民共和国宪法》（以下简称《宪法》）的基本原则；《宪法》关于我国的基本制度和根本任务；关于加强社会主义精神文明建设以及公民的基本权利和义务的规定。",
+      "sourcePages": [
+        "OCR PAGE 64"
+      ],
+      "sourceExcerpt": "《宪法》第42条规定，中华人民共和国公民有劳动的权利和义务。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》第42条规定，中华人民共和国公民有（ ）的权利和义务。",
+      "options": [
+        "劳动",
+        "受教育",
+        "纳税",
+        "服兵役"
+      ],
+      "answer": 0,
+      "explanation": "根据教材原文，《宪法》第42条规定，中华人民共和国公民有劳动的权利和义务。",
+      "publishedAt": "2026-09-15T09:57:35.082Z"
+    },
+    {
+      "id": "draft-026",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "《中华人民共和国宪法》（以下简称《宪法》）的基本原则；《宪法》关于我国的基本制度和根本任务；关于加强社会主义精神文明建设以及公民的基本权利和义务的规定。",
+      "sourcePages": [
+        "OCR PAGE 64"
+      ],
+      "sourceExcerpt": "《宪法》第46条规定，中华人民共和国公民有受教育的权利和义务。",
+      "type": "single_choice",
+      "sourceType": "self_authored",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》第46条规定，中华人民共和国公民有（ ）的权利和义务。",
+      "options": [
+        "受教育",
+        "劳动",
+        "纳税",
+        "服兵役"
+      ],
+      "answer": 0,
+      "publishedAt": "2026-09-15T09:57:35.082Z",
+      "explanation": "《宪法》第46条规定，中华人民共和国公民有受教育的权利和义务。"
+    },
+    {
+      "id": "draft-1789466541118-1",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神 第一节 概述",
+      "syllabusRequirement": "掌握党的二十大主题与召开的重大意义",
+      "sourcePages": [
+        "OCR PAGE 9"
+      ],
+      "sourceExcerpt": "党的二十大主题是：“高举中国特色社会主义伟大旗帜，全面贯彻新时代中国特色社会主义思想，弘扬伟大建党精神，自信自强、守正创新，踔厉奋发、勇毅前行，为全面建设社会主义现代化国家、全面推进中华民族伟大复兴而团结奋斗。”",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "党的二十大主题中，强调要弘扬的伟大精神是（ ）。",
+      "options": [
+        "伟大建党精神",
+        "伟大长征精神",
+        "伟大抗战精神",
+        "伟大改革开放精神"
+      ],
+      "answer": 0,
+      "explanation": "教材原文明确，党的二十大主题包括“弘扬伟大建党精神”。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-1789466541118-2",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神 第一节 概述",
+      "syllabusRequirement": "掌握党的二十大召开的重大意义",
+      "sourcePages": [
+        "OCR PAGE 10"
+      ],
+      "sourceExcerpt": "党的二十大是在全党全国各族人民迈上全面建设社会主义现代化国家新征程、向第二个百年奋斗目标进军的关键时刻召开的一次十分重要的大会。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "党的二十大是在全党全国各族人民迈上全面建设社会主义现代化国家新征程、向（ ）进军的关键时刻召开的一次十分重要的大会。",
+      "options": [
+        "第一个百年奋斗目标",
+        "第二个百年奋斗目标",
+        "第三个百年奋斗目标",
+        "全面建成小康社会"
+      ],
+      "answer": 1,
+      "explanation": "教材原文指出，党的二十大是在向第二个百年奋斗目标进军的关键时刻召开的一次十分重要的大会。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-1789466541118-3",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神 第一节 概述",
+      "syllabusRequirement": "掌握党的十九大以来的工作",
+      "sourcePages": [
+        "OCR PAGE 10"
+      ],
+      "sourceExcerpt": "五年来，党中央先后召开7次中央全会，分别就宪法修改，深化党和国家机构改革，坚持和完善中国特色社会主义制度、推进国家治理体系和治理能力现代化，制定“十四五”规划和2035年远景目标，总结党的百年奋斗重大成就和历史经验等重大问题作出决定和决议。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "党的十九大以来的五年，党中央先后召开（ ）次中央全会。",
+      "options": [
+        "5次",
+        "6次",
+        "7次",
+        "8次"
+      ],
+      "answer": 2,
+      "explanation": "教材原文明确，五年来党中央先后召开7次中央全会。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-1789466541118-4",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神 第一节 概述",
+      "syllabusRequirement": "掌握新时代十年的主要成就和伟大变革",
+      "sourcePages": [
+        "OCR PAGE 11"
+      ],
+      "sourceExcerpt": "党的十八大以来的十年，我们经历了对党和人民事业具有重大现实意义和深远历史意义的三件大事：一是迎来中国共产党成立一百周年；二是中国特色社会主义进入新时代；三是完成脱贫攻坚、全面建成小康社会的历史任务，实现第一个百年奋斗目标。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "党的十八大以来的十年，我们经历的三件大事不包括（ ）。",
+      "options": [
+        "迎来中国共产党成立一百周年",
+        "中国特色社会主义进入新时代",
+        "完成脱贫攻坚、全面建成小康社会的历史任务",
+        "实现第二个百年奋斗目标"
+      ],
+      "answer": 3,
+      "explanation": "教材原文指出三件大事是：迎来中国共产党成立一百周年；中国特色社会主义进入新时代；完成脱贫攻坚、全面建成小康社会的历史任务，实现第一个百年奋斗目标。实现第二个百年奋斗目标不属于这十年经历的三件大事。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-1789466541118-5",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神 第一节 概述",
+      "syllabusRequirement": "掌握深化党和国家机构改革",
+      "sourcePages": [
+        "OCR PAGE 13"
+      ],
+      "sourceExcerpt": "党的二十届二中全会审议通过了《党和国家机构改革方案》。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "审议通过《党和国家机构改革方案》的会议是（ ）。",
+      "options": [
+        "党的二十届一中全会",
+        "党的二十届二中全会",
+        "党的二十届三中全会",
+        "党的二十届四中全会"
+      ],
+      "answer": 1,
+      "explanation": "教材原文明确，党的二十届二中全会审议通过了《党和国家机构改革方案》。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-1789466541118-6",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神 第一节 概述",
+      "syllabusRequirement": "掌握进一步全面深化改革、推进中国式现代化的重大意义和总体要求",
+      "sourcePages": [
+        "OCR PAGE 13"
+      ],
+      "sourceExcerpt": "党的二十届三中全会研究了进一步全面深化改革、推进中国式现代化的问题，审议通过《中共中央关于进一步全面深化改革 推进中国式现代化的决定》。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "审议通过《中共中央关于进一步全面深化改革 推进中国式现代化的决定》的会议是（ ）。",
+      "options": [
+        "党的二十届一中全会",
+        "党的二十届二中全会",
+        "党的二十届三中全会",
+        "党的二十届四中全会"
+      ],
+      "answer": 2,
+      "explanation": "教材原文明确，党的二十届三中全会审议通过《中共中央关于进一步全面深化改革 推进中国式现代化的决定》。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-1789466541118-7",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神 第一节 概述",
+      "syllabusRequirement": "掌握进一步全面深化改革、推进中国式现代化的重大意义和总体要求",
+      "sourcePages": [
+        "OCR PAGE 14"
+      ],
+      "sourceExcerpt": "进一步全面深化改革的总目标是“继续完善和发展中国特色社会主义制度，推进国家治理体系和治理能力现代化”。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "进一步全面深化改革的总目标是（ ）。",
+      "options": [
+        "完善和发展中国特色社会主义制度、推进国家治理体系和治理能力现代化",
+        "继续完善和发展中国特色社会主义制度，推进国家治理体系和治理能力现代化",
+        "建设中国特色社会主义法治体系、建设社会主义法治国家",
+        "全面建成高水平社会主义市场经济体制"
+      ],
+      "answer": 1,
+      "explanation": "教材原文明确，进一步全面深化改革的总目标是“继续完善和发展中国特色社会主义制度，推进国家治理体系和治理能力现代化”。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-1789466541118-8",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神 第一节 概述",
+      "syllabusRequirement": "掌握关于制定国民经济和社会发展第十五个五年规划的建议",
+      "sourcePages": [
+        "OCR PAGE 14"
+      ],
+      "sourceExcerpt": "党的二十届四中全会就制定国民经济和社会发展“十五五”规划提出建议。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "就制定国民经济和社会发展“十五五”规划提出建议的会议是（ ）。",
+      "options": [
+        "党的二十届一中全会",
+        "党的二十届二中全会",
+        "党的二十届三中全会",
+        "党的二十届四中全会"
+      ],
+      "answer": 3,
+      "explanation": "教材原文明确，党的二十届四中全会就制定国民经济和社会发展“十五五”规划提出建议。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-1789466541118-9",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神 第二节 马克思主义的中国化时代化",
+      "syllabusRequirement": "掌握马克思主义中国化时代化新的飞跃",
+      "sourcePages": [
+        "OCR PAGE 17"
+      ],
+      "sourceExcerpt": "以毛泽东同志为主要代表的中国共产党人，创立了毛泽东思想，实现了马克思主义中国化的第一次历史性飞跃。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "实现了马克思主义中国化第一次历史性飞跃的是（ ）。",
+      "options": [
+        "毛泽东思想",
+        "邓小平理论",
+        "中国特色社会主义理论体系",
+        "习近平新时代中国特色社会主义思想"
+      ],
+      "answer": 0,
+      "explanation": "教材原文明确，以毛泽东同志为主要代表的中国共产党人创立了毛泽东思想，实现了马克思主义中国化的第一次历史性飞跃。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-1789466541118-10",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神 第二节 马克思主义的中国化时代化",
+      "syllabusRequirement": "掌握习近平新时代中国特色社会主义思想的主要内容",
+      "sourcePages": [
+        "OCR PAGE 19"
+      ],
+      "sourceExcerpt": "习近平新时代中国特色社会主义思想的核心要义，就是坚持和发展中国特色社会主义。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "习近平新时代中国特色社会主义思想的核心要义是（ ）。",
+      "options": [
+        "坚持和发展中国特色社会主义",
+        "实现中华民族伟大复兴",
+        "坚持以人民为中心",
+        "全面从严治党"
+      ],
+      "answer": 0,
+      "explanation": "教材原文明确，习近平新时代中国特色社会主义思想的核心要义，就是坚持和发展中国特色社会主义。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-1789466541118-11",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神 第二节 马克思主义的中国化时代化",
+      "syllabusRequirement": "掌握习近平新时代中国特色社会主义思想的世界观和方法论",
+      "sourcePages": [
+        "OCR PAGE 24"
+      ],
+      "sourceExcerpt": "继续推进实践基础上的理论创新，首先要把握好新时代中国特色社会主义思想的世界观和方法论，坚持好、运用好贯穿其中的立场观点方法。即“六个必须坚持”。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "继续推进实践基础上的理论创新，首先要把握好新时代中国特色社会主义思想的世界观和方法论，坚持好、运用好贯穿其中的立场观点方法，即（ ）。",
+      "options": [
+        "“十个明确”",
+        "“十四个坚持”",
+        "“六个必须坚持”",
+        "“十二个坚持”"
+      ],
+      "answer": 2,
+      "explanation": "教材原文明确，即“六个必须坚持”。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-1789466541118-12",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神 第三节 习近平法治思想、习近平文化思想、习近平生态文明思想、习近平外交思想",
+      "syllabusRequirement": "掌握习近平法治思想的主要内容",
+      "sourcePages": [
+        "OCR PAGE 27"
+      ],
+      "sourceExcerpt": "2020年11月召开的中央全面依法治国工作会议正式提出“习近平法治思想”，明确了其在全面依法治国、建设法治中国中的指导地位。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "正式提出“习近平法治思想”的会议是（ ）。",
+      "options": [
+        "2018年全国生态环境保护大会",
+        "2018年中央外事工作会议",
+        "2020年中央全面依法治国工作会议",
+        "2023年全国宣传思想文化工作会议"
+      ],
+      "answer": 2,
+      "explanation": "教材原文明确，2020年11月召开的中央全面依法治国工作会议正式提出“习近平法治思想”。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-1789466541118-13",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神 第三节 习近平法治思想、习近平文化思想、习近平生态文明思想、习近平外交思想",
+      "syllabusRequirement": "掌握习近平文化思想的主要内容",
+      "sourcePages": [
+        "OCR PAGE 28"
+      ],
+      "sourceExcerpt": "2023年10月7日至8日召开的全国宣传思想文化工作会议，首次提出了习近平文化思想。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "首次提出习近平文化思想的会议是（ ）。",
+      "options": [
+        "全国宣传思想文化工作会议",
+        "中央外事工作会议",
+        "全国生态环境保护大会",
+        "中央全面依法治国工作会议"
+      ],
+      "answer": 0,
+      "explanation": "教材原文明确，2023年10月7日至8日召开的全国宣传思想文化工作会议首次提出了习近平文化思想。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-1789466541118-14",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神 第三节 习近平法治思想、习近平文化思想、习近平生态文明思想、习近平外交思想",
+      "syllabusRequirement": "掌握习近平生态文明思想的主要内容",
+      "sourcePages": [
+        "OCR PAGE 29"
+      ],
+      "sourceExcerpt": "2018年5月18日至19日召开的全国生态环境保护大会，正式确立了习近平生态文明思想。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "正式确立习近平生态文明思想的会议是（ ）。",
+      "options": [
+        "全国宣传思想文化工作会议",
+        "中央外事工作会议",
+        "全国生态环境保护大会",
+        "中央全面依法治国工作会议"
+      ],
+      "answer": 2,
+      "explanation": "教材原文明确，2018年5月18日至19日召开的全国生态环境保护大会正式确立了习近平生态文明思想。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-1789466541118-15",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神 第三节 习近平法治思想、习近平文化思想、习近平生态文明思想、习近平外交思想",
+      "syllabusRequirement": "掌握习近平外交思想的主要内容",
+      "sourcePages": [
+        "OCR PAGE 30"
+      ],
+      "sourceExcerpt": "2018年6月22日至23日召开的中央外事工作会议，明确了习近平外交思想的指导地位。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "明确习近平外交思想指导地位的会议是（ ）。",
+      "options": [
+        "全国宣传思想文化工作会议",
+        "中央外事工作会议",
+        "全国生态环境保护大会",
+        "中央全面依法治国工作会议"
+      ],
+      "answer": 1,
+      "explanation": "教材原文明确，2018年6月22日至23日召开的中央外事工作会议明确了习近平外交思想的指导地位。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-1789466541118-16",
+      "chapterId": "chapter-02",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第二章 旅游方针政策 第一节 旅游强国建设“十五五”规划",
+      "syllabusRequirement": "掌握旅游强国建设“十五五”规划的指导思想、基本原则和发展目标",
+      "sourcePages": [
+        "OCR PAGE 46"
+      ],
+      "sourceExcerpt": "到2030年，旅游业高质量发展取得明显成效，现代旅游业体系更加完善，旅游强国建设取得显著进展。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据旅游强国建设“十五五”规划，到（ ）年，旅游业高质量发展取得明显成效，现代旅游业体系更加完善，旅游强国建设取得显著进展。",
+      "options": [
+        "2025年",
+        "2030年",
+        "2035年",
+        "2049年"
+      ],
+      "answer": 1,
+      "explanation": "教材原文明确，到2030年，旅游业高质量发展取得明显成效，现代旅游业体系更加完善，旅游强国建设取得显著进展。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-1789466541118-17",
+      "chapterId": "chapter-02",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第二章 旅游方针政策 第一节 旅游强国建设“十五五”规划",
+      "syllabusRequirement": "掌握旅游强国建设“十五五”规划的发展目标",
+      "sourcePages": [
+        "OCR PAGE 46"
+      ],
+      "sourceExcerpt": "国内居民出游人次达到83亿，国内出游总花费达到7.7万亿元，旅游的普惠性进一步凸显。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据旅游强国建设“十五五”规划，到2030年，国内居民出游人次达到（ ）。",
+      "options": [
+        "63亿",
+        "73亿",
+        "83亿",
+        "93亿"
+      ],
+      "answer": 2,
+      "explanation": "教材原文明确，国内居民出游人次达到83亿。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-1789466541118-18",
+      "chapterId": "chapter-02",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第二章 旅游方针政策 第一节 旅游强国建设“十五五”规划",
+      "syllabusRequirement": "掌握旅游强国建设“十五五”规划的发展目标",
+      "sourcePages": [
+        "OCR PAGE 46"
+      ],
+      "sourceExcerpt": "入境旅游人次达到1.9亿、总花费超过1500亿美元。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据旅游强国建设“十五五”规划，到2030年，入境旅游人次达到（ ）。",
+      "options": [
+        "1.5亿",
+        "1.7亿",
+        "1.9亿",
+        "2.1亿"
+      ],
+      "answer": 2,
+      "explanation": "教材原文明确，入境旅游人次达到1.9亿。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-1789466541118-19",
+      "chapterId": "chapter-02",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第二章 旅游方针政策 第二节 关于推动旅游业高质量发展的相关意见",
+      "syllabusRequirement": "掌握关于进一步加强旅游市场综合监管的通知的主要内容",
+      "sourcePages": [
+        "OCR PAGE 48"
+      ],
+      "sourceExcerpt": "2025年9月15日，国务院办公厅发布《关于进一步加强旅游市场综合监管的通知》（国办函〔2025〕95号）。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "《关于进一步加强旅游市场综合监管的通知》的文号是（ ）。",
+      "options": [
+        "国办函〔2025〕95号",
+        "文旅市场发〔2023〕41号",
+        "办市场发〔2023〕20号",
+        "文旅市场发〔2026〕5号"
+      ],
+      "answer": 0,
+      "explanation": "教材原文明确，该通知为国办函〔2025〕95号。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-1789466541118-20",
+      "chapterId": "chapter-02",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第二章 旅游方针政策 第二节 关于推动旅游业高质量发展的相关意见",
+      "syllabusRequirement": "掌握2026年版团队旅游合同（示范文本）的主要内容",
+      "sourcePages": [
+        "OCR PAGE 49"
+      ],
+      "sourceExcerpt": "2026年版团队旅游合同（示范文本）包括《团队境内旅游合同（示范文本）》《团队出境旅游合同（示范文本）》《大陆居民赴台湾地区旅游合同（示范文本）》《境内旅游“一日游”合同（示范文本）》《境内旅游组团社与地接社合同（示范文本）》《研学旅游合同（示范文本）》六个示范文本。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "2026年版团队旅游合同（示范文本）共包括（ ）个示范文本。",
+      "options": [
+        "4个",
+        "5个",
+        "6个",
+        "7个"
+      ],
+      "answer": 2,
+      "explanation": "教材原文明确，2026年版团队旅游合同（示范文本）包括六个示范文本。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-1789466541118-21",
+      "chapterId": "chapter-02",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第二章 旅游方针政策 第二节 关于推动旅游业高质量发展的相关意见",
+      "syllabusRequirement": "掌握关于推动在线旅游市场高质量发展的意见的主要内容",
+      "sourcePages": [
+        "OCR PAGE 50"
+      ],
+      "sourceExcerpt": "文化和旅游部印发了《关于推动在线旅游市场高质量发展的意见》（文旅市场发〔2023〕41号）。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "《关于推动在线旅游市场高质量发展的意见》的文号是（ ）。",
+      "options": [
+        "国办函〔2025〕95号",
+        "文旅市场发〔2023〕41号",
+        "办市场发〔2023〕20号",
+        "文旅市场发〔2026〕5号"
+      ],
+      "answer": 1,
+      "explanation": "教材原文明确，该意见为文旅市场发〔2023〕41号。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-1789466541118-22",
+      "chapterId": "chapter-02",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第二章 旅游方针政策 第二节 关于推动旅游业高质量发展的相关意见",
+      "syllabusRequirement": "掌握关于进一步规范旅游客运安全带使用保障游客出行安全有关工作的通知的主要内容",
+      "sourcePages": [
+        "OCR PAGE 51"
+      ],
+      "sourceExcerpt": "文化和旅游部办公厅、公安部办公厅、交通运输部办公厅于2023年1月31日联合印发《关于进一步规范旅游客运安全带使用保障游客出行安全有关工作的通知》（办市场发〔2023〕20号）。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "《关于进一步规范旅游客运安全带使用保障游客出行安全有关工作的通知》的文号是（ ）。",
+      "options": [
+        "国办函〔2025〕95号",
+        "文旅市场发〔2023〕41号",
+        "办市场发〔2023〕20号",
+        "文旅市场发〔2026〕5号"
+      ],
+      "answer": 2,
+      "explanation": "教材原文明确，该通知为办市场发〔2023〕20号。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-1789466541118-23",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识 第一节 概述",
+      "syllabusRequirement": "掌握宪法的概念和特征",
+      "sourcePages": [
+        "OCR PAGE 54"
+      ],
+      "sourceExcerpt": "1982年12月4日，第五届全国人大第5次会议通过《宪法》，此后历经1988年、1993年、1999年、2004年、2018年五次修订。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "我国现行宪法通过于（ ）。",
+      "options": [
+        "1954年",
+        "1975年",
+        "1978年",
+        "1982年"
+      ],
+      "answer": 3,
+      "explanation": "教材原文明确，1982年12月4日第五届全国人大第5次会议通过《宪法》。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-1789466541118-24",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识 第一节 概述",
+      "syllabusRequirement": "掌握宪法的概念和特征",
+      "sourcePages": [
+        "OCR PAGE 54"
+      ],
+      "sourceExcerpt": "《宪法》第64条规定，宪法的修改，由全国人民代表大会常务委员会或1/5以上全国人民代表大会代表提议，并由全国人民代表大会以全体代表的2/3以上的多数通过。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》第64条，宪法的修改由全国人民代表大会常务委员会或（ ）以上的全国人民代表大会代表提议。",
+      "options": [
+        "1/3",
+        "1/4",
+        "1/5",
+        "1/2"
+      ],
+      "answer": 2,
+      "explanation": "教材原文明确，由全国人民代表大会常务委员会或1/5以上全国人民代表大会代表提议。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-1789466541118-25",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识 第一节 概述",
+      "syllabusRequirement": "掌握宪法的概念和特征",
+      "sourcePages": [
+        "OCR PAGE 54"
+      ],
+      "sourceExcerpt": "并由全国人民代表大会以全体代表的2/3以上的多数通过。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "宪法的修改由全国人民代表大会以全体代表的（ ）以上的多数通过。",
+      "options": [
+        "1/2",
+        "2/3",
+        "3/4",
+        "4/5"
+      ],
+      "answer": 1,
+      "explanation": "教材原文明确，由全国人民代表大会以全体代表的2/3以上的多数通过。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-1789466541118-26",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识 第一节 概述",
+      "syllabusRequirement": "掌握国家确立的根本任务",
+      "sourcePages": [
+        "OCR PAGE 55"
+      ],
+      "sourceExcerpt": "《宪法》序言规定，国家的根本任务是，沿着中国特色社会主义道路，集中力量进行社会主义现代化建设。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "《宪法》序言规定，国家的根本任务是，沿着中国特色社会主义道路，集中力量进行（ ）。",
+      "options": [
+        "社会主义现代化建设",
+        "社会主义精神文明建设",
+        "社会主义法治建设",
+        "社会主义文化建设"
+      ],
+      "answer": 0,
+      "explanation": "教材原文明确，国家的根本任务是沿着中国特色社会主义道路，集中力量进行社会主义现代化建设。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-027",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识 第一节 概述",
+      "syllabusRequirement": "掌握宪法的基本原则",
+      "sourcePages": [
+        "OCR PAGE 55"
+      ],
+      "sourceExcerpt": "《宪法》第1条第2款规定，中国共产党领导是中国特色社会主义最本质的特征。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "《宪法》第1条第2款规定，中国特色社会主义最本质的特征是（ ）。",
+      "options": [
+        "人民民主专政",
+        "中国共产党领导",
+        "依法治国",
+        "人民代表大会制度"
+      ],
+      "answer": 1,
+      "explanation": "教材原文明确，中国共产党领导是中国特色社会主义最本质的特征。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-028",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识 第一节 概述",
+      "syllabusRequirement": "掌握宪法的基本原则",
+      "sourcePages": [
+        "OCR PAGE 56"
+      ],
+      "sourceExcerpt": "《宪法》第5条第1款规定，中华人民共和国实行依法治国，建设社会主义法治国家。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "《宪法》第5条第1款规定，中华人民共和国实行依法治国，建设社会主义（ ）。",
+      "options": [
+        "法治国家",
+        "法制国家",
+        "法治政府",
+        "法治社会"
+      ],
+      "answer": 0,
+      "explanation": "教材原文明确，中华人民共和国实行依法治国，建设社会主义法治国家。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-029",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识 第一节 概述",
+      "syllabusRequirement": "掌握宪法的基本原则",
+      "sourcePages": [
+        "OCR PAGE 56"
+      ],
+      "sourceExcerpt": "《宪法》第33条第3款规定，国家尊重和保障人权。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "《宪法》第33条第3款规定，国家尊重和保障（ ）。",
+      "options": [
+        "公民权利",
+        "人权",
+        "人民利益",
+        "人身自由"
+      ],
+      "answer": 1,
+      "explanation": "教材原文明确，国家尊重和保障人权。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-030",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识 第二节 国家制度",
+      "syllabusRequirement": "掌握国家制度",
+      "sourcePages": [
+        "OCR PAGE 58"
+      ],
+      "sourceExcerpt": "社会主义制度是中华人民共和国的根本制度。禁止任何组织或者个人破坏社会主义制度。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "中华人民共和国的根本制度是（ ）。",
+      "options": [
+        "人民代表大会制度",
+        "社会主义制度",
+        "民族区域自治制度",
+        "基层群众自治制度"
+      ],
+      "answer": 1,
+      "explanation": "教材原文明确，社会主义制度是中华人民共和国的根本制度。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-031",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识 第二节 国家制度",
+      "syllabusRequirement": "掌握国家制度",
+      "sourcePages": [
+        "OCR PAGE 58"
+      ],
+      "sourceExcerpt": "人民代表大会制度是我国的政权组织形式。这表明，人民代表大会制度是我国的根本政治制度，是我国的政体。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "我国的根本政治制度是（ ）。",
+      "options": [
+        "社会主义制度",
+        "人民代表大会制度",
+        "中国共产党领导的多党合作和政治协商制度",
+        "民族区域自治制度"
+      ],
+      "answer": 1,
+      "explanation": "教材原文明确，人民代表大会制度是我国的根本政治制度，是我国的政体。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-032",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识 第二节 国家制度",
+      "syllabusRequirement": "掌握国家制度",
+      "sourcePages": [
+        "OCR PAGE 58"
+      ],
+      "sourceExcerpt": "中国共产党与各民主党派合作的基本方针是“长期共存、互相监督、肝胆相照、荣辱与共”。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "中国共产党与各民主党派合作的基本方针是（ ）。",
+      "options": [
+        "长期共存、互相监督、肝胆相照、荣辱与共",
+        "长期共存、互相监督、团结合作、共同发展",
+        "互相尊重、互不干涉、长期共存、共同发展",
+        "长期共存、互相监督、平等相待、合作共赢"
+      ],
+      "answer": 0,
+      "explanation": "教材原文明确，基本方针是“长期共存、互相监督、肝胆相照、荣辱与共”。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-033",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识 第二节 国家制度",
+      "syllabusRequirement": "掌握国家制度",
+      "sourcePages": [
+        "OCR PAGE 59"
+      ],
+      "sourceExcerpt": "《宪法》第34条规定，中华人民共和国年满18周岁的公民，不分民族、种族、性别、职业、家庭出身、宗教信仰、教育程度、财产状况、居住期限，都有选举权和被选举权；但是依照法律被剥夺政治权利的人除外。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》第34条，中华人民共和国年满（ ）周岁的公民，都有选举权和被选举权，但是依照法律被剥夺政治权利的人除外。",
+      "options": [
+        "16周岁",
+        "18周岁",
+        "20周岁",
+        "22周岁"
+      ],
+      "answer": 1,
+      "explanation": "教材原文明确，年满18周岁的公民有选举权和被选举权。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-034",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识 第二节 国家制度",
+      "syllabusRequirement": "掌握国家制度",
+      "sourcePages": [
+        "OCR PAGE 59"
+      ],
+      "sourceExcerpt": "《宪法》第97条第1款规定，省、直辖市、设区的市的人民代表大会代表由下一级的人民代表大会选举；县、不设区的市、市辖区、乡、民族乡、镇的人民代表大会代表由选民直接选举。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》第97条第1款，县、不设区的市、市辖区、乡、民族乡、镇的人民代表大会代表由（ ）选举。",
+      "options": [
+        "下一级人民代表大会",
+        "选民直接",
+        "上一级人民代表大会",
+        "选举委员会"
+      ],
+      "answer": 1,
+      "explanation": "教材原文明确，县、不设区的市、市辖区、乡、民族乡、镇的人民代表大会代表由选民直接选举。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-035",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识 第二节 国家制度",
+      "syllabusRequirement": "掌握国家制度",
+      "sourcePages": [
+        "OCR PAGE 60"
+      ],
+      "sourceExcerpt": "《宪法》第111条第1款规定，城市和农村按居民居住地区设立的居民委员会或者村民委员会是基层群众性自治组织。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》第111条第1款，城市和农村按居民居住地区设立的居民委员会或者村民委员会是（ ）。",
+      "options": [
+        "基层政权组织",
+        "基层群众性自治组织",
+        "基层人民政府的派出机关",
+        "基层社会团体"
+      ],
+      "answer": 1,
+      "explanation": "教材原文明确，居民委员会或者村民委员会是基层群众性自治组织。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-036",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识 第二节 国家制度",
+      "syllabusRequirement": "掌握国家制度",
+      "sourcePages": [
+        "OCR PAGE 60"
+      ],
+      "sourceExcerpt": "《宪法》第31条规定，国家在必要时得设立特别行政区。在特别行政区内实行的制度按照具体情况由全国人民代表大会以法律规定。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》第31条，国家在必要时得设立特别行政区，在特别行政区内实行的制度按照具体情况由（ ）以法律规定。",
+      "options": [
+        "全国人民代表大会常务委员会",
+        "国务院",
+        "全国人民代表大会",
+        "中央人民政府"
+      ],
+      "answer": 2,
+      "explanation": "教材原文明确，在特别行政区内实行的制度按照具体情况由全国人民代表大会以法律规定。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-037",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识 第三节 公民的基本权利和义务",
+      "syllabusRequirement": "掌握公民的基本权利和义务",
+      "sourcePages": [
+        "OCR PAGE 61"
+      ],
+      "sourceExcerpt": "《宪法》第33条第1款规定，凡具有中华人民共和国国籍的人都是中华人民共和国公民。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》第33条第1款，凡具有中华人民共和国（ ）的人都是中华人民共和国公民。",
+      "options": [
+        "户籍",
+        "国籍",
+        "出生地",
+        "居住地"
+      ],
+      "answer": 1,
+      "explanation": "教材原文明确，凡具有中华人民共和国国籍的人都是中华人民共和国公民。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-038",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识 第三节 公民的基本权利和义务",
+      "syllabusRequirement": "掌握公民的基本权利和义务",
+      "sourcePages": [
+        "OCR PAGE 61"
+      ],
+      "sourceExcerpt": "《宪法》第35条规定，公民有言论、出版、集会、结社、游行、示威的自由。",
+      "type": "single_choice",
+      "sourceType": "past_exam",
+      "sourceStatus": "published",
+      "sourceNote": "教材文件名和页码待人工补充",
+      "year": null,
+      "region": "全国",
+      "prompt": "根据《宪法》第35条，公民的政治自由不包括（ ）。",
+      "options": [
+        "言论自由",
+        "出版自由",
+        "集会、结社、游行、示威自由",
+        "宗教信仰自由"
+      ],
+      "answer": 3,
+      "explanation": "教材原文明确，政治自由包括言论、出版、集会、结社、游行、示威的自由；宗教信仰自由属于宗教信仰自由权，不属于政治自由。",
+      "publishedAt": "2026-09-15T10:02:21.118Z"
+    },
+    {
+      "id": "draft-pl-001",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神",
+      "syllabusRequirement": "掌握党的二十大主题与召开的重大意义",
+      "sourcePages": [
+        "9-10"
+      ],
+      "sourceExcerpt": "党的二十大主题是：“高举中国特色社会主义伟大旗帜，全面贯彻新时代中国特色社会主义思想，弘扬伟大建党精神，自信自强、守正创新，踔厉奋发、勇毅前行，为全面建设社会主义现代化国家、全面推进中华民族伟大复兴而团结奋斗。”",
+      "type": "single_choice",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "党的二十大主题中，强调要弘扬的伟大精神是（ ）。",
+      "options": [
+        "伟大建党精神",
+        "伟大长征精神",
+        "伟大抗战精神",
+        "伟大改革开放精神"
+      ],
+      "answer": 0,
+      "explanation": "教材原文明确，党的二十大主题包括“弘扬伟大建党精神”。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-002",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神",
+      "syllabusRequirement": "熟悉党的十九大以来的工作",
+      "sourcePages": [
+        "10"
+      ],
+      "sourceExcerpt": "五年来，党中央先后召开7次中央全会，分别就宪法修改，深化党和国家机构改革，坚持和完善中国特色社会主义制度、推进国家治理体系和治理能力现代化，制定“十四五”规划和2035年远景目标，总结党的百年奋斗重大成就和历史经验等重大问题作出决定和决议。",
+      "type": "single_choice",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "党的十九大以来的五年，党中央先后召开中央全会的次数是（ ）。",
+      "options": [
+        "5次",
+        "6次",
+        "7次",
+        "8次"
+      ],
+      "answer": 2,
+      "explanation": "教材原文指出，五年来党中央先后召开7次中央全会。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-003",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神",
+      "syllabusRequirement": "掌握习近平新时代中国特色社会主义思想的核心要义",
+      "sourcePages": [
+        "19"
+      ],
+      "sourceExcerpt": "习近平新时代中国特色社会主义思想的核心要义，就是坚持和发展中国特色社会主义。",
+      "type": "true_false",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "习近平新时代中国特色社会主义思想的核心要义，就是坚持和发展中国特色社会主义。",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "answer": 0,
+      "explanation": "教材原文明确，习近平新时代中国特色社会主义思想的核心要义就是坚持和发展中国特色社会主义。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-004",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神",
+      "syllabusRequirement": "掌握习近平法治思想的主要内容",
+      "sourcePages": [
+        "27"
+      ],
+      "sourceExcerpt": "习近平法治思想内涵丰富、论述深刻、逻辑严密、系统完备，主要内容集中体现为“十二个坚持”。",
+      "type": "multiple_choice",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "习近平法治思想的主要内容集中体现为“十二个坚持”，下列属于“十二个坚持”的有（ ）。",
+      "options": [
+        "坚持党对全面依法治国的领导",
+        "坚持以人民为中心",
+        "坚持中国特色社会主义法治道路",
+        "坚持依宪治国、依宪执政"
+      ],
+      "answer": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "explanation": "教材原文列举的“十二个坚持”包括坚持党对全面依法治国的领导、坚持以人民为中心、坚持中国特色社会主义法治道路、坚持依宪治国、依宪执政等。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-005",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神",
+      "syllabusRequirement": "掌握习近平文化思想的主要内容",
+      "sourcePages": [
+        "28"
+      ],
+      "sourceExcerpt": "习近平文化思想内涵丰富，思想深邃，博大精深，主要集中体现为“七个着力”。",
+      "type": "single_choice",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "习近平文化思想的主要内容集中体现为（ ）。",
+      "options": [
+        "六个必须坚持",
+        "七个着力",
+        "十个坚持",
+        "十二个坚持"
+      ],
+      "answer": 1,
+      "explanation": "教材原文指出，习近平文化思想主要集中体现为“七个着力”。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-006",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神",
+      "syllabusRequirement": "掌握习近平生态文明思想的主要内容",
+      "sourcePages": [
+        "29"
+      ],
+      "sourceExcerpt": "习近平生态文明思想系统完整、逻辑严密，核心要义集中体现为“十个坚持”。",
+      "type": "true_false",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "习近平生态文明思想的核心要义集中体现为“十个坚持”。",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "answer": 0,
+      "explanation": "教材原文明确，习近平生态文明思想核心要义集中体现为“十个坚持”。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-007",
+      "chapterId": "chapter-01",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第一章 党的二十大和二十届历次全会精神",
+      "syllabusRequirement": "熟悉习近平总书记关于文化和旅游工作的重要论述",
+      "sourcePages": [
+        "37"
+      ],
+      "sourceExcerpt": "2025年5月19日至20日，习近平总书记在河南考察时指出，文旅融合前景广阔，要推动文旅产业高质量发展，真正打造成为支柱产业、民生产业、幸福产业。",
+      "type": "multiple_choice",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "2025年5月，习近平总书记在河南考察时指出，要推动文旅产业高质量发展，真正打造成为（ ）。",
+      "options": [
+        "支柱产业",
+        "民生产业",
+        "幸福产业",
+        "垄断产业"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
+      "explanation": "教材原文指出，要推动文旅产业高质量发展，真正打造成为支柱产业、民生产业、幸福产业。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-008",
+      "chapterId": "chapter-02",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第二章 旅游方针政策",
+      "syllabusRequirement": "掌握旅游强国建设“十五五”规划的主要内容",
+      "sourcePages": [
+        "46"
+      ],
+      "sourceExcerpt": "到2030年，旅游业高质量发展取得明显成效，现代旅游业体系更加完善，旅游强国建设取得显著进展。",
+      "type": "single_choice",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "根据旅游强国建设“十五五”规划，旅游业高质量发展取得明显成效、旅游强国建设取得显著进展的目标年份是（ ）。",
+      "options": [
+        "2025年",
+        "2030年",
+        "2035年",
+        "2049年"
+      ],
+      "answer": 1,
+      "explanation": "教材原文明确，到2030年，旅游业高质量发展取得明显成效，旅游强国建设取得显著进展。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-009",
+      "chapterId": "chapter-02",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第二章 旅游方针政策",
+      "syllabusRequirement": "熟悉关于进一步加强旅游市场综合监管的通知",
+      "sourcePages": [
+        "48"
+      ],
+      "sourceExcerpt": "2025年9月15日，国务院办公厅发布《关于进一步加强旅游市场综合监管的通知》（国办函〔2025〕95号）。",
+      "type": "true_false",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "《关于进一步加强旅游市场综合监管的通知》由国务院办公厅于2025年9月15日发布。",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "answer": 0,
+      "explanation": "教材原文明确，2025年9月15日国务院办公厅发布该通知。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-010",
+      "chapterId": "chapter-02",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第二章 旅游方针政策",
+      "syllabusRequirement": "熟悉2026年版团队旅游合同（示范文本）的主要内容",
+      "sourcePages": [
+        "49"
+      ],
+      "sourceExcerpt": "2026年版团队旅游合同（示范文本）包括《团队境内旅游合同（示范文本）》《团队出境旅游合同（示范文本）》《大陆居民赴台湾地区旅游合同（示范文本）》《境内旅游“一日游”合同（示范文本）》《境内旅游组团社与地接社合同（示范文本）》《研学旅游合同（示范文本）》六个示范文本。",
+      "type": "multiple_choice",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "2026年版团队旅游合同（示范文本）包括的示范文本有（ ）。",
+      "options": [
+        "团队境内旅游合同",
+        "团队出境旅游合同",
+        "大陆居民赴台湾地区旅游合同",
+        "研学旅游合同"
+      ],
+      "answer": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "explanation": "教材原文列举了六个示范文本，包括团队境内旅游合同、团队出境旅游合同、大陆居民赴台湾地区旅游合同、研学旅游合同等。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-011",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "掌握宪法的概念和特征",
+      "sourcePages": [
+        "54"
+      ],
+      "sourceExcerpt": "1982年12月4日，第五届全国人大第5次会议通过《宪法》，此后历经1988年、1993年、1999年、2004年、2018年五次修订。",
+      "type": "single_choice",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "我国现行宪法通过于（ ）。",
+      "options": [
+        "1954年",
+        "1975年",
+        "1978年",
+        "1982年"
+      ],
+      "answer": 3,
+      "explanation": "教材原文明确，1982年12月4日第五届全国人大第5次会议通过《宪法》。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-012",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "掌握宪法的基本原则",
+      "sourcePages": [
+        "55"
+      ],
+      "sourceExcerpt": "《宪法》第1条第2款规定，中国共产党领导是中国特色社会主义最本质的特征。",
+      "type": "true_false",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "《宪法》规定，中国共产党领导是中国特色社会主义最本质的特征。",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "answer": 0,
+      "explanation": "教材原文引用《宪法》第1条第2款，明确中国共产党领导是中国特色社会主义最本质的特征。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-013",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "熟悉国家制度",
+      "sourcePages": [
+        "58"
+      ],
+      "sourceExcerpt": "人民代表大会制度是我国的政权组织形式。《宪法》第2条第2款规定，人民行使国家权力的机关是全国人民代表大会和地方各级人民代表大会。这表明，人民代表大会制度是我国的根本政治制度，是我国的政体。",
+      "type": "single_choice",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "我国的根本政治制度是（ ）。",
+      "options": [
+        "人民代表大会制度",
+        "中国共产党领导的多党合作和政治协商制度",
+        "民族区域自治制度",
+        "基层群众自治制度"
+      ],
+      "answer": 0,
+      "explanation": "教材原文指出，人民代表大会制度是我国的根本政治制度，是我国的政体。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-014",
+      "chapterId": "chapter-03",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第三章 宪法的基本知识",
+      "syllabusRequirement": "掌握公民的基本权利和义务",
+      "sourcePages": [
+        "61"
+      ],
+      "sourceExcerpt": "《宪法》第34条规定，中华人民共和国年满18周岁的公民，不分民族、种族、性别、职业、家庭出身、宗教信仰、教育程度、财产状况、居住期限，都有选举权和被选举权；但是依照法律被剥夺政治权利的人除外。",
+      "type": "single_choice",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "根据《宪法》第34条，中华人民共和国年满18周岁的公民享有选举权和被选举权，但（ ）除外。",
+      "options": [
+        "依照法律被剥夺政治权利的人",
+        "被判处刑罚的人",
+        "未受过教育的人",
+        "无固定职业的人"
+      ],
+      "answer": 0,
+      "explanation": "教材原文明确，年满18周岁的公民都有选举权和被选举权，但是依照法律被剥夺政治权利的人除外。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-015",
+      "chapterId": "chapter-04",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第四章 宪法相关法的基本知识",
+      "syllabusRequirement": "掌握国旗法的规定",
+      "sourcePages": [
+        "68"
+      ],
+      "sourceExcerpt": "《国旗法》第2条规定，中华人民共和国国旗是五星红旗。",
+      "type": "single_choice",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "中华人民共和国国旗是（ ）。",
+      "options": [
+        "五星红旗",
+        "红旗",
+        "八一军旗",
+        "镰刀锤头旗"
+      ],
+      "answer": 0,
+      "explanation": "教材原文引用《国旗法》第2条，明确中华人民共和国国旗是五星红旗。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-016",
+      "chapterId": "chapter-04",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第四章 宪法相关法的基本知识",
+      "syllabusRequirement": "熟悉国歌法的规定",
+      "sourcePages": [
+        "71"
+      ],
+      "sourceExcerpt": "《国歌法》第2条规定，中华人民共和国国歌是《义勇军进行曲》。",
+      "type": "true_false",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "中华人民共和国国歌是《义勇军进行曲》。",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "answer": 0,
+      "explanation": "教材原文引用《国歌法》第2条，明确中华人民共和国国歌是《义勇军进行曲》。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-017",
+      "chapterId": "chapter-04",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第四章 宪法相关法的基本知识",
+      "syllabusRequirement": "掌握香港维护国家安全法的规定",
+      "sourcePages": [
+        "76"
+      ],
+      "sourceExcerpt": "《香港维护国家安全法》第20条规定，任何人组织、策划、实施或者参与实施以下旨在分裂国家、破坏国家统一行为之一的，不论是否使用武力或者以武力相威胁，即属犯罪。",
+      "type": "multiple_choice",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "根据《香港维护国家安全法》第20条，旨在分裂国家、破坏国家统一的行为包括（ ）。",
+      "options": [
+        "将香港特别行政区或者中华人民共和国其他任何部分从中华人民共和国分离出去",
+        "非法改变香港特别行政区或者中华人民共和国其他任何部分的法律地位",
+        "将香港特别行政区或者中华人民共和国其他任何部分转归外国统治",
+        "在香港特别行政区正常参与社会活动"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
+      "explanation": "教材原文列举了三种分裂国家行为，包括分离出去、非法改变法律地位、转归外国统治。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-018",
+      "chapterId": "chapter-04",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第四章 宪法相关法的基本知识",
+      "syllabusRequirement": "熟悉英雄烈士保护法的规定",
+      "sourcePages": [
+        "79"
+      ],
+      "sourceExcerpt": "《英烈保护法》第5条规定，每年9月30日为烈士纪念日，国家在首都北京天安门广场人民英雄纪念碑前举行纪念仪式，缅怀英雄烈士。",
+      "type": "single_choice",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "根据《英雄烈士保护法》，我国的烈士纪念日是（ ）。",
+      "options": [
+        "9月3日",
+        "9月30日",
+        "10月1日",
+        "12月13日"
+      ],
+      "answer": 1,
+      "explanation": "教材原文引用《英烈保护法》第5条，明确每年9月30日为烈士纪念日。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-019",
+      "chapterId": "chapter-04",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第四章 宪法相关法的基本知识",
+      "syllabusRequirement": "熟悉宗教事务条例的规定",
+      "sourcePages": [
+        "84"
+      ],
+      "sourceExcerpt": "《条例》第3条规定，宗教事务管理坚持保护合法、制止非法、遏制极端、抵御渗透、打击犯罪的原则。",
+      "type": "true_false",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "《宗教事务条例》规定，宗教事务管理坚持保护合法、制止非法、遏制极端、抵御渗透、打击犯罪的原则。",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "answer": 0,
+      "explanation": "教材原文引用《宗教事务条例》第3条，明确该管理原则。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-020",
+      "chapterId": "chapter-05",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第五章 民法的基本知识",
+      "syllabusRequirement": "掌握民法的基本原则",
+      "sourcePages": [
+        "94"
+      ],
+      "sourceExcerpt": "《民法典》第4条规定，民事主体在民事活动中的法律地位一律平等。",
+      "type": "single_choice",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "《民法典》规定，民事主体在民事活动中的法律地位一律平等，体现的是（ ）。",
+      "options": [
+        "平等原则",
+        "自愿原则",
+        "公平原则",
+        "诚信原则"
+      ],
+      "answer": 0,
+      "explanation": "教材原文引用《民法典》第4条，该规定体现平等原则。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-021",
+      "chapterId": "chapter-05",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第五章 民法的基本知识",
+      "syllabusRequirement": "掌握自然人的民事权利能力和民事行为能力",
+      "sourcePages": [
+        "96"
+      ],
+      "sourceExcerpt": "《民法典》第17条规定，18周岁以上的自然人为成年人。第18条第1款规定，成年人为完全民事行为能力人，可以独立实施民事法律行为。",
+      "type": "true_false",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "根据《民法典》，18周岁以上的自然人为成年人，成年人为完全民事行为能力人，可以独立实施民事法律行为。",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "answer": 0,
+      "explanation": "教材原文引用《民法典》第17条、第18条第1款，明确该规定。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-022",
+      "chapterId": "chapter-05",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第五章 民法的基本知识",
+      "syllabusRequirement": "熟悉代理制度",
+      "sourcePages": [
+        "110"
+      ],
+      "sourceExcerpt": "《民法典》第163条规定，代理包括委托代理和法定代理。",
+      "type": "multiple_choice",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "根据《民法典》第163条，代理包括（ ）。",
+      "options": [
+        "委托代理",
+        "法定代理",
+        "指定代理",
+        "职务代理"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "教材原文引用《民法典》第163条，明确代理包括委托代理和法定代理。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-023",
+      "chapterId": "chapter-06",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第六章 合同法律制度",
+      "syllabusRequirement": "掌握合同的订立",
+      "sourcePages": [
+        "123"
+      ],
+      "sourceExcerpt": "《民法典》第469条第1款规定，当事人订立合同，可以采用书面形式、口头形式或者其他形式。",
+      "type": "single_choice",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "根据《民法典》第469条，当事人订立合同可以采用的形式不包括（ ）。",
+      "options": [
+        "书面形式",
+        "口头形式",
+        "其他形式",
+        "公证形式"
+      ],
+      "answer": 3,
+      "explanation": "教材原文引用《民法典》第469条，明确合同形式包括书面形式、口头形式或者其他形式，不包括公证形式。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-024",
+      "chapterId": "chapter-06",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第六章 合同法律制度",
+      "syllabusRequirement": "熟悉合同的履行和违约责任",
+      "sourcePages": [
+        "135"
+      ],
+      "sourceExcerpt": "《民法典》第586条规定，定金的数额由当事人约定；但是，不得超过主合同标的额的20%，超过部分不产生定金的效力。",
+      "type": "true_false",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "根据《民法典》，定金的数额由当事人约定，但不得超过主合同标的额的20%，超过部分不产生定金的效力。",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "answer": 0,
+      "explanation": "教材原文引用《民法典》第586条，明确定金数额不得超过主合同标的额的20%。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-025",
+      "chapterId": "chapter-06",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第六章 合同法律制度",
+      "syllabusRequirement": "熟悉客运合同和委托合同",
+      "sourcePages": [
+        "137"
+      ],
+      "sourceExcerpt": "《民法典》第814条规定，客运合同自承运人向旅客出具客票时成立，但是当事人另有约定或者另有交易习惯的除外。",
+      "type": "single_choice",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "根据《民法典》第814条，客运合同成立的时间是（ ）。",
+      "options": [
+        "承运人向旅客出具客票时",
+        "旅客支付票款时",
+        "旅客登上运输工具时",
+        "承运人开始运输时"
+      ],
+      "answer": 0,
+      "explanation": "教材原文引用《民法典》第814条，明确客运合同自承运人向旅客出具客票时成立。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-026",
+      "chapterId": "chapter-07",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第七章 侵权责任法律制度",
+      "syllabusRequirement": "掌握侵权损害赔偿的归责原则",
+      "sourcePages": [
+        "146"
+      ],
+      "sourceExcerpt": "《民法典》第1165条第1款规定，行为人因过错侵害他人民事权益，应当承担侵权责任。",
+      "type": "single_choice",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "《民法典》第1165条第1款规定，行为人因过错侵害他人民事权益，应当承担侵权责任。这体现的归责原则是（ ）。",
+      "options": [
+        "过错责任原则",
+        "过错推定责任",
+        "无过错责任原则",
+        "公平责任原则"
+      ],
+      "answer": 0,
+      "explanation": "教材原文引用《民法典》第1165条第1款，该规定体现过错责任原则。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-027",
+      "chapterId": "chapter-07",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第七章 侵权责任法律制度",
+      "syllabusRequirement": "熟悉一般侵权责任",
+      "sourcePages": [
+        "148"
+      ],
+      "sourceExcerpt": "《民法典》第1174条规定，损害是因受害人故意造成的，行为人不承担责任。",
+      "type": "true_false",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "根据《民法典》第1174条，损害是因受害人故意造成的，行为人不承担责任。",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "answer": 0,
+      "explanation": "教材原文引用《民法典》第1174条，明确该免责事由。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
+    },
+    {
+      "id": "draft-pl-028",
+      "chapterId": "chapter-07",
+      "subject": "政策与法律法规",
+      "textbookSubject": "政策与法律法规",
+      "textbookChapter": "第七章 侵权责任法律制度",
+      "syllabusRequirement": "熟悉特殊侵权责任",
+      "sourcePages": [
+        "155"
+      ],
+      "sourceExcerpt": "《民法典》第1198条第1款规定，宾馆、商场、银行、车站、机场、体育场馆、娱乐场所等经营场所、公共场所的经营者、管理者或者群众性活动的组织者，未尽到安全保障义务，造成他人损害的，应当承担侵权责任。",
+      "type": "multiple_choice",
+      "sourceType": "textbook",
+      "sourceStatus": "published",
+      "sourceNote": "依据教材原文命制，非官方真题，待审核。",
+      "year": 2025,
+      "region": "全国",
+      "prompt": "根据《民法典》第1198条，负有安全保障义务的主体包括（ ）。",
+      "options": [
+        "宾馆、商场、银行、车站、机场、体育场馆、娱乐场所等经营场所的经营者",
+        "公共场所的管理者",
+        "群众性活动的组织者",
+        "普通路人"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
+      "explanation": "教材原文引用《民法典》第1198条，明确安全保障义务主体包括经营场所的经营者、公共场所的管理者、群众性活动的组织者。",
+      "publishedAt": "2026-09-15T10:15:37.262Z"
     }
   ],
   "mockConfig": {
-    "id": "written-mock-2026-1", "version": "2026.1.0", "durationMinutes": 30,
-    "questionCount": 3, "questionIds": ["demo-001", "past-2024-sichuan-001", "mock-001"]
+    "id": "written-mock-2026-1",
+    "version": "2026.1.0",
+    "durationMinutes": 30,
+    "questionCount": 3,
+    "questionIds": [
+      "demo-001",
+      "past-2024-sichuan-001",
+      "mock-001"
+    ]
   }
 }

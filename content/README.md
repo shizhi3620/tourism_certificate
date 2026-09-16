@@ -5,6 +5,12 @@
 - `exam.json`：全国大纲四个笔试科目、章节、笔试题目和模考配置。
 - `sichuan-practical.json`：四川现场考试数据包；英语只用于现场面试训练。
 
+## 题型合同与审核队列
+
+全国笔试的题型清单和生成策略在 `exam.json` 的 `exam.writtenExam` 下维护，`public/question-types.js` 是生成、审核、发布和用户端共用的校验实现。笔试草稿位于 `content/drafts/questions-pending-review.json`，审核发布后写入 `exam.json`。
+
+四川现场材料不使用笔试题型。现场材料草稿位于 `content/drafts/practical-materials-pending-review.json`，结构由 `public/practical-materials.js` 校验，审核发布后写入 `sichuan-practical.json`。不得把 `practical_material` 写入笔试题目或题型清单。
+
 ## 生成题目
 
 题目可以来自官方公开材料、合法授权内容或自行编写内容。不要复制来源不明

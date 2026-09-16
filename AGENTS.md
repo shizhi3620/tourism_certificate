@@ -13,3 +13,7 @@ This repository uses the five canonical triage labels: `needs-triage`, `needs-in
 ### Domain docs
 
 This is a single-context repository with one root `CONTEXT.md` and optional root `docs/adr/` decisions. See `docs/agents/domain.md`.
+
+## Commit workflow
+
+After completing each update, run the relevant checks, commit the focused changes, and push to the current branch on GitHub unless the user explicitly asks not to.

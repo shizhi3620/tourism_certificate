@@ -4,3 +4,4 @@ coverage/
 *.log
 content/sources/
 content/drafts/
+.DS_Store

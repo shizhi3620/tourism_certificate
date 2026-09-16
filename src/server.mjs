@@ -5,6 +5,8 @@ import { createHash } from "node:crypto";
 import { extname, join, normalize, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { PDFParse } from "pdf-parse";
+import { validateQuestionTypeCatalog, validateWrittenQuestion } from "../public/question-types.js";
+import { practicalMaterialToAttraction, validatePracticalMaterial } from "../public/practical-materials.js";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const publicDirectory = join(root, "public");
@@ -12,7 +14,10 @@ const contentPath = join(root, "content/exam.json");
 const practicalPath = join(root, "content/sichuan-practical.json");
 const sourceDirectory = join(root, "content/sources");
 const draftDirectory = join(root, "content/drafts");
-const draftPath = join(draftDirectory, "questions-pending-review.json");
+const writtenDraftPath = join(draftDirectory, "questions-pending-review.json");
+const practicalDraftPath = join(draftDirectory, "practical-materials-pending-review.json");
+const writtenPublishHistoryPath = join(draftDirectory, "publish-history.jsonl");
+const practicalPublishHistoryPath = join(draftDirectory, "practical-publish-history.jsonl");
 const materialsPath = join(sourceDirectory, "materials.json");
 const uploadMaxBytes = 200 * 1024 * 1024;
 const contentTypes = { ".css": "text/css; charset=utf-8", ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".json": "application/json; charset=utf-8" };
@@ -105,9 +110,9 @@ function syllabusCoverage(syllabusText, items) {
     estimated: true,
   };
 }
-function reviewFlags(item) {
+function reviewFlags(item, questionTypes) {
   const text = JSON.stringify(item);
-  const placeholderValues = new Set(["必须填写教材章节", "必须填写支持答案的原文短引文", "待补充", "待确认"]);
+  const placeholderValues = new Set(["必须填写教材章节", "必须填写支持答案的原文短引文", "待补充", "待确认", "待审核"]);
   const hasMeaningfulValue = (value) => typeof value === "string"
     ? value.trim().length > 0 && !placeholderValues.has(value.trim())
     : Boolean(value);
@@ -115,19 +120,43 @@ function reviewFlags(item) {
     && item.sourcePages.length > 0
     && item.sourcePages.every((page) => hasMeaningfulValue(page));
   return [
-    ...["id", "chapterId", "sourceType", "sourceNote"].filter((field) => !item[field]).map((field) => `缺少${field}`),
+    ...["id", "sourceType", "sourceNote"].filter((field) => !item[field]).map((field) => `缺少${field}`),
+    !hasMeaningfulValue(item.chapterId) ? "缺少章节" : null,
+    !hasMeaningfulValue(item.subject) ? "缺少科目" : null,
     !item.prompt && !item.title ? "缺少题目内容" : null,
-    ["single_choice", "multiple_choice", "true_false"].includes(item.type) && (!Array.isArray(item.options) || item.options.length < 2) ? "选项不足" : null,
-    item.type === "multiple_choice" && (!Array.isArray(item.answer) || item.answer.length === 0 || item.answer.some((answer) => !Number.isInteger(answer))) ? "答案未确认" : null,
-    item.type !== "multiple_choice" && ["single_choice", "true_false"].includes(item.type) && !Number.isInteger(item.answer) ? "答案未确认" : null,
-    item.type === "multiple_choice" && (!Array.isArray(item.options) || item.answer.some((answer) => answer < 0 || answer >= item.options.length)) ? "答案超出选项范围" : null,
-    item.type !== "multiple_choice" && ["single_choice", "true_false"].includes(item.type) && (!Array.isArray(item.options) || item.answer < 0 || item.answer >= item.options.length) ? "答案超出选项范围" : null,
-    !["single_choice", "multiple_choice", "true_false", "practical_material"].includes(item.type) ? "题型不受支持" : null,
+    ...validateWrittenQuestion(item, questionTypes),
     text.includes("[无法识别]") ? "包含 OCR 无法识别标记" : null,
     !hasMeaningfulValue(item.syllabusRequirement) ? "缺少大纲要求定位" : null,
     !hasMeaningfulValue(item.textbookSubject) || !hasMeaningfulValue(item.textbookChapter) ? "缺少教材章节定位" : null,
     !hasMeaningfulPages || !hasMeaningfulValue(item.sourceExcerpt) ? "缺少来源页码或引用" : null,
   ].filter(Boolean);
+}
+function publishFlags(item, exam) {
+  const questionTypes = exam.exam?.writtenExam?.questionTypes ?? [];
+  const chapter = exam.chapters.find((candidate) => candidate.id === item.chapterId);
+  const chapterSubject = chapter ? exam.subjects.find((subject) => subject.id === chapter.subjectId) : null;
+  const namedSubject = exam.subjects.find((subject) => subject.id === item.subject || subject.name === item.subject);
+  return [
+    ...reviewFlags(item, questionTypes),
+    !chapter ? "章节不在题库配置中" : null,
+    !namedSubject ? "科目不在题库配置中" : null,
+    chapter && (!chapterSubject || (item.subject !== chapterSubject.id && item.subject !== chapterSubject.name)) ? "科目与章节不一致" : null,
+    chapter && chapterSubject && item.textbookSubject !== chapterSubject.name ? "教材科目与章节不一致" : null,
+  ].filter(Boolean);
+}
+function normalizeQueue(queue) {
+  if (queue === undefined || queue === null || queue === "" || queue === "written") return "written";
+  if (queue === "practical") return "practical";
+  throw Object.assign(new Error("invalid_review_queue"), { status: 400 });
+}
+function queueForMode(mode) {
+  return mode === "practical_material" ? "practical" : "written";
+}
+function draftPathForQueue(queue) {
+  return normalizeQueue(queue) === "practical" ? practicalDraftPath : writtenDraftPath;
+}
+function practicalFlags(item) {
+  return validatePracticalMaterial(item);
 }
 function normalizeSourcePages(sourcePages) {
   if (Array.isArray(sourcePages)) return sourcePages;
@@ -141,20 +170,32 @@ function nextContentVersion(version) {
   if (!match) throw new Error(`invalid contentVersion: ${version}`);
   return `${match[1]}.${match[2]}.${Number(match[3]) + 1}`;
 }
-async function readDraft() {
-  return JSON.parse(await readFile(draftPath, "utf8"));
+async function readDraft(queue = "written") {
+  return JSON.parse(await readFile(draftPathForQueue(queue), "utf8"));
 }
-async function publishApprovedDraft() {
-  const draft = await readDraft();
+async function readExamContent() {
+  return JSON.parse(await readFile(contentPath, "utf8"));
+}
+async function readQuestionTypes() {
+  const exam = await readExamContent();
+  const questionTypes = exam.exam?.writtenExam?.questionTypes ?? [];
+  const errors = validateQuestionTypeCatalog(questionTypes);
+  if (errors.length) throw Object.assign(new Error(`invalid_question_type_catalog:${errors.join(";")}`), { status: 500 });
+  return questionTypes;
+}
+async function publishApprovedWrittenDraft() {
+  const [draft, exam] = await Promise.all([
+    readDraft("written"),
+    readExamContent(),
+  ]);
   const items = draft.items ?? draft.questions ?? [];
   const approved = items.filter((item) => item.reviewStatus === "approved");
   if (!approved.length) throw Object.assign(new Error("no_approved_items"), { status: 400 });
-  const publishable = approved.filter((item) => !reviewFlags(item).length && ["single_choice", "multiple_choice", "true_false"].includes(item.type));
+  const publishable = approved.filter((item) => !publishFlags(item, exam).length);
   const skipped = approved
     .filter((item) => !publishable.includes(item))
-    .map((item) => ({ id: item.id ?? "missing-id", reasons: reviewFlags(item).length ? reviewFlags(item) : ["题型不受支持"] }));
+    .map((item) => ({ id: item.id ?? "missing-id", reasons: publishFlags(item, exam).length ? publishFlags(item, exam) : ["题型不受支持"] }));
   if (!publishable.length) throw Object.assign(new Error(`no_publishable_items:${skipped.map((item) => item.id).join(",")}`), { status: 400 });
-  const exam = JSON.parse(await readFile(contentPath, "utf8"));
   const existingIds = new Set(exam.questions.map((question) => question.id));
   const usedIds = new Set(existingIds);
   const generatedIdPrefix = `draft-${Date.now()}`;
@@ -184,11 +225,46 @@ async function publishApprovedDraft() {
     ...(approved.includes(item) ? { reviewStatus: "pending" } : {}),
   }));
   const updatedDraft = { ...draft, items: remaining, publishedAt, publishedCount: publishedQuestions.length, skipped };
-  await writeFile(draftPath, `${JSON.stringify(updatedDraft, null, 2)}\n`);
-  await writeFile(join(draftDirectory, "publish-history.jsonl"), `${JSON.stringify({
+  await writeFile(writtenDraftPath, `${JSON.stringify(updatedDraft, null, 2)}\n`);
+  await writeFile(writtenPublishHistoryPath, `${JSON.stringify({
     publishedAt, contentVersion, count: publishedQuestions.length, ids: publishedQuestions.map((item) => item.id),
   })}\n`, { flag: "a" });
-  return { published: publishedQuestions.length, contentVersion, skipped };
+  return { queue: "written", published: publishedQuestions.length, totalQuestions: updatedExam.questions.length, contentVersion, skipped };
+}
+async function publishApprovedPracticalDraft() {
+  const [draft, pack] = await Promise.all([
+    readDraft("practical"),
+    readFile(practicalPath, "utf8").then((value) => JSON.parse(value)),
+  ]);
+  const items = draft.items ?? [];
+  const approved = items.filter((item) => item.reviewStatus === "approved");
+  if (!approved.length) throw Object.assign(new Error("no_approved_items"), { status: 400 });
+  const publishable = approved.filter((item) => validatePracticalMaterial(item).length === 0);
+  const skipped = approved
+    .filter((item) => !publishable.includes(item))
+    .map((item) => ({ id: item.id ?? "missing-id", reasons: validatePracticalMaterial(item) }));
+  if (!publishable.length) throw Object.assign(new Error(`no_publishable_items:${skipped.map((item) => item.id).join(",")}`), { status: 400 });
+  const publishedAt = new Date().toISOString();
+  const packVersion = nextContentVersion(pack.packVersion);
+  const publishedAttractions = publishable.map(practicalMaterialToAttraction);
+  const publishedIds = new Set(publishedAttractions.map((item) => item.id));
+  const updatedPack = {
+    ...pack,
+    packVersion,
+    publishedAt,
+    attractions: [...pack.attractions.filter((item) => !publishedIds.has(item.id)), ...publishedAttractions],
+  };
+  await writeFile(practicalPath, `${JSON.stringify(updatedPack, null, 2)}\n`);
+  const remaining = items.filter((item) => !publishable.includes(item)).map((item) => ({
+    ...item,
+    ...(approved.includes(item) ? { reviewStatus: "pending" } : {}),
+  }));
+  const updatedDraft = { ...draft, items: remaining, publishedAt, publishedCount: publishedAttractions.length, skipped };
+  await writeFile(practicalDraftPath, `${JSON.stringify(updatedDraft, null, 2)}\n`);
+  await writeFile(practicalPublishHistoryPath, `${JSON.stringify({
+    publishedAt, packVersion, count: publishedAttractions.length, ids: publishedAttractions.map((item) => item.id),
+  })}\n`, { flag: "a" });
+  return { queue: "practical", published: publishedAttractions.length, totalAttractions: updatedPack.attractions.length, packVersion, skipped };
 }
 async function importUploadedFile(file, fields) {
   const files = Array.isArray(file) ? file : [file];
@@ -297,7 +373,8 @@ function sourcePath(candidate) {
   return resolved;
 }
 function published(content) {
-  return { ...content, questions: content.questions.filter((question) => question.sourceStatus === "published") };
+  const questions = content.questions.filter((question) => question.sourceStatus === "published");
+  return { ...content, questions, questionCount: questions.length };
 }
 function allowed(request) {
   const now = Date.now();
@@ -324,7 +401,8 @@ async function sendStaticFile(response, pathname) {
 export function createTourismServer() {
   return createServer(async (request, response) => {
     if (!allowed(request)) return sendJson(response, 429, { error: "rate_limited", message: "请求过于频繁，请稍后再试。" });
-    const pathname = new URL(request.url, "http://localhost").pathname;
+    const url = new URL(request.url, "http://localhost");
+    const pathname = url.pathname;
     if (pathname === "/admin" && request.method === "GET") return sendStaticFile(response, "/admin.html");
     if (pathname === "/api/admin/import" && request.method === "POST") {
       if (!adminAllowed(request)) return sendJson(response, 401, { error: "admin_auth_required" });
@@ -376,9 +454,12 @@ export function createTourismServer() {
         const generatedInput = join(draftDirectory, "generation-input.txt");
         await writeFile(generatedInput, sourceText, "utf8");
         await mkdir(draftDirectory, { recursive: true });
-        const outputPath = "content/drafts/questions-pending-review.json";
+        const mode = payload.mode ?? "written_simulation";
+        const queue = queueForMode(mode);
+        const targetDraftPath = draftPathForQueue(queue);
+        const outputPath = queue === "practical" ? "content/drafts/practical-materials-pending-review.json" : "content/drafts/questions-pending-review.json";
         const generated = await generateDraft("content/drafts/generation-input.txt", outputPath, {
-          mode: payload.mode,
+          mode,
           subject: payload.subject,
           region: payload.region,
           chapter: payload.chapter,
@@ -386,10 +467,10 @@ export function createTourismServer() {
         const selectedMaterials = await readMaterials();
         const syllabusPaths = paths.filter((path) => selectedMaterials.some((material) => material.textPath === path && material.role === "考纲"));
         const syllabusText = (await Promise.all(syllabusPaths.map((path) => readFile(sourcePath(path), "utf8")))).join("\n");
-        const generatedDraft = await readDraft();
-        const coverage = syllabusCoverage(syllabusText, generatedDraft.items ?? []);
-        await writeFile(draftPath, `${JSON.stringify({ ...generatedDraft, syllabusCoverage: coverage }, null, 2)}\n`);
-        return sendJson(response, 201, { ...generated, syllabusCoverage: coverage });
+        const generatedDraft = await readDraft(queue);
+        const coverage = queue === "written" ? syllabusCoverage(syllabusText, generatedDraft.items ?? []) : null;
+        await writeFile(targetDraftPath, `${JSON.stringify({ ...generatedDraft, ...(coverage ? { syllabusCoverage: coverage } : {}) }, null, 2)}\n`);
+        return sendJson(response, 201, { ...generated, queue, syllabusCoverage: coverage });
       } catch (error) {
         return sendJson(response, error.status ?? 500, { error: error.message });
       }
@@ -397,23 +478,29 @@ export function createTourismServer() {
     if (pathname === "/api/admin/review" && request.method === "GET") {
       if (!adminAllowed(request)) return sendJson(response, 401, { error: "admin_auth_required" });
       try {
-        const draft = await readDraft();
-        const items = (draft.items ?? draft.questions ?? []).map((item) => ({
-          ...item,
-          sourcePages: normalizeSourcePages(item.sourcePages),
-          reviewStatus: item.reviewStatus ?? "pending",
-          reviewFlags: reviewFlags({ ...item, sourcePages: normalizeSourcePages(item.sourcePages) }),
-        }));
-        return sendJson(response, 200, { ...draft, items });
+        const queue = normalizeQueue(url.searchParams.get("queue"));
+        const draft = await readDraft(queue);
+        const questionTypes = queue === "written" ? await readQuestionTypes() : null;
+        const items = (draft.items ?? draft.questions ?? []).map((item) => {
+          const normalized = { ...item, sourcePages: normalizeSourcePages(item.sourcePages) };
+          return {
+            ...normalized,
+            reviewStatus: item.reviewStatus ?? "pending",
+            reviewFlags: queue === "written" ? reviewFlags(normalized, questionTypes) : practicalFlags(normalized),
+          };
+        });
+        return sendJson(response, 200, { ...draft, queue, items, ...(queue === "written" ? { questionTypes } : {}) });
       } catch (error) {
-        return sendJson(response, error.code === "ENOENT" ? 404 : 500, { error: error.code === "ENOENT" ? "draft_not_found" : error.message });
+        return sendJson(response, error.status ?? (error.code === "ENOENT" ? 404 : 500), { error: error.code === "ENOENT" ? "draft_not_found" : error.message });
       }
     }
     if (pathname === "/api/admin/review" && request.method === "POST") {
       if (!adminAllowed(request)) return sendJson(response, 401, { error: "admin_auth_required" });
       try {
         const payload = JSON.parse((await readBody(request, 2 * 1024 * 1024)).toString("utf8"));
-        const draft = await readDraft();
+        const queue = normalizeQueue(url.searchParams.get("queue"));
+        const draft = await readDraft(queue);
+        const questionTypes = queue === "written" ? await readQuestionTypes() : null;
         const updates = new Map((payload.items ?? []).map((item) => [item.id, item]));
         const blocked = [];
         const items = (draft.items ?? draft.questions ?? []).map((item) => {
@@ -421,14 +508,14 @@ export function createTourismServer() {
           const update = updates.get(item.id);
           if (!update) return normalized;
           const merged = { ...normalized, ...update, sourcePages: normalizeSourcePages(update.sourcePages ?? normalized.sourcePages), sourceStatus: "pending_review" };
-          const flags = reviewFlags(merged);
+          const flags = queue === "written" ? reviewFlags(merged, questionTypes) : practicalFlags(merged);
           if (merged.reviewStatus === "approved" && flags.length) {
             blocked.push({ id: item.id, reasons: flags });
             return { ...merged, reviewStatus: "pending" };
           }
           return merged;
         });
-        await writeFile(draftPath, `${JSON.stringify({ ...draft, items, updatedAt: new Date().toISOString() }, null, 2)}\n`);
+        await writeFile(draftPathForQueue(queue), `${JSON.stringify({ ...draft, items, updatedAt: new Date().toISOString() }, null, 2)}\n`);
         return sendJson(response, 200, { updated: updates.size - blocked.length, blocked });
       } catch (error) {
         return sendJson(response, error.code === "ENOENT" ? 404 : 400, { error: error.code === "ENOENT" ? "draft_not_found" : error.message });
@@ -437,7 +524,8 @@ export function createTourismServer() {
     if (pathname === "/api/admin/publish" && request.method === "POST") {
       if (!adminAllowed(request)) return sendJson(response, 401, { error: "admin_auth_required" });
       try {
-        return sendJson(response, 200, await publishApprovedDraft());
+        const queue = normalizeQueue(url.searchParams.get("queue"));
+        return sendJson(response, 200, await (queue === "practical" ? publishApprovedPracticalDraft() : publishApprovedWrittenDraft()));
       } catch (error) {
         return sendJson(response, error.status ?? 500, { error: error.message });
       }

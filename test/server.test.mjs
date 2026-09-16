@@ -84,6 +84,30 @@ test("publishes only reviewed questions and exposes content versions", async () 
   }
 });
 
+test("serves navigable published questions with configured chapter metadata", async () => {
+  const server = await startServer();
+  try {
+    const content = await (await fetch(`http://127.0.0.1:${server.address().port}/api/exam`)).json();
+    const chapterIds = new Set(content.chapters.map((chapter) => chapter.id));
+    const subjects = new Map(content.subjects.map((subject) => [subject.id, subject]));
+    assert.equal(content.questionCount, content.questions.length);
+    assert.deepEqual(content.exam.writtenExam.questionTypes.map((type) => type.id), ["single_choice", "multiple_choice", "true_false"]);
+    assert.equal(content.questions.find((question) => question.id === "draft-pl-014").type, "single_choice");
+    assert.equal(content.questions.find((question) => question.id === "draft-pl-025").type, "single_choice");
+    assert.ok(content.questions.length > 100);
+    assert.ok(content.questions.every((question) => chapterIds.has(question.chapterId)));
+    assert.ok(content.questions.every((question) => {
+      const chapter = content.chapters.find((candidate) => candidate.id === question.chapterId);
+      const subject = chapter ? subjects.get(chapter.subjectId) : null;
+      return subject && (question.subject === subject.id || question.subject === subject.name);
+    }));
+    assert.ok(content.questions.some((question) => question.id === "draft-pl-028"));
+  } finally {
+    server.close();
+    await once(server, "close");
+  }
+});
+
 test("serves the reviewed Sichuan practical pack", async () => {
   const server = await startServer();
   try {
@@ -129,6 +153,24 @@ test("protects the content admin page and accepts authenticated source uploads",
     assert.ok((await materials.json()).materials.some((material) => (
       material.filename === "past-paper.txt" && material.subject === "政策与法律法规"
     )));
+  } finally {
+    if (previousToken === undefined) delete process.env.ADMIN_TOKEN;
+    else process.env.ADMIN_TOKEN = previousToken;
+    server.close();
+    await once(server, "close");
+  }
+});
+
+test("rejects invalid review queues", async () => {
+  const previousToken = process.env.ADMIN_TOKEN;
+  process.env.ADMIN_TOKEN = "test-admin-token";
+  const server = await startServer();
+  try {
+    const response = await fetch(`http://127.0.0.1:${server.address().port}/api/admin/review?queue=invalid`, {
+      headers: { authorization: "Bearer test-admin-token" },
+    });
+    assert.equal(response.status, 400);
+    assert.deepEqual(await response.json(), { error: "invalid_review_queue" });
   } finally {
     if (previousToken === undefined) delete process.env.ADMIN_TOKEN;
     else process.env.ADMIN_TOKEN = previousToken;

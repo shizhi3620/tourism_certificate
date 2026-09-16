@@ -76,6 +76,8 @@
   <section class="card">
     <h2>第三步：审核与发布</h2>
     <p class="muted">加载后重点检查题干、答案、教材章节、大纲要求、来源页码和引用片段。审核通过后，再点击“发布已通过题目”。</p>
+    <p id="admin-status" class="notice" role="status" aria-live="polite" hidden></p>
+    <label>审核队列<select id="review-queue"><option value="written">笔试题目</option><option value="practical">四川现场材料</option></select></label>
     <button id="load-review" class="primary">加载待审核题目</button>
     <button id="publish" class="small">发布全部已通过题目</button>
     <div id="review-list"></div>
